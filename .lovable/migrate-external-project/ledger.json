@@ -1,0 +1,12 @@
+[
+  {"capability":"code (Next.js dashboard, simulation, catalog)","source":"v0 ZIP","outcome":"migrate","status":"in_progress","next_action":"Port to TanStack Start"},
+  {"capability":"schema: careers","source":"Postgres via Drizzle","outcome":"migrate","status":"in_progress","next_action":"Create careers table in Lovable Cloud with RLS"},
+  {"capability":"records: careers","source":"Postgres (DATABASE_URL)","outcome":"migrate","status":"pending","next_action":"User exports careers table as CSV/JSON"},
+  {"capability":"auth identities","source":"Better Auth email/password","outcome":"migrate","status":"pending","next_action":"User exports user table (id, email, name); users verify email and set new password on first sign-in"},
+  {"capability":"authorization","source":"server actions filtered by session userId","outcome":"migrate","status":"in_progress","next_action":"RLS owner policies"},
+  {"capability":"public endpoints /api/football/*","source":"Next route handlers","outcome":"migrate","status":"in_progress","next_action":"TanStack server routes"},
+  {"capability":"API-Football provider","source":"API_FOOTBALL_KEY","outcome":"preserve","status":"pending","next_action":"User adds API_FOOTBALL_KEY via secure form"},
+  {"capability":"Vercel Analytics","source":"@vercel/analytics","outcome":"drop (Vercel-only runtime)","status":"accepted","next_action":"none"},
+  {"capability":"storage / schedules / webhooks / payments / email","source":"none detected","outcome":"n/a","status":"verified","next_action":"none"},
+  {"capability":"verification","source":"-","outcome":"verify","status":"pending","next_action":"Run preview checks"}
+]
