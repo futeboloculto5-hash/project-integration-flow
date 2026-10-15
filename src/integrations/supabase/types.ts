@@ -14,13 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      careers: {
+        Row: {
+          balance: number
+          club_id: string
+          club_name: string
+          created_at: string
+          current_date: string
+          data: Json | null
+          id: string
+          legacy_id: string | null
+          legacy_user_id: string | null
+          season: string
+          transfer_budget: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          club_id: string
+          club_name: string
+          created_at?: string
+          current_date?: string
+          data?: Json | null
+          id?: string
+          legacy_id?: string | null
+          legacy_user_id?: string | null
+          season?: string
+          transfer_budget?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          balance?: number
+          club_id?: string
+          club_name?: string
+          created_at?: string
+          current_date?: string
+          data?: Json | null
+          id?: string
+          legacy_id?: string | null
+          legacy_user_id?: string | null
+          season?: string
+          transfer_budget?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      legacy_users: {
+        Row: {
+          auth_user_id: string | null
+          claimed_at: string | null
+          created_at: string
+          email: string
+          legacy_id: string
+          name: string | null
+        }
+        Insert: {
+          auth_user_id?: string | null
+          claimed_at?: string | null
+          created_at?: string
+          email: string
+          legacy_id: string
+          name?: string | null
+        }
+        Update: {
+          auth_user_id?: string | null
+          claimed_at?: string | null
+          created_at?: string
+          email?: string
+          legacy_id?: string
+          name?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_legacy_account: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
