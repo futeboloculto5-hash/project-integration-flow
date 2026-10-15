@@ -1,24 +1,42 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import Dashboard from "@/components/dashboard";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Clube Campeão World | Gestão de futebol" },
+      { name: "description", content: "Assuma o comando, construa seu elenco e leve seu clube ao topo." },
+      { property: "og:title", content: "Clube Campeão World | Gestão de futebol" },
+      { property: "og:description", content: "Assuma o comando, construa seu elenco e leve seu clube ao topo." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const { user, ready } = useAuth();
+  if (!ready) return <div className="auth-shell" />;
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      {/* keyed so the career reloads from the account after sign-in */}
+      <Dashboard key={user?.id ?? "guest"} />
+      <div className="account-chip">
+        {user ? (
+          <>
+            <span>{user.email}</span>
+            <button onClick={() => supabase.auth.signOut()}>Sair</button>
+          </>
+        ) : (
+          <>
+            <span>Carreira não salva</span>
+            <Link to="/auth">Entrar</Link>
+          </>
+        )}
+      </div>
+    </>
   );
 }
