@@ -6,7 +6,7 @@ async function GET(request: Request) {
   const params = new URL(request.url).searchParams
   const search = params.get('search')?.trim()
   const team = params.get('team')?.trim()
-  const key = process.env.API_FOOTBALL_KEY
+  const key = process.env['API_FOOTBALL_KEY']
   if (!key) return Response.json({ error: 'API_FOOTBALL_KEY não configurada', source: 'API-Football', players: [] }, { status: 503 })
   if (!search && !team) return Response.json({ error: 'Informe search ou team', source: 'API-Football', players: [] }, { status: 400 })
   const query = search ? `search=${encodeURIComponent(search)}` : `team=${teamIds[team!] ?? ''}`

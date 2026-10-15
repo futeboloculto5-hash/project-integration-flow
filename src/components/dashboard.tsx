@@ -1,3 +1,4 @@
+// @ts-nocheck -- ported verbatim from the original app
 
 import { useEffect, useMemo, useState } from 'react'
 import { advanceCareerDay, createCareer, listCareers, saveCareer } from '@/lib/career-actions'

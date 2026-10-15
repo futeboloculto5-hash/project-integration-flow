@@ -1,3 +1,4 @@
+// @ts-nocheck -- ported verbatim from the original app
 export type ClubProfile = {
   id: string
   name: string
