@@ -2,9 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Pause, Play, FastForward, Repeat2, Swords, BarChart3, MessageSquare, X } from "lucide-react";
 import {
   createMatch, createTeam, makeSquad, playerPositions, setTactics, step, substitute,
-  type Formation, type MatchState, type Mentality,
+  type Formation, type MatchPlayer, type MatchState, type Mentality,
 } from "@/lib/match/engine";
 
+type SquadIn = { id: string; name: string; pos: "GOL" | "DEF" | "MEI" | "ATA"; rating: number };
+const toMatch = (list: SquadIn[]): MatchPlayer[] => list.map((p, i) => ({ id: p.id, name: p.name, pos: p.pos, rating: p.rating, number: i === 0 ? 1 : i + 1, energy: 100, yellow: false, sentOff: false, goals: 0, form: 6.5 }));
 type TeamInfo = { name: string; short: string; color: string; rating: number };
 
 type Props = {
@@ -12,6 +14,9 @@ type Props = {
   away: TeamInfo;
   roster?: { name: string; pos?: string }[];
   seed: string;
+  homeSquad?: SquadIn[];
+  awaySquad?: SquadIn[];
+  homeFormation?: Formation;
   onFinish: (score: { home: number; away: number }) => void;
   onClose: () => void;
 };
@@ -20,13 +25,13 @@ const SPEEDS = [1, 2, 4] as const;
 const TICK_MS = 260;
 type Tab = "lances" | "tatica" | "elenco" | "stats";
 
-export function LiveMatch({ home, away, roster, seed, onFinish, onClose }: Props) {
+export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, homeFormation, onFinish, onClose }: Props) {
   const initial = useMemo(() => {
-    const h = createTeam(home.name, home.short, home.color, home.rating, makeSquad(`${seed}-h`, home.rating, roster));
-    const a = createTeam(away.name, away.short, away.color, away.rating, makeSquad(`${seed}-a`, away.rating), "4-4-2");
+    const h = createTeam(home.name, home.short, home.color, home.rating, homeSquad ? toMatch(homeSquad) : makeSquad(`${seed}-h`, home.rating, roster), homeFormation ?? "4-3-3");
+    const a = createTeam(away.name, away.short, away.color, away.rating, awaySquad ? toMatch(awaySquad) : makeSquad(`${seed}-a`, away.rating), "4-4-2");
     const m = createMatch(h, a, seed);
     return { ...m, paused: true };
-  }, [home, away, roster, seed]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [match, setMatch] = useState<MatchState>(initial);
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(1);

@@ -15,8 +15,9 @@ const teamIds: Record<string, number> = {
 }
 
 async function GET(request: Request) {
-  const club = new URL(request.url).searchParams.get('club') ?? ''
-  const teamId = teamIds[club]
+  const params = new URL(request.url).searchParams
+  const club = params.get('club') ?? ''
+  const teamId = Number(params.get('teamId')) || teamIds[club]
   const apiKey = process.env['API_FOOTBALL_KEY']
   if (!teamId) return Response.json({ error: 'Clube ainda não mapeado', source: 'API-Football', players: [] }, { status: 404 })
   if (!apiKey) return Response.json({ error: 'API_FOOTBALL_KEY não configurada', source: 'API-Football', players: [] }, { status: 503 })
