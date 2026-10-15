@@ -165,10 +165,10 @@ export function step(prev: MatchState): MatchState {
 
   // Chance in the final third
   const inFinal = atkSide === "home" ? st.ball.x > 74 : st.ball.x < 26;
-  if (!lose && inFinal && rng(st) < 0.2 + edge * 0.2) {
+  if (!lose && inFinal && rng(st) < 0.14 + edge * 0.15) {
     const shooter = attacker(st, atk);
     const gk = def.lineup.find((p) => p.pos === "GOL")!;
-    const quality = Math.max(0.04, Math.min(0.55, 0.09 + (shooter.rating - gk.rating) / 160 + edge * 0.12 + (rng(st) - 0.5) * 0.12));
+    const quality = Math.max(0.04, Math.min(0.55, 0.075 + (shooter.rating - gk.rating) / 160 + edge * 0.12 + (rng(st) - 0.5) * 0.12));
     st.stats[atkSide].shots += 1;
     st.stats[atkSide].xg += quality;
     const roll = rng(st);
