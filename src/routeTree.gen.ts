@@ -10,33 +10,76 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiFootballMarketRouteImport } from './routes/api/football/market'
+import { Route as ApiFootballPlayersRouteImport } from './routes/api/football/players'
+import { Route as ApiFootballSquadRouteImport } from './routes/api/football/squad'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiFootballMarketRoute = ApiFootballMarketRouteImport.update({
+  id: '/api/football/market',
+  path: '/api/football/market',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFootballPlayersRoute = ApiFootballPlayersRouteImport.update({
+  id: '/api/football/players',
+  path: '/api/football/players',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFootballSquadRoute = ApiFootballSquadRouteImport.update({
+  id: '/api/football/squad',
+  path: '/api/football/squad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/football/market': typeof ApiFootballMarketRoute
+  '/api/football/players': typeof ApiFootballPlayersRoute
+  '/api/football/squad': typeof ApiFootballSquadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/football/market': typeof ApiFootballMarketRoute
+  '/api/football/players': typeof ApiFootballPlayersRoute
+  '/api/football/squad': typeof ApiFootballSquadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/football/market': typeof ApiFootballMarketRoute
+  '/api/football/players': typeof ApiFootballPlayersRoute
+  '/api/football/squad': typeof ApiFootballSquadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/football/market'
+    | '/api/football/players'
+    | '/api/football/squad'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/football/market'
+    | '/api/football/players'
+    | '/api/football/squad'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/football/market'
+    | '/api/football/players'
+    | '/api/football/squad'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiFootballMarketRoute: typeof ApiFootballMarketRoute
+  ApiFootballPlayersRoute: typeof ApiFootballPlayersRoute
+  ApiFootballSquadRoute: typeof ApiFootballSquadRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +91,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/football/market': {
+      id: '/api/football/market'
+      path: '/api/football/market'
+      fullPath: '/api/football/market'
+      preLoaderRoute: typeof ApiFootballMarketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/football/players': {
+      id: '/api/football/players'
+      path: '/api/football/players'
+      fullPath: '/api/football/players'
+      preLoaderRoute: typeof ApiFootballPlayersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/football/squad': {
+      id: '/api/football/squad'
+      path: '/api/football/squad'
+      fullPath: '/api/football/squad'
+      preLoaderRoute: typeof ApiFootballSquadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiFootballMarketRoute: ApiFootballMarketRoute,
+  ApiFootballPlayersRoute: ApiFootballPlayersRoute,
+  ApiFootballSquadRoute: ApiFootballSquadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
