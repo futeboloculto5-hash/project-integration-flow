@@ -27,7 +27,7 @@ function Index() {
         {user ? (
           <button onClick={() => supabase.auth.signOut()}>Sair</button>
         ) : (
-          <><span>Salvo só neste aparelho</span><Link to="/auth">Entrar</Link></>
+          <Link to="/auth" title="Entre para salvar na nuvem">Entrar</Link>
         )}
       </div>
     </>

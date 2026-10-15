@@ -487,3 +487,6 @@ h1 { text-transform: uppercase; font-weight: 800; font-style: italic; }
 .g-card-player { display: grid; justify-items: center; gap: 6px; text-align: center; }
 .g-card-player h3 { margin: 0; font: 900 italic 26px var(--font-display); text-transform: uppercase; } .g-card-player p { margin: 0; color: var(--muted); }
 .g-ovr-big { font-size: 44px; padding: 4px 16px; border-radius: 14px; }
+.account-chip { top: 64px; bottom: auto !important; right: 10px; padding: 3px; font-size: 11px; opacity: .92; }
+.account-chip span { display: none; }
+.account-chip a, .account-chip button { padding: 4px 10px; font-size: 12px; }
