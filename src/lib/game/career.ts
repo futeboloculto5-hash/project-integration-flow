@@ -67,10 +67,10 @@ export function mapApiPos(p?: string): Pos {
 
 export function squadFromApi(clubId: string, rating: number, api: { id: number | string; name: string; position?: string; age?: number | null }[]): Player[] {
   const r = seeded(`${clubId}:api`);
-  return api.slice(0, 32).map((a, i) => {
+  return api.slice(0, 32).map((a) => {
     const age = a.age ?? 24;
     const rt = Math.round(rating - 7 + r() * 11 - (age < 20 ? 4 : 0));
-    return { id: `${clubId}-api-${a.id}`, clubId, name: a.name, pos: mapApiPos(a.position), age, rating: rt, value: playerValue(rt, age), wage: playerWage(rt), real: true, ...(i < 0 ? {} : {}) };
+    return { id: `${clubId}-api-${a.id}`, clubId, name: a.name, pos: mapApiPos(a.position), age, rating: rt, value: playerValue(rt, age), wage: playerWage(rt), real: true };
   });
 }
 
@@ -95,7 +95,7 @@ export function makeFixtures(seed: string): Fixture[] {
   const start = new Date("2025-03-29T00:00:00Z");
   return all.flatMap((games, rd) => {
     const d = new Date(start);
-    d.setUTCDate(start.getUTCDate() + rd * 7 + (rd % 2 === 1 ? -3 : 0) + Math.floor(rd / 2) * 0);
+    d.setUTCDate(start.getUTCDate() + Math.floor(rd * 3.5));
     const date = d.toISOString().slice(0, 10);
     return games.map(([home, away]) => ({ round: rd + 1, date, home, away }));
   });
