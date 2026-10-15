@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { advanceCareerDay, createCareer, listCareers, saveCareer } from '@/lib/career-actions'
+import { LiveMatch } from '@/components/live-match'
 import { applyStandingsResult, compareStandings, simulateMatch, type StandingRow } from '@/lib/career/simulation'
 import {
   ArrowDownRight, ArrowUpRight, Bell, CalendarDays, ChevronRight, CircleDollarSign,
@@ -233,8 +234,12 @@ return apiRoster.filter((player) => {
   const selectedStanding = tableRows.find((row) => row.clubId === selectedClub.short)?.stats
   const playedBeforeNextMatch = selectedStanding?.played ?? 7
 
-  function simulateMatchAction() {
-    const result = simulateMatch(selectedClub.rating, 76, `${selectedClub.name}:2025-02-15`)
+  const [liveOpen, setLiveOpen] = useState(false)
+  function simulateMatchAction() { if (!matchPlayed) setLiveOpen(true) }
+  function finishLiveMatch(result: { home: number; away: number }) {
+    applyMatchResult({ homeGoals: result.home, awayGoals: result.away })
+  }
+  function applyMatchResult(result: { homeGoals: number; awayGoals: number }) {
     const nextStandings = applyStandingsResult(standings, selectedClub.short, 'botafogo', result.homeGoals, result.awayGoals)
     const nextBalance = balance + 185000
     setMatchScore({ home: result.homeGoals, away: result.awayGoals })
@@ -246,6 +251,7 @@ return apiRoster.filter((player) => {
 
   return (
     <main className="football-app">
+      {liveOpen && <LiveMatch home={{ name: selectedClub.name, short: selectedClub.short, color: selectedClub.color, rating: selectedClub.rating }} away={{ name: 'Botafogo', short: 'BOT', color: '#e8e8e8', rating: 76 }} roster={roster.map((p) => ({ name: p.name, pos: p.pos }))} seed={`${selectedClub.name}:${currentDate}`} onFinish={finishLiveMatch} onClose={() => setLiveOpen(false)} />}
       <aside className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
         <div className="brand"><div className="brand-mark"><Trophy /></div><div><strong>Clube Campeão</strong><span>WORLD</span></div><button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Fechar menu"><X /></button></div>
         <div className="career-switcher" onClick={() => setShowClubPicker(true)} role="button" tabIndex={0}><div className="crest crest-small">{selectedClub.short.slice(0, 2)}</div><div><b>{selectedClub.name}</b><span>Carreira 01 · 2025</span></div><ChevronRight /></div>
