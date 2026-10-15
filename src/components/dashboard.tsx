@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { advanceCareerDay, createCareer, listCareers, saveCareer } from '@/lib/career-actions'
+import { LiveMatch } from '@/components/live-match'
 import { applyStandingsResult, compareStandings, simulateMatch, type StandingRow } from '@/lib/career/simulation'
 import {
   ArrowDownRight, ArrowUpRight, Bell, CalendarDays, ChevronRight, CircleDollarSign,
@@ -233,8 +234,12 @@ return apiRoster.filter((player) => {
   const selectedStanding = tableRows.find((row) => row.clubId === selectedClub.short)?.stats
   const playedBeforeNextMatch = selectedStanding?.played ?? 7
 
-  function simulateMatchAction() {
-    const result = simulateMatch(selectedClub.rating, 76, `${selectedClub.name}:2025-02-15`)
+  const [liveOpen, setLiveOpen] = useState(false)
+  function simulateMatchAction() { if (!matchPlayed) setLiveOpen(true) }
+  function finishLiveMatch(result: { home: number; away: number }) {
+    applyMatchResult({ homeGoals: result.home, awayGoals: result.away })
+  }
+  function applyMatchResult(result: { homeGoals: number; awayGoals: number }) {
     const nextStandings = applyStandingsResult(standings, selectedClub.short, 'botafogo', result.homeGoals, result.awayGoals)
     const nextBalance = balance + 185000
     setMatchScore({ home: result.homeGoals, away: result.awayGoals })
@@ -246,6 +251,7 @@ return apiRoster.filter((player) => {
 
   return (
     <main className="football-app">
+      {liveOpen && <LiveMatch home={{ name: selectedClub.name, short: selectedClub.short, color: selectedClub.color, rating: selectedClub.rating }} away={{ name: 'Botafogo', short: 'BOT', color: '#e8e8e8', rating: 76 }} roster={roster.map((p) => ({ name: p.name, pos: p.pos }))} seed={`${selectedClub.name}:${currentDate}`} onFinish={finishLiveMatch} onClose={() => setLiveOpen(false)} />}
       <aside className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
         <div className="brand"><div className="brand-mark"><Trophy /></div><div><strong>Clube Campeão</strong><span>WORLD</span></div><button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Fechar menu"><X /></button></div>
         <div className="career-switcher" onClick={() => setShowClubPicker(true)} role="button" tabIndex={0}><div className="crest crest-small">{selectedClub.short.slice(0, 2)}</div><div><b>{selectedClub.name}</b><span>Carreira 01 · 2025</span></div><ChevronRight /></div>
@@ -261,7 +267,7 @@ return apiRoster.filter((player) => {
 
           {active === 'Visão geral' && <>
             <section className="club-hero"><div className="hero-club"><div className="crest crest-large" style={{ background: `linear-gradient(145deg, ${selectedClub.color}, #112631)` }}>{selectedClub.short.slice(0, 2)}</div><div><p className="eyebrow">SEU CLUBE · BRASIL</p><h2>{selectedClub.name}</h2><p>{selectedClub.city} · {selectedClub.league}</p></div></div><div className="hero-metrics"><div><span>Reputação</span><b>{selectedClub.rating}<small>/100</small></b></div><div><span>Confiança da diretoria</span><b className="positive">84<small>/100</small></b></div><div><span>Objetivo da temporada</span><b>Top 8</b></div></div></section>
-            <section className="dashboard-grid"><div className="card next-match"><div className="card-header"><div><span className="eyebrow">PRÓXIMA PARTIDA · BRASILEIRÃO</span><h3>Rodada {playedBeforeNextMatch + 1} <span>·</span> Em 3 dias</h3><p className="data-note">Histórico da carreira: {playedBeforeNextMatch} partidas disputadas</p></div><button className="more">•���•</button></div><div className="match-date">SÁBADO, 15 FEV · 18:30 <span>Maracanã · Rio de Janeiro</span></div><div className="match-teams"><div><div className="mini-crest">FLU</div><b>{selectedClub.short}</b><span>Casa</span></div><div className="versus"><b>{matchScore ? `${matchScore.home} — ${matchScore.away}` : '— — —'}</b><span>{matchPlayed ? 'Fim de jogo' : 'Pré-jogo'}</span></div><div><div className="mini-crest opponent">BOT</div><b>BOT</b><span>Visitante</span></div></div><button className="primary-button full" onClick={simulateMatchAction}>{matchPlayed ? 'Partida simulada' : 'Simular partida'} <Zap /></button></div>
+            <section className="dashboard-grid"><div className="card next-match"><div className="card-header"><div><span className="eyebrow">PRÓXIMA PARTIDA · BRASILEIRÃO</span><h3>Rodada {playedBeforeNextMatch + 1} <span>·</span> Em 3 dias</h3><p className="data-note">Histórico da carreira: {playedBeforeNextMatch} partidas disputadas</p></div><button className="more">•••</button></div><div className="match-date">SÁBADO, 15 FEV · 18:30 <span>Maracanã · Rio de Janeiro</span></div><div className="match-teams"><div><div className="mini-crest">FLU</div><b>{selectedClub.short}</b><span>Casa</span></div><div className="versus"><b>{matchScore ? `${matchScore.home} — ${matchScore.away}` : '— — —'}</b><span>{matchPlayed ? 'Fim de jogo' : 'Pré-jogo'}</span></div><div><div className="mini-crest opponent">BOT</div><b>BOT</b><span>Visitante</span></div></div><button className="primary-button full" onClick={simulateMatchAction}>{matchPlayed ? 'Partida encerrada' : 'Jogar ao vivo'} <Zap /></button></div>
             <div className="card standings"><div className="card-header"><div><span className="eyebrow">BRASILEIRÃO SÉRIE A</span><h3>Classificação</h3></div><button className="text-button" onClick={() => setActive('Competições')}>Abrir tabela <ChevronRight /></button></div><div className="table-head"><span>#</span><span>Clube</span><span>J</span><span>V</span><span>SG</span><span>GP</span><span>PTS</span></div>{tableRows.map((row) => <div className={`table-row ${row.clubId === selectedClub.short ? 'highlight' : ''}`} key={row.clubId}><span className="rank">{row.position}</span><span className="club-name"><i className="table-dot" />{row.name}</span><span>{row.stats.played}</span><span>{row.stats.wins}</span><span>{row.goalDifference > 0 ? `+${row.goalDifference}` : row.goalDifference}</span><span>{row.stats.scored}</span><b>{row.stats.points}</b></div>)}</div></section>
             <section className="lower-grid"><div className="card form-card"><div className="card-header"><div><span className="eyebrow">DESEMPENHO RECENTE</span><h3>Últimos resultados</h3></div><button className="text-button" onClick={() => setActive('Calendário')}>Calendário <ChevronRight /></button></div><div className="results"><Result opponent="CRU" name="Cruzeiro" score="2 — 0" result="V" date="08 FEV" /><Result opponent="GRE" name="Grêmio" score="1 — 1" result="E" date="02 FEV" /><Result opponent="VAS" name="Vasco" score="0 — 1" result="D" date="26 JAN" /></div></div><div className="card news-card"><div className="card-header"><div><span className="eyebrow">CENTRAL DO CLUBE</span><h3>Notícias e eventos</h3></div><button className="icon-button"><Bell /></button></div><div className="news-item"><span className="news-icon blue"><ArrowUpRight /></span><div><b>Receita de bilheteria atualizada</b><p>R$ 1,24 mi adicionados ao caixa</p></div><time>Hoje</time></div><div className="news-item"><span className="news-icon amber"><ClipboardList /></span><div><b>3 contratos perto do fim</b><p>Revise as renovações pendentes</p></div><time>Ontem</time></div></div></section>
           </>}
