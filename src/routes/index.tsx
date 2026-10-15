@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import Dashboard from "@/components/dashboard";
+import { Game } from "@/components/game/game";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -7,9 +7,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Clube Campeão World | Gestão de futebol" },
-      { name: "description", content: "Assuma o comando, construa seu elenco e leve seu clube ao topo." },
+      { name: "description", content: "Escolha seu clube do Brasileirão, monte o elenco e dispute 38 rodadas ao vivo." },
       { property: "og:title", content: "Clube Campeão World | Gestão de futebol" },
-      { property: "og:description", content: "Assuma o comando, construa seu elenco e leve seu clube ao topo." },
+      { property: "og:description", content: "Escolha seu clube do Brasileirão, monte o elenco e dispute 38 rodadas ao vivo." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -19,22 +19,15 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { user, ready } = useAuth();
-  if (!ready) return <div className="auth-shell" />;
+  if (!ready) return <div className="g-loading"><div className="g-spinner" /></div>;
   return (
     <>
-      {/* keyed so the career reloads from the account after sign-in */}
-      <Dashboard key={user?.id ?? "guest"} />
+      <Game key={user?.id ?? "guest"} userId={user?.id ?? null} />
       <div className="account-chip">
         {user ? (
-          <>
-            <span>{user.email}</span>
-            <button onClick={() => supabase.auth.signOut()}>Sair</button>
-          </>
+          <button onClick={() => supabase.auth.signOut()}>Sair</button>
         ) : (
-          <>
-            <span>Carreira não salva</span>
-            <Link to="/auth">Entrar</Link>
-          </>
+          <><span>Salvo só neste aparelho</span><Link to="/auth">Entrar</Link></>
         )}
       </div>
     </>
