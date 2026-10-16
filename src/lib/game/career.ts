@@ -1,4 +1,4 @@
-import { CLUBS, clubById } from "./clubs";
+import { CLUBS, COMPANIES, KIT_BRANDS, clubById } from "./clubs";
 import { simulateMatch } from "@/lib/career/simulation";
 
 export type Pos = "GOL" | "DEF" | "MEI" | "ATA";
@@ -22,7 +22,17 @@ export type CareerV2 = {
   transferredIn: string[];
   transferredOut: string[];
   formation: "4-3-3" | "4-4-2" | "3-5-2" | "5-3-2";
+  debt: number;
+  stadium: { capacity: number; ticketPrice: number; level: number; building?: { until: string; seats: number } };
+  sponsors: Sponsor[];
+  sponsorOffers: SponsorOffer[];
+  otherSquads?: Record<string, Player[]>;
+  ledger: { week: string; income: number; expense: number; items: { label: string; value: number }[] }[];
 };
+
+export type SponsorSlot = "Máster" | "Material esportivo" | "Manga" | "Costas" | "Naming rights";
+export type Sponsor = { id: string; company: string; slot: SponsorSlot; weekly: number; until: string; real?: boolean };
+export type SponsorOffer = { id: string; company: string; slot: SponsorSlot; weekly: number; weeks: number; expires: string };
 
 // ---------- deterministic random ----------
 export function seeded(seed: string) {
@@ -133,7 +143,8 @@ export const teamRating = (squad: Player[], formation?: CareerV2["formation"]) =
 
 export function aiSquad(career: CareerV2, clubId: string) {
   const c = clubById(clubId);
-  return generateSquad(clubId, c.rating).filter((p) => !career.transferredOut.includes(p.id) && !career.transferredIn.includes(p.id));
+  const base = career.otherSquads?.[clubId]?.length ? career.otherSquads[clubId]! : generateSquad(clubId, c.rating);
+  return base.filter((p) => !career.transferredOut.includes(p.id) && !career.transferredIn.includes(p.id));
 }
 export function aiRating(career: CareerV2, clubId: string) {
   return teamRating(aiSquad(career, clubId));
@@ -147,6 +158,7 @@ export function createCareer(manager: string, clubId: string, apiSquad?: Player[
     version: 2, manager, clubId, season: "2025", date: "2025-03-24", balance: club.budget,
     squad, fixtures: makeFixtures(`${clubId}:${manager}:2025`), market: [], offers: [], news: [],
     transferredIn: [], transferredOut: [], formation: "4-3-3",
+    debt: club.debt, stadium: { capacity: club.capacity, ticketPrice: 60, level: 1 }, sponsors: initialSponsors(clubId), sponsorOffers: [], ledger: [],
   };
   base.market = refreshMarket(base, "2025-03-24");
   base.news = [{ id: "welcome", date: base.date, kind: "info", title: `${manager} é o novo técnico do ${club.name}!`, body: `A diretoria espera brigar na parte de cima da tabela. Orçamento disponível: ${money(club.budget)}.` }];
@@ -180,7 +192,7 @@ export const money = (v: number) => {
 export const nextFixture = (c: CareerV2) => c.fixtures.find((f) => f.hg == null && (f.home === c.clubId || f.away === c.clubId));
 export const currentRound = (c: CareerV2) => nextFixture(c)?.round ?? 39;
 
-function addDays(date: string, n: number) { const d = new Date(`${date}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+export function addDays(date: string, n: number) { const d = new Date(`${date}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
 
 /** Advance one day. Blocked on match day until the match is played. */
 export function advanceDay(c: CareerV2): { career: CareerV2; blocked?: string } {
@@ -190,10 +202,16 @@ export function advanceDay(c: CareerV2): { career: CareerV2; blocked?: string } 
   next.date = addDays(c.date, 1);
   const r = seeded(`day:${next.date}:${c.clubId}`);
   // weekly wages on Mondays
-  if (new Date(`${next.date}T00:00:00Z`).getUTCDay() === 1) {
-    const wages = next.squad.reduce((s, p) => s + p.wage, 0) * 7 / 30;
-    next.balance -= Math.round(wages);
+  const dow = new Date(`${next.date}T00:00:00Z`).getUTCDay();
+  if (dow === 1) weeklyFinance(next);
+  if (next.date.endsWith("-01")) monthlyDebt(next);
+  if (next.stadium.building && next.date >= next.stadium.building.until) {
+    next.stadium.capacity += next.stadium.building.seats; next.stadium.level += 1;
+    next.news.unshift({ id: `stad-${next.date}`, date: next.date, kind: "info", title: "Obra concluída no estádio!", body: `Capacidade agora: ${next.stadium.capacity.toLocaleString("pt-BR")} lugares.` });
+    delete next.stadium.building;
   }
+  next.sponsorOffers = next.sponsorOffers.filter((o) => o.expires >= next.date);
+  if (r() < 0.12) addSponsorOffer(next, r);
   // expire offers
   next.offers = next.offers.filter((o) => o.expires >= next.date);
   // AI offer for one of your players
@@ -233,10 +251,13 @@ export function completeRound(c: CareerV2, hg: number, ag: number): CareerV2 {
   const isHome = nf.home === c.clubId;
   const my = isHome ? hg : ag, opp = isHome ? ag : hg;
   const club = clubById(c.clubId);
-  const prize = (my > opp ? 1_200_000 : my === opp ? 500_000 : 200_000) + (isHome ? 900_000 : 0);
+  const gate = isHome ? gateIncome(c) : null;
+  const prize = (my > opp ? 1_200_000 : my === opp ? 500_000 : 200_000) + (gate?.income ?? 0);
   next.balance += prize;
+  const wk = currentWeek(next);
+  wk.income += prize; wk.items.push({ label: `Rodada ${nf.round}${gate ? ` · ${gate.attendance.toLocaleString("pt-BR")} torcedores` : " · premiação"}`, value: prize });
   const oppClub = clubById(isHome ? nf.away : nf.home);
-  next.news.unshift({ id: `res-${nf.round}`, date: next.date, kind: "result", title: `${my > opp ? "Vitória" : my === opp ? "Empate" : "Derrota"}: ${club.short} ${my} x ${opp} ${oppClub.short}`, body: `Rodada ${nf.round} do Brasileirão. Receita da partida: ${money(prize)}.` });
+  next.news.unshift({ id: `res-${nf.round}`, date: next.date, kind: "result", title: `${my > opp ? "Vitória" : my === opp ? "Empate" : "Derrota"}: ${club.short} ${my} x ${opp} ${oppClub.short}`, body: `Rodada ${nf.round} do Brasileirão.${gate ? ` Público: ${gate.attendance.toLocaleString("pt-BR")}.` : ""} Receita: ${money(prize)}.` });
   next.date = addDays(next.date, 1);
   return next;
 }
@@ -268,5 +289,123 @@ export function sellPlayer(c: CareerV2, playerId: string, fee: number, toClub?: 
   next.offers = next.offers.filter((o) => o.playerId !== playerId);
   next.transferredOut.push(playerId);
   next.news.unshift({ id: `out-${p.id}`, date: c.date, kind: "transfer", title: `Vendido: ${p.name}`, body: `${toClub ? `Para o ${clubById(toClub).name}` : "Negociado"} por ${money(fee)}.` });
+  return { career: next };
+}
+
+
+// ---------- finances ----------
+export function ensureFields(c: CareerV2): CareerV2 {
+  const club = clubById(c.clubId);
+  return {
+    ...c,
+    debt: c.debt ?? club.debt,
+    stadium: c.stadium ?? { capacity: club.capacity, ticketPrice: 60, level: 1 },
+    sponsors: c.sponsors ?? initialSponsors(c.clubId),
+    sponsorOffers: c.sponsorOffers ?? [],
+    ledger: c.ledger ?? [],
+  };
+}
+
+function initialSponsors(clubId: string): Sponsor[] {
+  const club = clubById(clubId);
+  const r = seeded(`sp:${clubId}`);
+  const scale = club.rating >= 80 ? 1 : club.rating >= 75 ? 0.6 : 0.35;
+  const pick = (arr: string[]) => arr[Math.floor(r() * arr.length)]!;
+  return [
+    { id: "sp-master", company: club.master ?? pick(COMPANIES), slot: "Máster", weekly: Math.round(2_400_000 * scale / 1000) * 1000, until: "2025-12-31", real: !!club.master },
+    { id: "sp-kit", company: pick(KIT_BRANDS), slot: "Material esportivo", weekly: Math.round(1_300_000 * scale / 1000) * 1000, until: "2026-12-31" },
+    { id: "sp-sleeve", company: pick(COMPANIES), slot: "Manga", weekly: Math.round(180_000 * scale / 1000) * 1000, until: "2025-09-30" },
+  ];
+}
+
+export const SLOT_BASE: Record<SponsorSlot, number> = { "Máster": 2_400_000, "Material esportivo": 1_300_000, "Manga": 180_000, "Costas": 300_000, "Naming rights": 900_000 };
+
+function addSponsorOffer(c: CareerV2, r: () => number) {
+  const taken = new Set(c.sponsors.map((s) => s.slot));
+  const slots = (Object.keys(SLOT_BASE) as SponsorSlot[]).filter((s) => s !== "Material esportivo");
+  const slot = slots[Math.floor(r() * slots.length)]!;
+  const pos = computeTable(c.fixtures).findIndex((x) => x.clubId === c.clubId) + 1;
+  const prestige = (clubById(c.clubId).rating - 60) / 25 + (pos > 0 && pos <= 6 ? 0.2 : 0);
+  const company = (slot === "Máster" ? ["Betano", "Superbet", "Itaú Unibanco", "Nubank", "Banco do Brasil", "Magazine Luiza", "Ambev", "Mercado Livre", "Esportes da Sorte", "PicPay"] : COMPANIES)[Math.floor(r() * (slot === "Máster" ? 10 : COMPANIES.length))]!;
+  if (c.sponsors.some((s) => s.company === company)) return;
+  const weekly = Math.round((SLOT_BASE[slot] * Math.max(0.25, prestige) * (0.8 + r() * 0.5)) / 1000) * 1000;
+  const o: SponsorOffer = { id: `so-${c.date}-${slot}`, company, slot, weekly, weeks: [20, 40, 52][Math.floor(r() * 3)]!, expires: addDays(c.date, 5) };
+  c.sponsorOffers.unshift(o);
+  c.news.unshift({ id: o.id, date: c.date, kind: "offer", title: `${company} quer patrocinar o clube`, body: `${slot}: ${money(weekly)}/semana por ${o.weeks} semanas${taken.has(slot) ? " (substitui o contrato atual)" : ""}. Veja em Clube › Patrocínios.` });
+}
+
+export function acceptSponsor(c: CareerV2, offerId: string): CareerV2 {
+  const o = c.sponsorOffers.find((x) => x.id === offerId);
+  if (!o) return c;
+  const next = structuredClone(c);
+  next.sponsors = next.sponsors.filter((s) => s.slot !== o.slot);
+  next.sponsors.push({ id: `sp-${o.id}`, company: o.company, slot: o.slot, weekly: o.weekly, until: addDays(c.date, o.weeks * 7) });
+  next.sponsorOffers = next.sponsorOffers.filter((x) => x.id !== offerId);
+  next.news.unshift({ id: `spok-${o.id}`, date: c.date, kind: "transfer", title: `Novo patrocínio: ${o.company}`, body: `${o.slot} · ${money(o.weekly)} por semana.` });
+  return next;
+}
+
+export function currentWeek(c: CareerV2) {
+  const d = new Date(`${c.date}T00:00:00Z`);
+  const monday = addDays(c.date, -((d.getUTCDay() + 6) % 7));
+  let wk = c.ledger[0];
+  if (!wk || wk.week !== monday) { wk = { week: monday, income: 0, expense: 0, items: [] }; c.ledger.unshift(wk); c.ledger = c.ledger.slice(0, 8); }
+  return wk;
+}
+
+function weeklyFinance(c: CareerV2) {
+  const wk = currentWeek(c);
+  const wages = Math.round(c.squad.reduce((s, p) => s + p.wage, 0) * 12 / 52);
+  c.sponsors = c.sponsors.filter((s) => {
+    if (s.until < c.date) { c.news.unshift({ id: `spend-${s.id}-${c.date}`, date: c.date, kind: "info", title: `Fim do contrato com ${s.company}`, body: `O espaço ${s.slot} está livre. Aguarde novas propostas.` }); return false; }
+    return true;
+  });
+  const sponsorIncome = c.sponsors.reduce((s, x) => s + x.weekly, 0);
+  const upkeep = Math.round(c.stadium.capacity * 9);
+  c.balance += sponsorIncome - wages - upkeep;
+  wk.income += sponsorIncome; wk.expense += wages + upkeep;
+  wk.items.push({ label: "Patrocínios", value: sponsorIncome }, { label: "Salários", value: -wages }, { label: "Manutenção do estádio", value: -upkeep });
+}
+
+function monthlyDebt(c: CareerV2) {
+  if (c.debt <= 0) return;
+  const interest = Math.round(c.debt * 0.003);
+  const principal = Math.round(Math.min(c.debt, c.debt * 0.002 + 200_000));
+  c.balance -= interest + principal;
+  c.debt -= principal;
+  const wk = currentWeek(c);
+  wk.expense += interest + principal;
+  wk.items.push({ label: "Parcela da dívida (juros)", value: -interest }, { label: "Parcela da dívida (amortização)", value: -principal });
+  c.news.unshift({ id: `debt-${c.date}`, date: c.date, kind: "info", title: "Parcela da dívida paga", body: `${money(interest + principal)} debitados. Dívida restante: ${money(c.debt)}.` });
+}
+
+export function payDebt(c: CareerV2, amount: number): { career: CareerV2; error?: string } {
+  const value = Math.min(amount, c.debt);
+  if (value <= 0) return { career: c };
+  if (value > c.balance) return { career: c, error: "Saldo insuficiente para essa amortização." };
+  const next = structuredClone(c);
+  next.balance -= value; next.debt -= value;
+  const wk = currentWeek(next); wk.expense += value; wk.items.push({ label: "Amortização antecipada", value: -value });
+  return { career: next };
+}
+
+export function gateIncome(c: CareerV2) {
+  const table = computeTable(c.fixtures);
+  const pos = table.findIndex((r) => r.clubId === c.clubId) + 1;
+  const hype = 0.95 - (pos - 1) * 0.015;
+  const priceFactor = Math.max(0.25, 1.25 - c.stadium.ticketPrice / 160);
+  const fill = Math.max(0.2, Math.min(1, hype * priceFactor));
+  const attendance = Math.round(c.stadium.capacity * fill);
+  return { attendance, fill, income: attendance * c.stadium.ticketPrice };
+}
+
+export const EXPANSION = { seats: 5000, cost: 25_000_000, days: 60 };
+export function expandStadium(c: CareerV2): { career: CareerV2; error?: string } {
+  if (c.stadium.building) return { career: c, error: "Já existe uma obra em andamento." };
+  if (c.balance < EXPANSION.cost) return { career: c, error: `Precisa de ${money(EXPANSION.cost)} em caixa.` };
+  const next = structuredClone(c);
+  next.balance -= EXPANSION.cost;
+  next.stadium.building = { until: addDays(c.date, EXPANSION.days), seats: EXPANSION.seats };
+  const wk = currentWeek(next); wk.expense += EXPANSION.cost; wk.items.push({ label: "Obra de ampliação do estádio", value: -EXPANSION.cost });
   return { career: next };
 }

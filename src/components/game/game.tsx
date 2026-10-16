@@ -1,16 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Home, CalendarDays, ListOrdered, Shirt, ArrowLeftRight, Play, FastForward, SkipForward, Newspaper, Wallet, X } from "lucide-react";
+import { Home, CalendarDays, ListOrdered, Shirt, ArrowLeftRight, Building2, Play, FastForward, SkipForward, Newspaper, Wallet, X } from "lucide-react";
 import { toast } from "sonner";
 import { CLUBS, clubById } from "@/lib/game/clubs";
 import {
   advanceDay, advanceToMatch, aiSquad, bestEleven, buyPlayer, completeRound, computeTable, createCareer, currentRound,
-  money, nextFixture, sellPlayer, squadFromApi, teamRating, type CareerV2, type Player, type Pos,
+  ensureFields, money, nextFixture, refreshMarket, sellPlayer, squadFromApi, teamRating, type CareerV2, type Player, type Pos,
 } from "@/lib/game/career";
 import { loadCareer, saveCareer } from "@/lib/game/storage";
 import { LiveMatch } from "@/components/live-match";
 import { Crest, Onboarding } from "./onboarding";
+import { ClubTab } from "./club-tab";
 
-type Tab = "inicio" | "calendario" | "tabela" | "elenco" | "mercado";
+type Tab = "inicio" | "calendario" | "tabela" | "elenco" | "mercado" | "clube";
 const fmtDate = (d: string, opts: Intl.DateTimeFormatOptions = { weekday: "short", day: "2-digit", month: "short" }) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString("pt-BR", { ...opts, timeZone: "UTC" });
 
@@ -25,18 +26,52 @@ export function Game({ userId }: { userId: string | null }) {
 
   useEffect(() => {
     let off = false;
-    loadCareer(userId).then((r) => { if (off) return; setCareer(r.career); rowId.current = r.rowId; })
+    loadCareer(userId).then((r) => { if (off) return; setCareer(r.career ? ensureFields(r.career) : null); rowId.current = r.rowId; })
       .catch(() => toast.error("Não foi possível carregar sua carreira."))
       .finally(() => !off && setLoading(false));
     return () => { off = true; };
   }, [userId]);
 
-  const update = (c: CareerV2) => {
-    setCareer(c);
+  // Load real squads for every other club once per career
+  const fetchingSquads = useRef(false);
+  useEffect(() => {
+    if (!career || career.otherSquads || fetchingSquads.current) return;
+    fetchingSquads.current = true;
+    (async () => {
+      const result: Record<string, Player[]> = {};
+      const others = CLUBS.filter((c) => c.id !== career.clubId);
+      for (let i = 0; i < others.length; i += 5) {
+        await Promise.all(others.slice(i, i + 5).map(async (c) => {
+          try {
+            const res = await fetch(`/api/football/squad?teamId=${c.apiId}`);
+            if (!res.ok) return;
+            const data = await res.json();
+            const sq = squadFromApi(c.id, c.rating, data.players ?? []);
+            if (sq.length >= 16) result[c.id] = sq;
+          } catch { /* keep generated squad */ }
+        }));
+      }
+      if (Object.keys(result).length === 0) { fetchingSquads.current = false; return; }
+      setCareer((cur) => {
+        if (!cur) return cur;
+        const next = { ...cur, otherSquads: result };
+        next.market = refreshMarket(next, next.date);
+        queueSave(next);
+        return next;
+      });
+    })();
+  }, [career?.clubId, !!career?.otherSquads]);
+
+  const queueSave = (c: CareerV2) => {
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
       saveCareer(userId, rowId.current, c).then((id) => { rowId.current = id; }).catch(() => toast.error("Falha ao salvar. Tentaremos de novo."));
     }, 400);
+  };
+
+  const update = (c: CareerV2) => {
+    setCareer(c);
+    queueSave(c);
   };
 
   const start = async (manager: string, clubId: string) => {
@@ -79,12 +114,13 @@ export function Game({ userId }: { userId: string | null }) {
         {tab === "tabela" && <TableTab career={career} />}
         {tab === "elenco" && <SquadTab career={career} update={update} />}
         {tab === "mercado" && <MarketTab career={career} update={update} />}
+        {tab === "clube" && <ClubTab career={career} update={update} />}
       </main>
 
       <nav className="g-nav">
-        {([["inicio", Home, "Início"], ["calendario", CalendarDays, "Jogos"], ["tabela", ListOrdered, "Tabela"], ["elenco", Shirt, "Elenco"], ["mercado", ArrowLeftRight, "Mercado"]] as const).map(([k, Icon, l]) => (
+        {([["inicio", Home, "Início"], ["calendario", CalendarDays, "Jogos"], ["tabela", ListOrdered, "Tabela"], ["elenco", Shirt, "Elenco"], ["mercado", ArrowLeftRight, "Mercado"], ["clube", Building2, "Clube"]] as const).map(([k, Icon, l]) => (
           <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>
-            <Icon />{l}{k === "mercado" && career.offers.length > 0 && <i className="g-badge">{career.offers.length}</i>}
+            <Icon />{l}{k === "mercado" && career.offers.length > 0 && <i className="g-badge">{career.offers.length}</i>}{k === "clube" && career.sponsorOffers.length > 0 && <i className="g-badge">{career.sponsorOffers.length}</i>}
           </button>
         ))}
       </nav>
@@ -152,7 +188,7 @@ function HomeTab({ career, matchDay, onAdvance, onSkip, onPlay, goto }: { career
       <div className="g-tiles">
         <button className="g-tile" onClick={() => goto("tabela")}><span>Posição</span><b>{pos}º</b><small>{row.pts} pts · {row.p} jogos</small></button>
         <button className="g-tile" onClick={() => goto("elenco")}><span>Força</span><b>{teamRating(career.squad, career.formation)}</b><small>{career.squad.length} jogadores</small></button>
-        <button className="g-tile" onClick={() => goto("mercado")}><span>Propostas</span><b>{career.offers.length}</b><small>no mercado</small></button>
+        <button className="g-tile" onClick={() => goto("clube")}><span>Dívida</span><b className="g-tile-debt">{money(career.debt).replace("R$ ", "")}</b><small>{clubById(career.clubId).stadium}</small></button>
       </div>
 
       <section className="g-card">
