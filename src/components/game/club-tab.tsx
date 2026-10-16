@@ -61,7 +61,7 @@ function Debt({ career, update }: { career: CareerV2; update: (c: CareerV2) => v
   const club = clubById(career.clubId);
   const paid = club.debt - career.debt;
   const pct = club.debt ? Math.round((paid / club.debt) * 100) : 100;
-  const monthly = Math.round(career.debt * 0.008) + Math.round(Math.min(career.debt, career.debt * 0.004 + 300_000));
+  const monthly = Math.round(career.debt * 0.003) + Math.round(Math.min(career.debt, career.debt * 0.002 + 200_000));
   const pay = (v: number) => { const r = payDebt(career, v); if (r.error) toast.error(r.error); else { update(r.career); toast.success(`${money(Math.min(v, career.debt))} amortizados`); } };
   return (
     <section className="g-card">
@@ -71,7 +71,7 @@ function Debt({ career, update }: { career: CareerV2; update: (c: CareerV2) => v
       <p className="g-mini">{pct}% quitado desde o início da carreira (dívida inicial {money(club.debt)}, referência de balanços divulgados).</p>
       <div className="g-facts">
         <div><span>Parcela mensal</span><b>{money(monthly)}</b></div>
-        <div><span>Juros</span><b>0,8% ao mês</b></div>
+        <div><span>Juros</span><b>0,3% ao mês</b></div>
       </div>
       <p className="g-mini">A parcela é debitada todo dia 1º. Amortizar antes reduz os juros.</p>
       <div className="g-row3">

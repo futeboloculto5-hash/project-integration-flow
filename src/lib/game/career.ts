@@ -369,8 +369,8 @@ function weeklyFinance(c: CareerV2) {
 
 function monthlyDebt(c: CareerV2) {
   if (c.debt <= 0) return;
-  const interest = Math.round(c.debt * 0.008);
-  const principal = Math.round(Math.min(c.debt, c.debt * 0.004 + 300_000));
+  const interest = Math.round(c.debt * 0.003);
+  const principal = Math.round(Math.min(c.debt, c.debt * 0.002 + 200_000));
   c.balance -= interest + principal;
   c.debt -= principal;
   const wk = currentWeek(c);
