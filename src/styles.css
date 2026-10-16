@@ -517,3 +517,4 @@ h1 { text-transform: uppercase; font-weight: 800; font-style: italic; }
 .g-logo-co { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--foreground); color: oklch(0.2 0.06 262); font: 900 13px var(--font-display); }
 .g-real { display: inline-block; margin-left: 6px; font: 700 10px var(--font-body); font-style: normal; color: oklch(0.2 0.06 262); background: var(--gold); border-radius: 5px; padding: 1px 5px; vertical-align: middle; }
 .g-nav button { font-size: 11px; }
+.account-chip { top: auto; bottom: 82px !important; right: 10px; }
