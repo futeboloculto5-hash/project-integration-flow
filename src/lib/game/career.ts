@@ -208,7 +208,7 @@ export function advanceDay(c: CareerV2): { career: CareerV2; blocked?: string } 
   if (next.stadium.building && next.date >= next.stadium.building.until) {
     next.stadium.capacity += next.stadium.building.seats; next.stadium.level += 1;
     next.news.unshift({ id: `stad-${next.date}`, date: next.date, kind: "info", title: "Obra concluída no estádio!", body: `Capacidade agora: ${next.stadium.capacity.toLocaleString("pt-BR")} lugares.` });
-    next.stadium.building = undefined;
+    delete next.stadium.building;
   }
   next.sponsorOffers = next.sponsorOffers.filter((o) => o.expires >= next.date);
   if (r() < 0.12) addSponsorOffer(next, r);

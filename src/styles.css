@@ -407,7 +407,7 @@ h1 { text-transform: uppercase; font-weight: 800; font-style: italic; }
 .g-cash svg { width: 16px; }
 .g-main { max-width: 760px; margin: 0 auto; padding: 12px; }
 .g-stack { display: grid; gap: 12px; }
-.g-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); background: oklch(0.16 0.05 262); border-top: 2px solid var(--line); }
+.g-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: repeat(6, 1fr); padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); background: oklch(0.16 0.05 262); border-top: 2px solid var(--line); }
 .g-nav button { position: relative; display: grid; justify-items: center; gap: 2px; padding: 6px 0; border: 0; border-radius: 12px; background: none; color: var(--muted); font: 800 12px var(--font-display); text-transform: uppercase; cursor: pointer; }
 .g-nav button svg { width: 22px; height: 22px; }
 .g-nav button.on { background: var(--accent); color: oklch(0.2 0.06 262); }
