@@ -490,3 +490,30 @@ h1 { text-transform: uppercase; font-weight: 800; font-style: italic; }
 .account-chip { top: 64px; bottom: auto !important; right: 10px; padding: 3px; font-size: 11px; opacity: .92; }
 .account-chip span { display: none; }
 .account-chip a, .account-chip button { padding: 4px 10px; font-size: 12px; }
+/* Club tab */
+.g-seg-icons button { display: grid; justify-items: center; gap: 2px; height: auto; padding: 8px 2px; font-size: 12px; position: relative; }
+.g-seg-icons svg { width: 18px; height: 18px; }
+.g-dot { position: absolute; top: 5px; right: 12%; width: 9px; height: 9px; border-radius: 50%; background: var(--danger); }
+.g-big-money { font: 900 italic 38px/1 var(--font-display); color: var(--accent); }
+.g-pos-v { color: var(--accent) !important; } .g-neg-v { color: var(--away) !important; }
+.g-tile-debt { color: var(--away) !important; font-size: 24px !important; }
+.g-progress { height: 12px; border-radius: 99px; background: oklch(0.16 0.05 262); overflow: hidden; }
+.g-progress i { display: block; height: 100%; background: var(--accent); }
+.g-row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; } .g-row3 .g-btn { padding: 0 6px; font-size: 15px; }
+.g-ledger { background: var(--panel-2); border-radius: 10px; padding: 8px 10px; display: grid; gap: 3px; }
+.g-ledger-h { display: flex; justify-content: space-between; font: 800 15px var(--font-display); }
+.g-ledger-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.g-stadium { position: relative; overflow: hidden; border-radius: 20px; border: 2px solid var(--line); box-shadow: var(--shadow-pop); min-height: 170px; display: grid; align-items: end;
+  background: radial-gradient(60% 50% at 50% 70%, oklch(0.62 0.17 145), oklch(0.4 0.14 148) 60%, oklch(0.2 0.06 262) 100%); }
+.g-stadium-art { position: absolute; inset: 0; }
+.g-stadium-art i { position: absolute; top: 8px; width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(oklch(1 0 0 / .95), transparent 65%); }
+.g-stadium-art i:nth-child(1) { left: 6% } .g-stadium-art i:nth-child(2) { left: 30% } .g-stadium-art i:nth-child(3) { right: 30% } .g-stadium-art i:nth-child(4) { right: 6% }
+.g-stadium-info { position: relative; padding: 14px; background: linear-gradient(transparent, oklch(0.15 0.05 262 / .92)); display: grid; }
+.g-stadium-info span { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.g-stadium-info h2 { margin: 0; font: 900 italic 30px/1 var(--font-display); text-transform: uppercase; }
+.g-stadium-info b { font: 800 15px var(--font-display); color: var(--accent); }
+.g-price-row { display: grid; grid-template-columns: 56px 1fr 56px; align-items: center; text-align: center; }
+.g-price-row .g-btn { font-size: 26px; padding: 0; } .g-price-row b { display: block; font: 900 italic 32px var(--font-display); } .g-price-row span { font-size: 12px; color: var(--muted); }
+.g-logo-co { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--foreground); color: oklch(0.2 0.06 262); font: 900 13px var(--font-display); }
+.g-real { display: inline-block; margin-left: 6px; font: 700 10px var(--font-body); font-style: normal; color: oklch(0.2 0.06 262); background: var(--gold); border-radius: 5px; padding: 1px 5px; vertical-align: middle; }
+.g-nav button { font-size: 11px; }
