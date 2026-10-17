@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Home, CalendarDays, ListOrdered, Shirt, ArrowLeftRight, Building2, Play, FastForward, SkipForward, Newspaper, Wallet, X } from "lucide-react";
+import { Home, CalendarDays, ListOrdered, Shirt, ArrowLeftRight, Building2, Play, FastForward, SkipForward, Newspaper, Wallet, X, CloudCheck, CloudUpload, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { CLUBS, clubById } from "@/lib/game/clubs";
 import {
   advanceDay, advanceToMatch, aiSquad, bestEleven, buyPlayer, completeRound, computeTable, createCareer, currentRound,
   ensureFields, money, nextFixture, refreshMarket, sellPlayer, squadFromApi, teamRating, type CareerV2, type Player, type Pos,
 } from "@/lib/game/career";
-import { loadCareer, saveCareer } from "@/lib/game/storage";
+import { Button } from "@/components/ui/button";
+import { getSaveStatus, subscribeSave, retryCareerSave, type SaveStatus, loadCareer, saveCareer } from "@/lib/game/storage";
 import { LiveMatch } from "@/components/live-match";
 import { Crest, Onboarding } from "./onboarding";
 import { ClubTab } from "./club-tab";
@@ -22,15 +23,25 @@ export function Game({ userId }: { userId: string | null }) {
   const [tab, setTab] = useState<Tab>("inicio");
   const [live, setLive] = useState(false);
   const rowId = useRef<string | null>(null);
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [saveState, setSaveState] = useState<SaveStatus>(() => getSaveStatus(userId));
+  const [loadError, setLoadError] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+
+  useEffect(() => subscribeSave(userId, () => setSaveState(getSaveStatus(userId))), [userId]);
+  useEffect(() => {
+    const retry = () => { void retryCareerSave(userId).catch(() => {}); };
+    window.addEventListener("online", retry);
+    return () => window.removeEventListener("online", retry);
+  }, [userId]);
 
   useEffect(() => {
     let off = false;
+    setLoading(true); setLoadError(false);
     loadCareer(userId).then((r) => { if (off) return; setCareer(r.career ? ensureFields(r.career) : null); rowId.current = r.rowId; })
-      .catch(() => toast.error("Não foi possível carregar sua carreira."))
+      .catch(() => { if (!off) { setLoadError(true); toast.error("Não foi possível carregar sua carreira. Seus dados não foram alterados."); } })
       .finally(() => !off && setLoading(false));
     return () => { off = true; };
-  }, [userId]);
+  }, [userId, loadAttempt]);
 
   // Load real squads for every other club once per career
   const fetchingSquads = useRef(false);
@@ -63,10 +74,9 @@ export function Game({ userId }: { userId: string | null }) {
   }, [career?.clubId, !!career?.otherSquads]);
 
   const queueSave = (c: CareerV2) => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => {
-      saveCareer(userId, rowId.current, c).then((id) => { rowId.current = id; }).catch(() => toast.error("Falha ao salvar. Tentaremos de novo."));
-    }, 400);
+    void saveCareer(userId, rowId.current, c).then((id) => { rowId.current = id; }).catch(() => {
+      toast.error(userId ? "Carreira guardada neste aparelho. A sincronização será tentada novamente." : "Não foi possível salvar neste aparelho.");
+    });
   };
 
   const update = (c: CareerV2) => {
@@ -83,11 +93,12 @@ export function Game({ userId }: { userId: string | null }) {
       if (res.ok) { const data = await res.json(); real = squadFromApi(clubId, club.rating, data.players ?? []); }
     } catch { /* fall back to generated squad */ }
     const c = createCareer(manager, clubId, real);
-    try { rowId.current = await saveCareer(userId, null, c); } catch { /* saved locally on next update */ }
+    queueSave(c);
     setCareer(c); setBusy(false);
   };
 
   if (loading) return <div className="g-loading"><div className="g-spinner" /></div>;
+  if (loadError) return <div className="g-loading"><div className="g-stack"><p>Não foi possível recuperar sua carreira.</p><Button onClick={() => setLoadAttempt((n) => n + 1)}><RefreshCw /> Tentar novamente</Button></div></div>;
   if (!career) return <Onboarding onStart={start} busy={busy} />;
 
   const club = clubById(career.clubId);
@@ -108,6 +119,11 @@ export function Game({ userId }: { userId: string | null }) {
         <div className="g-cash"><Wallet /> {money(career.balance)}</div>
       </header>
 
+      <div className="flex items-center justify-end gap-2 px-4 py-1 text-xs text-muted-foreground" role="status" aria-live="polite">
+        {saveState === "saving" ? <CloudUpload size={14} /> : <CloudCheck size={14} />}
+        <span>{saveState === "saving" ? "Salvando…" : saveState === "pending" ? "Salvo no aparelho · sincronização pendente" : saveState === "error" ? "Falha no salvamento" : userId ? "Carreira salva na nuvem" : "Carreira salva neste aparelho"}</span>
+        {(saveState === "pending" || saveState === "error") && <Button variant="ghost" size="icon" title="Tentar salvar novamente" aria-label="Tentar salvar novamente" onClick={() => { if (career) queueSave(career); }}><RefreshCw /></Button>}
+      </div>
       <main className="g-main">
         {tab === "inicio" && <HomeTab career={career} matchDay={matchDay} onAdvance={onAdvance} onSkip={() => update(advanceToMatch(career))} onPlay={() => setLive(true)} goto={setTab} />}
         {tab === "calendario" && <CalendarTab career={career} />}
