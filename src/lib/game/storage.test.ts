@@ -1,0 +1,86 @@
+import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
+import { createCareer, completeRound, computeTable, buyPlayer, payDebt } from "./career";
+
+const db = vi.hoisted(() => ({ rows: [] as any[], writes: [] as any[], failure: false, hold: null as null | (() => void) }));
+vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: () => ({
+  select: () => ({ eq: (_column: string, id: string) => ({ order: async () => ({ data: db.rows.filter(r => r.user_id === id), error: db.failure ? new Error("offline") : null }) }) }),
+  upsert: (row: any) => ({ select: () => ({ single: async () => {
+    db.writes.push(structuredClone(row));
+    if (db.hold) await new Promise<void>(resolve => { db.hold = resolve; });
+    if (db.failure) return { data: null, error: new Error("offline") };
+    db.rows = [row, ...db.rows.filter(r => r.id !== row.id)];
+    return { data: { id: row.id }, error: null };
+  } }) }),
+}) } }));
+async function storage() { return import("./storage"); }
+function snapshot() {
+  let c = createCareer("Treinador persistente", "flamengo");
+  c = completeRound(c, 3, 1);
+  const p = c.market[0];
+  if (p) c = buyPlayer({ ...c, balance: 900_000_000 }, p.id).career;
+  c = payDebt(c, 1_000_000).career;
+  c.stadium.ticketPrice = 75;
+  return c;
+}
+beforeEach(() => { vi.resetModules(); localStorage.clear(); db.rows = []; db.writes = []; db.failure = false; db.hold = null; });
+afterEach(() => { vi.useRealTimers(); });
+describe("Career persistence", () => {
+  it("immediately saves guest changes before awaiting and recovers every field after reload", async () => {
+    const c = snapshot(); const s = await storage(); const promise = s.saveCareer(null, null, c);
+    expect(JSON.parse(localStorage.getItem("ccw-career-v2") ?? "null")).toEqual(c);
+    await promise; vi.resetModules();
+    const loaded = (await (await storage()).loadCareer(null)).career;
+    expect(loaded).toEqual(c);
+    expect(loaded?.clubId).toBe("flamengo"); expect(loaded?.manager).toBe("Treinador persistente");
+    expect(loaded?.fixtures.filter(f => f.hg != null)).toHaveLength(10);
+    expect(loaded?.transferredIn).toHaveLength(1);
+    expect(loaded?.stadium.ticketPrice).toBe(75);
+    expect(computeTable(loaded?.fixtures ?? [])).toEqual(computeTable(c.fixtures));
+  });
+  it("recovers full cloud state on a fresh sign-in without local storage", async () => {
+    const s = await storage(); const c = snapshot(); const id = await s.saveCareer("owner", null, c);
+    localStorage.clear(); vi.resetModules();
+    expect(await (await storage()).loadCareer("owner")).toEqual({ career: c, rowId: id });
+  });
+  it("preserves existing row identity and other careers", async () => {
+    const c = snapshot(); const old = createCareer("Outro", "palmeiras");
+    db.rows = [{ id: "existing", user_id: "owner", data: c, updated_at: "2025-01-01" }, { id: "untouched", user_id: "another", data: old, updated_at: "2025-01-01" }];
+    const s = await storage(); const loaded = await s.loadCareer("owner");
+    await s.saveCareer("owner", loaded.rowId, { ...c, formation: "4-4-2" });
+    expect(db.rows.map(r => r.id).sort()).toEqual(["existing", "untouched"]);
+    expect(db.rows.find(r => r.id === "untouched")?.data).toEqual(old);
+  });
+  it("serializes overlapping writes using one stable ID and the latest state", async () => {
+    db.hold = () => {}; const s = await storage(); const c = snapshot();
+    const first = s.saveCareer("owner", null, c);
+    const latest = { ...c, balance: 123456, formation: "4-4-2" as const };
+    const second = s.saveCareer("owner", null, latest);
+    expect(db.writes).toHaveLength(1);
+    const release = db.hold; db.hold = null; release?.();
+    const [a,b] = await Promise.all([first,second]);
+    expect(a).toBe(b); expect(db.rows).toHaveLength(1); expect(db.rows[0].data).toEqual(latest);
+  });
+  it("retries a failed cloud write automatically without losing the snapshot", async () => {
+    vi.useFakeTimers(); db.failure = true; const s = await storage(); const c = snapshot();
+    await expect(s.saveCareer("owner", null, c)).rejects.toThrow();
+    expect(s.getSaveStatus("owner")).toBe("pending");
+    expect(JSON.parse(localStorage.getItem("ccw-career-v2:owner") ?? "null").career).toEqual(c);
+    db.failure = false; await vi.advanceTimersByTimeAsync(1100);
+    expect(s.getSaveStatus("owner")).toBe("saved"); expect(db.rows[0].data).toEqual(c);
+  });
+  it("recovers an interrupted pending write after reload", async () => {
+    const c = snapshot(); localStorage.setItem("ccw-career-v2:owner", JSON.stringify({career:c,rowId:"stable",updatedAt:"2026-10-17T00:00:00Z",dirty:true}));
+    const s = await storage(); expect(await s.loadCareer("owner")).toEqual({career:c,rowId:"stable"});
+    await s.retryCareerSave("owner"); expect(db.rows[0].data).toEqual(c);
+  });
+  it("never loads another account's backup or hides cloud load failure as a new career", async () => {
+    const s = await storage(); await s.saveCareer("owner",null,snapshot()); db.failure = true;
+    await expect(s.loadCareer("another")).rejects.toThrow("Career load unavailable");
+  });
+  it("retains guest career and does not replace an existing signed-in career", async () => {
+    const s = await storage(); const guest = createCareer("Convidado","palmeiras"); const existing = snapshot();
+    await s.saveCareer(null,null,guest); await s.saveCareer("owner",null,existing);
+    expect((await s.loadCareer("owner")).career).toEqual(existing);
+    expect((await s.loadCareer(null)).career).toEqual(guest);
+  });
+});
