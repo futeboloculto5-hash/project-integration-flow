@@ -8,6 +8,13 @@
       "when": 1792105299212,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792368173503,
+      "tag": "0001_football_shared_cache_budget",
+      "breakpoints": true
     }
   ]
 }

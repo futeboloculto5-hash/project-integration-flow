@@ -62,6 +62,45 @@ export type Database = {
         }
         Relationships: []
       }
+      football_api_budget: {
+        Row: {
+          blocked_until: string | null
+          day: string
+          used: number
+        }
+        Insert: {
+          blocked_until?: string | null
+          day: string
+          used?: number
+        }
+        Update: {
+          blocked_until?: string | null
+          day?: string
+          used?: number
+        }
+        Relationships: []
+      }
+      football_api_cache: {
+        Row: {
+          fetched_at: string | null
+          locked_until: string | null
+          payload: Json | null
+          request_key: string
+        }
+        Insert: {
+          fetched_at?: string | null
+          locked_until?: string | null
+          payload?: Json | null
+          request_key: string
+        }
+        Update: {
+          fetched_at?: string | null
+          locked_until?: string | null
+          payload?: Json | null
+          request_key?: string
+        }
+        Relationships: []
+      }
       legacy_users: {
         Row: {
           auth_user_id: string | null
@@ -95,6 +134,7 @@ export type Database = {
     }
     Functions: {
       claim_legacy_account: { Args: never; Returns: number }
+      reserve_football_request: { Args: { p_key: string }; Returns: string }
     }
     Enums: {
       [_ in never]: never
