@@ -1,8 +1,9 @@
 import { CLUBS, COMPANIES, KIT_BRANDS, clubById } from "./clubs";
 import { simulateMatch } from "@/lib/career/simulation";
+import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 
 export type Pos = "GOL" | "DEF" | "MEI" | "ATA";
-export type Player = { id: string; name: string; pos: Pos; age: number; rating: number; value: number; wage: number; clubId: string; real?: boolean };
+export type Player = { id: string; name: string; pos: Pos; age: number; rating: number; value: number; wage: number; clubId: string; real?: boolean; apiId?: number; contractUntil?: string; ageUnknown?: boolean };
 export type Fixture = { round: number; date: string; home: string; away: string; hg?: number; ag?: number };
 export type NewsItem = { id: string; date: string; title: string; body: string; kind: "info" | "offer" | "transfer" | "result" };
 export type Offer = { id: string; playerId: string; fromClub: string; fee: number; expires: string };
@@ -27,6 +28,11 @@ export type CareerV2 = {
   sponsors: Sponsor[];
   sponsorOffers: SponsorOffer[];
   otherSquads?: Record<string, Player[]>;
+  worldClubs?: WorldClub[];
+  negotiations?: Negotiation[];
+  loans?: Loan[];
+  transferHistory?: TransferRecord[];
+  aiBalances?: Record<string, number>;
   ledger: { week: string; income: number; expense: number; items: { label: string; value: number }[] }[];
 };
 
@@ -80,7 +86,7 @@ export function squadFromApi(clubId: string, rating: number, api: { id: number |
   return api.slice(0, 32).map((a) => {
     const age = a.age ?? 24;
     const rt = Math.round(rating - 7 + r() * 11 - (age < 20 ? 4 : 0));
-    return { id: `${clubId}-api-${a.id}`, clubId, name: a.name, pos: mapApiPos(a.position), age, rating: rt, value: playerValue(rt, age), wage: playerWage(rt), real: true };
+    return { id: `${clubId}-api-${a.id}`, apiId: Number(a.id), clubId, name: a.name, pos: mapApiPos(a.position), age, ageUnknown: a.age == null, rating: rt, value: playerValue(rt, age), wage: playerWage(rt), real: true };
   });
 }
 
@@ -142,9 +148,10 @@ export const teamRating = (squad: Player[], formation?: CareerV2["formation"]) =
 };
 
 export function aiSquad(career: CareerV2, clubId: string) {
+  const stored = career.otherSquads?.[clubId];
+  if (stored) return stored.filter(p => p.clubId === clubId);
   const c = clubById(clubId);
-  const base = career.otherSquads?.[clubId]?.length ? career.otherSquads[clubId]! : generateSquad(clubId, c.rating);
-  return base.filter((p) => !career.transferredOut.includes(p.id) && !career.transferredIn.includes(p.id));
+  return generateSquad(clubId, c.rating).filter((p) => !career.transferredIn.includes(p.id));
 }
 export function aiRating(career: CareerV2, clubId: string) {
   return teamRating(aiSquad(career, clubId));
@@ -173,13 +180,17 @@ export function refreshMarket(career: CareerV2, date: string): Player[] {
     const sq = aiSquad(career, c.id);
     for (let i = 0; i < 2; i++) pool.push(sq[Math.floor(r() * sq.length)]!);
   }
+  for (const club of career.worldClubs ?? []) {
+    if (CLUBS.some(x => x.id === club.id)) continue;
+    pool.push(...(career.otherSquads?.[club.id] ?? []).filter(p => !career.loans?.some(l => l.playerId === p.id)));
+  }
   // free agents
   for (let i = 0; i < 6; i++) {
     const pos = (["GOL", "DEF", "MEI", "ATA"] as Pos[])[Math.floor(r() * 4)]!;
     const age = 27 + Math.floor(r() * 8); const rt = 64 + Math.floor(r() * 12);
     pool.push({ id: `fa-${date}-${i}`, clubId: "livre", pos, age, rating: rt, value: 0, wage: playerWage(rt), name: `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}` });
   }
-  return [...new Map(pool.map((p) => [p.id, p])).values()].sort((a, b) => b.rating - a.rating).slice(0, 40);
+  return [...new Map(pool.filter(p => p && !career.squad.some(x => x.id === p.id) && !career.loans?.some(l => l.playerId === p.id)).map((p) => [p.id, p])).values()].sort((a, b) => b.rating - a.rating);
 }
 
 export const money = (v: number) => {
@@ -200,6 +211,7 @@ export function advanceDay(c: CareerV2): { career: CareerV2; blocked?: string } 
   if (nf && c.date >= nf.date) return { career: c, blocked: "Hoje é dia de jogo! Jogue a partida para continuar." };
   const next: CareerV2 = structuredClone(c);
   next.date = addDays(c.date, 1);
+  processMarketDay(next);
   const r = seeded(`day:${next.date}:${c.clubId}`);
   // weekly wages on Mondays
   const dow = new Date(`${next.date}T00:00:00Z`).getUTCDay();
@@ -258,8 +270,8 @@ export function completeRound(c: CareerV2, hg: number, ag: number): CareerV2 {
   wk.income += prize; wk.items.push({ label: `Rodada ${nf.round}${gate ? ` · ${gate.attendance.toLocaleString("pt-BR")} torcedores` : " · premiação"}`, value: prize });
   const oppClub = clubById(isHome ? nf.away : nf.home);
   next.news.unshift({ id: `res-${nf.round}`, date: next.date, kind: "result", title: `${my > opp ? "Vitória" : my === opp ? "Empate" : "Derrota"}: ${club.short} ${my} x ${opp} ${oppClub.short}`, body: `Rodada ${nf.round} do Brasileirão.${gate ? ` Público: ${gate.attendance.toLocaleString("pt-BR")}.` : ""} Receita: ${money(prize)}.` });
-  next.date = addDays(next.date, 1);
-  return next;
+  // Use the regular daily path so contracts, loans and salary charges cannot be skipped.
+  return advanceDay(next).career;
 }
 
 // ---------- transfers ----------
@@ -269,27 +281,16 @@ export function buyPlayer(c: CareerV2, playerId: string): { career: CareerV2; er
   if (c.squad.length >= 32) return { career: c, error: "Elenco cheio (máximo 32). Venda alguém primeiro." };
   const fee = p.clubId === "livre" ? 0 : Math.round(p.value * 1.1);
   if (fee > c.balance) return { career: c, error: `Saldo insuficiente. Precisa de ${money(fee)}.` };
-  const next = structuredClone(c);
-  next.balance -= fee;
-  next.market = next.market.filter((x) => x.id !== playerId);
-  next.squad.push({ ...p, clubId: c.clubId, id: p.id });
-  next.transferredIn.push(p.id);
-  const from = p.clubId === "livre" ? "sem clube" : clubById(p.clubId).name;
-  next.news.unshift({ id: `in-${p.id}`, date: c.date, kind: "transfer", title: `Contratado: ${p.name}`, body: `${p.pos} de ${p.age} anos, vindo de ${from}, por ${fee ? money(fee) : "custo zero"}.` });
-  return { career: next };
+  return transferPlayer(c, playerId, p.clubId, c.clubId, { kind: 'buy', fee, wage: p.wage, months: 24 });
 }
 
 export function sellPlayer(c: CareerV2, playerId: string, fee: number, toClub?: string): { career: CareerV2; error?: string } {
   if (c.squad.length <= 16) return { career: c, error: "Elenco mínimo de 16 jogadores." };
   const p = c.squad.find((x) => x.id === playerId);
   if (!p) return { career: c };
-  const next = structuredClone(c);
-  next.squad = next.squad.filter((x) => x.id !== playerId);
-  next.balance += fee;
-  next.offers = next.offers.filter((o) => o.playerId !== playerId);
-  next.transferredOut.push(playerId);
-  next.news.unshift({ id: `out-${p.id}`, date: c.date, kind: "transfer", title: `Vendido: ${p.name}`, body: `${toClub ? `Para o ${clubById(toClub).name}` : "Negociado"} por ${money(fee)}.` });
-  return { career: next };
+  const buyer = toClub ?? CLUBS.find(x => x.id !== c.clubId && aiSquad(c, x.id).length < 32 && (c.aiBalances?.[x.id] ?? x.budget) >= fee)?.id;
+  if (!buyer) return { career: c, error: 'Nenhum clube comprador tem saldo ou vaga.' };
+  return transferPlayer(c, playerId, c.clubId, buyer, { kind: 'buy', fee, wage: p.wage, months: 24 });
 }
 
 
@@ -303,6 +304,8 @@ export function ensureFields(c: CareerV2): CareerV2 {
     sponsors: c.sponsors ?? initialSponsors(c.clubId),
     sponsorOffers: c.sponsorOffers ?? [],
     ledger: c.ledger ?? [],
+    squad: c.squad.map(p => ({ ...p, contractUntil: p.contractUntil ?? addDays(c.date, 730) })),
+    negotiations: c.negotiations ?? [], loans: c.loans ?? [], transferHistory: c.transferHistory ?? [], worldClubs: c.worldClubs ?? [], aiBalances: c.aiBalances ?? {},
   };
 }
 
