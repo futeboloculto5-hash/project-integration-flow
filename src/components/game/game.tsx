@@ -3,7 +3,7 @@ import { Home, CalendarDays, ListOrdered, Shirt, ArrowLeftRight, Building2, Play
 import { toast } from "sonner";
 import { CLUBS, clubById } from "@/lib/game/clubs";
 import {
-  advanceDay, advanceToMatch, aiSquad, bestEleven, buyPlayer, completeRound, computeTable, createCareer, currentRound,
+  advanceDay, advanceToMatch, aiSquad, bestEleven, completeRound, computeTable, createCareer, currentRound,
   ensureFields, money, nextFixture, refreshMarket, sellPlayer, squadFromApi, teamRating, type CareerV2, type Player, type Pos,
 } from "@/lib/game/career";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { getSaveStatus, subscribeSave, retryCareerSave, type SaveStatus, loadCar
 import { LiveMatch } from "@/components/live-match";
 import { Crest, Onboarding } from "./onboarding";
 import { ClubTab } from "./club-tab";
+import { WorldMarket } from "./world-market";
 
 type Tab = "inicio" | "calendario" | "tabela" | "elenco" | "mercado" | "clube";
 const fmtDate = (d: string, opts: Intl.DateTimeFormatOptions = { weekday: "short", day: "2-digit", month: "short" }) =>
@@ -51,21 +52,21 @@ export function Game({ userId }: { userId: string | null }) {
     (async () => {
       const result: Record<string, Player[]> = {};
       const others = CLUBS.filter((c) => c.id !== career.clubId);
-      for (let i = 0; i < others.length; i += 5) {
-        await Promise.all(others.slice(i, i + 5).map(async (c) => {
+      for (let i = 0; i < others.length; i += 1) {
+        await Promise.all(others.slice(i, i + 1).map(async (c) => {
           try {
             const res = await fetch(`/api/football/squad?teamId=${c.apiId}`);
             if (!res.ok) return;
             const data = await res.json();
             const sq = squadFromApi(c.id, c.rating, data.players ?? []);
-            if (sq.length >= 16) result[c.id] = sq;
+            if (sq.length >= 16) result[c.id] = sq.filter(p => !career.squad.some(x => x.apiId === p.apiId || x.id === p.id) && !career.transferredIn.includes(p.id));
           } catch { /* keep generated squad */ }
         }));
       }
       if (Object.keys(result).length === 0) { fetchingSquads.current = false; return; }
       setCareer((cur) => {
         if (!cur) return cur;
-        const next = { ...cur, otherSquads: result };
+        const next = { ...cur, otherSquads: { ...result, ...cur.otherSquads } };
         next.market = refreshMarket(next, next.date);
         queueSave(next);
         return next;
@@ -129,7 +130,7 @@ export function Game({ userId }: { userId: string | null }) {
         {tab === "calendario" && <CalendarTab career={career} />}
         {tab === "tabela" && <TableTab career={career} />}
         {tab === "elenco" && <SquadTab career={career} update={update} />}
-        {tab === "mercado" && <MarketTab career={career} update={update} />}
+        {tab === "mercado" && <WorldMarket career={career} update={update} />}
         {tab === "clube" && <ClubTab career={career} update={update} />}
       </main>
 
@@ -363,72 +364,6 @@ function PlayerSheet({ player, onClose, actions, from }: { player: Player; onClo
         </div>
         {actions}
       </div>
-    </div>
-  );
-}
-
-function MarketTab({ career, update }: { career: CareerV2; update: (c: CareerV2) => void }) {
-  const [filter, setFilter] = useState<Pos | "ALL">("ALL");
-  const [sel, setSel] = useState<Player | null>(null);
-  const list = career.market.filter((p) => filter === "ALL" || p.pos === filter);
-  return (
-    <div className="g-stack">
-      {career.offers.length > 0 && (
-        <section className="g-card g-card-hot">
-          <h3 className="g-h">PROPOSTAS RECEBIDAS</h3>
-          <ul className="g-offers">
-            {career.offers.map((o) => {
-              const p = career.squad.find((x) => x.id === o.playerId);
-              if (!p) return null;
-              const from = clubById(o.fromClub);
-              return (
-                <li key={o.id}>
-                  <Crest club={from} size={34} />
-                  <div><b>{p.name} <span className="g-ovr g-ovr-sm">{p.rating}</span></b><small>{from.name} oferece <strong>{money(o.fee)}</strong> · valor {money(p.value)}</small></div>
-                  <div className="g-offer-act">
-                    <button className="g-btn g-btn-sm" onClick={() => { const r = sellPlayer(career, p.id, o.fee, o.fromClub); if (r.error) toast.error(r.error); else { update(r.career); toast.success(`${p.name} vendido ao ${from.name}`); } }}>ACEITAR</button>
-                    <button className="g-btn g-btn-sm g-btn-ghost" onClick={() => update({ ...career, offers: career.offers.filter((x) => x.id !== o.id) })}>RECUSAR</button>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
-      <section className="g-card">
-        <h3 className="g-h"><ArrowLeftRight /> MERCADO · {money(career.balance)} disponível</h3>
-        <div className="g-seg">
-          {(["ALL", ...POS_ORDER] as const).map((p) => <button key={p} className={filter === p ? "on" : ""} onClick={() => setFilter(p)}>{p === "ALL" ? "TODOS" : p}</button>)}
-        </div>
-        <p className="g-mini">Lista renovada toda segunda-feira.</p>
-        <ul className="g-players">
-          {list.map((p) => {
-            const fee = p.clubId === "livre" ? 0 : Math.round(p.value * 1.1);
-            const c = CLUBS.find((x) => x.id === p.clubId);
-            return (
-              <li key={p.id}>
-                <button onClick={() => setSel(p)}>
-                  <span className={`g-pos-tag g-pos-${p.pos}`}>{p.pos}</span>
-                  <b>{p.name}<small className="g-from">{c ? c.short : "LIVRE"} · {p.age}a</small></b>
-                  <span className={`g-price ${fee > career.balance ? "g-price-no" : ""}`}>{fee ? money(fee) : "GRÁTIS"}</span>
-                  <span className="g-ovr">{p.rating}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-      {sel && (
-        <PlayerSheet player={sel} from={CLUBS.find((x) => x.id === sel.clubId)?.name ?? "Sem clube"} onClose={() => setSel(null)} actions={(() => {
-          const fee = sel.clubId === "livre" ? 0 : Math.round(sel.value * 1.1);
-          return (
-            <button className="g-btn g-btn-big" disabled={fee > career.balance} onClick={() => {
-              const r = buyPlayer(career, sel.id);
-              if (r.error) toast.error(r.error); else { update(r.career); toast.success(`${sel.name} contratado!`); setSel(null); }
-            }}>{fee > career.balance ? "SALDO INSUFICIENTE" : `CONTRATAR · ${fee ? money(fee) : "GRÁTIS"}`}</button>
-          );
-        })()} />
-      )}
     </div>
   );
 }
