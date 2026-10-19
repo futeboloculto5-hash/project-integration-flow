@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { footballRead, footballFailure } from '@/lib/football-api.server';
 
 const teamIds: Record<string, number> = {
   'Fluminense FC': 124,
@@ -17,23 +18,16 @@ const teamIds: Record<string, number> = {
 async function GET(request: Request) {
   const params = new URL(request.url).searchParams
   const club = params.get('club') ?? ''
-  const teamId = Number(params.get('teamId')) || teamIds[club]
-  const apiKey = process.env['API_FOOTBALL_KEY']
-  if (!teamId) return Response.json({ error: 'Clube ainda não mapeado', source: 'API-Football', players: [] }, { status: 404 })
-  if (!apiKey) return Response.json({ error: 'API_FOOTBALL_KEY não configurada', source: 'API-Football', players: [] }, { status: 503 })
-
-  const response = await fetch(`https://v3.football.api-sports.io/players/squads?team=${teamId}`, {
-    headers: { 'x-apisports-key': apiKey },
-
-  })
-  if (!response.ok) return Response.json({ error: 'API-Football indisponível', source: 'API-Football', players: [] }, { status: 502 })
-  const payload = await response.json()
-  const team = payload.response?.[0]
+  const teamId = params.has('teamId') ? Number(params.get('teamId')) : teamIds[club]
+  if (!Number.isSafeInteger(teamId) || teamId <= 0) return Response.json({ error: 'Clube inválido', source: 'API-Football', players: [] }, { status: 400 })
+  try {
+  const result = await footballRead('players/squads', { team: String(teamId) });
+  const team = result.payload.response?.[0]
   const uniquePlayers = new Map<string, any>()
   for (const item of team?.players ?? []) {
     const position = item.position ?? 'Não divulgado'
     const key = String(item.id ?? `${item.name}-${position}`).trim().toLocaleLowerCase()
-    if (!uniquePlayers.has(key)) uniquePlayers.set(key, {
+    if (item.id && item.name && !uniquePlayers.has(key)) uniquePlayers.set(key, {
       id: item.id,
       name: item.name,
       position,
@@ -43,7 +37,8 @@ async function GET(request: Request) {
     })
   }
   const players = Array.from(uniquePlayers.values())
-  return Response.json({ source: 'API-Football', sourceUrl: 'https://www.api-football.com/', verifiedAt: new Date().toISOString(), team: team?.team?.name ?? club, players })
+  return Response.json({ source: 'API-Football', sourceUrl: 'https://www.api-football.com/documentation-v3', verifiedAt: result.fetchedAt, cached: result.cached, stale: result.stale, team: team?.team?.name ?? null, teamId, players })
+  } catch (error) { return footballFailure(error); }
 }
 
 export const Route = createFileRoute("/api/football/squad")({
