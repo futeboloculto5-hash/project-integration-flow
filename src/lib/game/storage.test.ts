@@ -1,5 +1,6 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { createCareer, completeRound, computeTable, buyPlayer, payDebt } from "./career";
+import { importWorldSquad, proposeDeal, renewContract } from './transfers';
 
 const db = vi.hoisted(() => ({ rows: [] as any[], writes: [] as any[], failure: false, hold: null as null | (() => void) }));
 vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: () => ({
@@ -82,5 +83,21 @@ describe("Career persistence", () => {
     await s.saveCareer(null,null,guest); await s.saveCareer("owner",null,existing);
     expect((await s.loadCareer("owner")).career).toEqual(existing);
     expect((await s.loadCareer(null)).career).toEqual(guest);
+  });
+  it('recovers world clubs, negotiations, contracts, wages and transfer history from the cloud', async () => {
+    let c = importWorldSquad(snapshot(), { apiId: 529, name: 'Barcelona', country: 'Spain', fetchedAt: '2026-10-19T00:00:00Z' }, Array.from({ length: 22 }, (_, i) => ({ id: 9000 + i, name: `API ${i}`, age: 25 })));
+    const p = c.squad[0], q = c.market.find(x => x.apiId === 9000);
+    if (!p || !q) throw Error('missing test player');
+    c = renewContract(c, p.id, p.wage + 1000, 36).career;
+    c = proposeDeal(c, q.id, { kind: 'loan', fee: 100_000, wage: q.wage, months: 6 }).career;
+    c.aiBalances = { 'world-529': 98_000_000 };
+    c.loans = [{ playerId: 'legacy-loan', owner: 'world-529', borrower: c.clubId, until: '2025-08-01', originalWage: 50000 }];
+    const s = await storage(); await s.saveCareer('owner', null, c); localStorage.clear(); vi.resetModules();
+    const restored = (await (await storage()).loadCareer('owner')).career;
+    expect(restored).toEqual(c);
+    expect(restored?.negotiations?.[0]?.kind).toBe('loan');
+    expect(restored?.transferHistory?.[0]?.kind).toBe('renew');
+    expect(restored?.aiBalances?.['world-529']).toBe(98_000_000);
+    expect(restored?.loans?.[0]?.until).toBe('2025-08-01');
   });
 });
