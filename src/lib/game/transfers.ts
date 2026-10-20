@@ -4,8 +4,8 @@ import { addDays, aiSquad, currentWeek, money, seeded, squadFromApi, type Career
 export type WorldClub = { id: string; apiId: number; name: string; country: string | null; fetchedAt: string | null };
 export type DealTerms = { kind: 'buy' | 'loan'; fee: number; wage: number; months: number };
 export type Negotiation = DealTerms & { id: string; playerId: string; fromClub: string; created: string; expires: string; status: 'pending' | 'counter' | 'accepted' | 'rejected' | 'completed' };
-export type Loan = { playerId: string; owner: string; borrower: string; until: string; originalWage: number; originalContract?: string };
-export type TransferRecord = { id: string; date: string; player: string; playerId: string; from: string; to: string; kind: 'buy' | 'loan' | 'return' | 'renew' | 'release'; fee: number; wage: number; until?: string; ai: boolean };
+export type Loan = { playerId: string; owner: string; borrower: string; until: string; originalWage: number; originalContract?: string | undefined };
+export type TransferRecord = { id: string; date: string; player: string; playerId: string; from: string; to: string; kind: 'buy' | 'loan' | 'return' | 'renew' | 'release'; fee: number; wage: number; until?: string | undefined; ai: boolean };
 
 export const marketClubName = (c: CareerV2, id: string) => CLUBS.find(x => x.id === id)?.name ?? c.worldClubs?.find(x => x.id === id)?.name ?? (id === 'livre' ? 'Sem clube' : id);
 export const playerIdentity = (p: Player) => p.apiId ? `api:${p.apiId}` : p.id.includes('-api-') ? `api:${p.id.split('-api-')[1]}` : p.id;
@@ -73,11 +73,13 @@ export function transferPlayer(c: CareerV2, playerId: string, from: string, to: 
   if (c.loans?.some(x => x.playerId === p.id)) return { career: c, error: 'Não é possível negociar um jogador emprestado.' };
   if (to === 'livre') return { career: c, error: 'Selecione um clube comprador.' };
   if (from !== 'livre' && clubSquad(c, from).length <= 16) return { career: c, error: 'Elenco mínimo de 16 jogadores no clube vendedor.' };
-  if (clubSquad(c, to).length >= 32) return { career: c, error: 'Elenco cheio (máximo 32).' };
+  const reserved = c.loans?.filter(x => x.owner === to).length ?? 0;
+  if (clubSquad(c, to).length + reserved >= 32) return { career: c, error: 'Elenco cheio (máximo 32, incluindo vagas de empréstimos).' };
   if (clubSquad(c, to).some(x => same(x, p))) return { career: c, error: 'Jogador já está no clube.' };
   const next = structuredClone(c);
   if (terms.fee > budget(next, to)) return { career: c, error: 'Clube comprador sem saldo suficiente.' };
   if (terms.wage < p.wage) return { career: c, error: 'Jogador recusou o salário oferecido.' };
+  if (to !== c.clubId && terms.fee > Math.round(p.value * (terms.kind === 'loan' ? 0.16 : 1.2))) return { career: c, error: 'O clube recusou o valor pedido.' };
   const until = addDays(c.date, terms.months * 30);
   const signed = { ...p, clubId: to, wage: terms.wage, contractUntil: terms.kind === 'buy' ? until : p.contractUntil };
   putSquad(next, from, clubSquad(next, from).filter(x => !same(x, p)));
@@ -99,7 +101,7 @@ export function acceptNegotiation(c: CareerV2, id: string) {
   const deal = c.negotiations?.find(x => x.id === id);
   if (!deal || !['accepted', 'counter'].includes(deal.status) || deal.expires < c.date) return { career: c, error: 'Proposta indisponível ou vencida.' };
   const result = transferPlayer(c, deal.playerId, deal.fromClub, c.clubId, deal);
-  if (!result.error) result.career.negotiations = result.career.negotiations?.map(x => x.id === id ? { ...x, status: 'completed' } : x);
+  if (!result.error) result.career.negotiations = (result.career.negotiations ?? []).map(x => x.id === id ? { ...x, status: 'completed' } : x);
   return result;
 }
 
@@ -132,7 +134,7 @@ export function processMarketDay(c: CareerV2) {
     // The owner may not fill this reserved roster slot while the loan is active.
     putSquad(c, loan.borrower, clubSquad(c, loan.borrower).filter(x => x.id !== p.id));
     putSquad(c, loan.owner, [...clubSquad(c, loan.owner), { ...p, clubId: loan.owner, wage: loan.originalWage, contractUntil: loan.originalContract }]);
-    c.loans = c.loans?.filter(x => x !== loan);
+    c.loans = (c.loans ?? []).filter(x => x !== loan);
     c.transferredIn = c.transferredIn.filter(x => x !== p.id); c.transferredOut = c.transferredOut.filter(x => x !== p.id);
     record(c, p, loan.borrower, loan.owner, 'return', 0, loan.originalWage);
   }

@@ -19,7 +19,7 @@ async function GET(request: Request) {
   const params = new URL(request.url).searchParams
   const club = params.get('club') ?? ''
   const teamId = params.has('teamId') ? Number(params.get('teamId')) : teamIds[club]
-  if (!Number.isSafeInteger(teamId) || teamId <= 0) return Response.json({ error: 'Clube inválido', source: 'API-Football', players: [] }, { status: 400 })
+  if (teamId == null || !Number.isSafeInteger(teamId) || teamId <= 0) return Response.json({ error: 'Clube inválido', source: 'API-Football', players: [] }, { status: 400 })
   try {
   const result = await footballRead('players/squads', { team: String(teamId) });
   const team = result.payload.response?.[0]

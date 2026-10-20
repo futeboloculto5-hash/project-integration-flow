@@ -3,7 +3,7 @@ import { simulateMatch } from "@/lib/career/simulation";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 
 export type Pos = "GOL" | "DEF" | "MEI" | "ATA";
-export type Player = { id: string; name: string; pos: Pos; age: number; rating: number; value: number; wage: number; clubId: string; real?: boolean; apiId?: number; contractUntil?: string; ageUnknown?: boolean };
+export type Player = { id: string; name: string; pos: Pos; age: number; rating: number; value: number; wage: number; clubId: string; real?: boolean; apiId?: number; contractUntil?: string | undefined; ageUnknown?: boolean };
 export type Fixture = { round: number; date: string; home: string; away: string; hg?: number; ag?: number };
 export type NewsItem = { id: string; date: string; title: string; body: string; kind: "info" | "offer" | "transfer" | "result" };
 export type Offer = { id: string; playerId: string; fromClub: string; fee: number; expires: string };
