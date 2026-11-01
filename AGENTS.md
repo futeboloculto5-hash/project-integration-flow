@@ -14,3 +14,4 @@
 - All upstream football reads use `src/lib/football-api.server.ts` with a durable service-only cache and atomic shared request reservation; fail closed when quota bookkeeping is unavailable so browsing cannot bypass plan safeguards.
 - Career transfer rules live in `src/lib/game/transfers.ts`, with additive snapshot fields and authoritative club ownership after import; API refreshes must never undo simulated deals or overwrite the user's squad.
 - Imported users from the old app are matched by verified email via `claim_legacy_account()` on sign-in; `legacy_users` is service-role only.
+- Season rules live in `src/lib/game/seasons.ts` as additive snapshot state: official references never overwrite career results, and rollover archives competitions before applying division changes and player development.

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Pause, Play, FastForward, Repeat2, Swords, BarChart3, MessageSquare, X } from "lucide-react";
 import {
   createMatch, createTeam, makeSquad, playerPositions, setTactics, step, substitute,
-  type Formation, type MatchPlayer, type MatchState, type Mentality,
+  type Formation, type MatchPlayer, type MatchState, type Mentality, type MatchGoal, type Side,
 } from "@/lib/match/engine";
 
 type SquadIn = { id: string; name: string; pos: "GOL" | "DEF" | "MEI" | "ATA"; rating: number };
@@ -17,7 +17,9 @@ type Props = {
   homeSquad?: SquadIn[];
   awaySquad?: SquadIn[];
   homeFormation?: Formation;
-  onFinish: (score: { home: number; away: number }) => void;
+  awayFormation?: Formation;
+  managedSide?: Side;
+  onFinish: (score: { home: number; away: number; goals: MatchGoal[] }) => void;
   onClose: () => void;
 };
 
@@ -25,11 +27,11 @@ const SPEEDS = [1, 2, 4] as const;
 const TICK_MS = 260;
 type Tab = "lances" | "tatica" | "elenco" | "stats";
 
-export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, homeFormation, onFinish, onClose }: Props) {
+export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, homeFormation, awayFormation, managedSide = "home", onFinish, onClose }: Props) {
   const initial = useMemo(() => {
     const h = createTeam(home.name, home.short, home.color, home.rating, homeSquad ? toMatch(homeSquad) : makeSquad(`${seed}-h`, home.rating, roster), homeFormation ?? "4-3-3");
-    const a = createTeam(away.name, away.short, away.color, away.rating, awaySquad ? toMatch(awaySquad) : makeSquad(`${seed}-a`, away.rating), "4-4-2");
-    const m = createMatch(h, a, seed);
+    const a = createTeam(away.name, away.short, away.color, away.rating, awaySquad ? toMatch(awaySquad) : makeSquad(`${seed}-a`, away.rating), awayFormation ?? "4-4-2");
+    const m = createMatch(h, a, seed, managedSide);
     return { ...m, paused: true };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -55,7 +57,7 @@ export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, home
   }, [match.flash?.at]);
 
   useEffect(() => {
-    if (match.finished && !reported.current) { reported.current = true; onFinish(match.score); }
+    if (match.finished && !reported.current) { reported.current = true; onFinish({ ...match.score, goals: match.goals }); }
   }, [match.finished]);
 
   const togglePlay = () => { setStarted(true); setMatch((m) => ({ ...m, paused: !m.paused })); };
@@ -65,9 +67,9 @@ export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, home
   const possHome = Math.round((match.stats.home.possession / totalPoss) * 100);
   const clock = `${String(Math.min(match.minute, match.half === 1 ? 45 : 90)).padStart(2, "0")}'${match.minute >= (match.half === 1 ? 45 : 90) ? `+${match.minute - (match.half === 1 ? 45 : 90) + 1}` : ""}`;
 
-  const mentality = (v: Mentality) => setMatch((m) => setTactics(m, "home", { mentality: v }));
-  const formation = (v: Formation) => setMatch((m) => setTactics(m, "home", { formation: v }));
-  const pressing = (v: number) => setMatch((m) => setTactics(m, "home", { pressing: v }));
+  const mentality = (v: Mentality) => setMatch((m) => setTactics(m, managedSide, { mentality: v }));
+  const formation = (v: Formation) => setMatch((m) => setTactics(m, managedSide, { formation: v }));
+  const pressing = (v: number) => setMatch((m) => setTactics(m, managedSide, { pressing: v }));
 
   return (
     <div className="lm-overlay" role="dialog" aria-label="Partida ao vivo">
@@ -122,7 +124,7 @@ export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, home
             )}
             {match.finished && (
               <div className="lm-final">
-                <span>{match.score.home > match.score.away ? "VITÓRIA!" : match.score.home < match.score.away ? "DERROTA" : "EMPATE"}</span>
+                <span>{match.score[managedSide] > match.score[managedSide === "home" ? "away" : "home"] ? "VITÓRIA!" : match.score[managedSide] < match.score[managedSide === "home" ? "away" : "home"] ? "DERROTA" : "EMPATE"}</span>
                 <b>{home.short} {match.score.home} x {match.score.away} {away.short}</b>
                 <button className="lm-cta" onClick={onClose}>CONTINUAR</button>
               </div>
@@ -143,7 +145,7 @@ export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, home
 
         {/* Tabs */}
         <nav className="lm-tabs">
-          {([["lances", MessageSquare, "Lances"], ["tatica", Swords, "Tática"], ["elenco", Repeat2, `Trocas (${match.home.subsLeft})`], ["stats", BarChart3, "Números"]] as const).map(([k, Icon, label]) => (
+          {([["lances", MessageSquare, "Lances"], ["tatica", Swords, "Tática"], ["elenco", Repeat2, `Trocas (${match[managedSide].subsLeft})`], ["stats", BarChart3, "Números"]] as const).map(([k, Icon, label]) => (
             <button key={k} className={tab === k ? "lm-tab lm-tab-on" : "lm-tab"} onClick={() => setTab(k)}><Icon />{label}</button>
           ))}
         </nav>
@@ -162,13 +164,13 @@ export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, home
           {tab === "tatica" && (
             <div className="lm-tactics">
               <div className="lm-group"><h4>Postura</h4><div className="lm-seg">
-                {(["defensiva", "equilibrada", "ofensiva"] as Mentality[]).map((v) => <button key={v} className={match.home.mentality === v ? "lm-seg-on" : ""} onClick={() => mentality(v)}>{v}</button>)}
+                {(["defensiva", "equilibrada", "ofensiva"] as Mentality[]).map((v) => <button key={v} className={match[managedSide].mentality === v ? "lm-seg-on" : ""} onClick={() => mentality(v)}>{v}</button>)}
               </div></div>
               <div className="lm-group"><h4>Formação</h4><div className="lm-seg">
-                {(["4-3-3", "4-4-2", "3-5-2", "5-3-2"] as Formation[]).map((v) => <button key={v} className={match.home.formation === v ? "lm-seg-on" : ""} onClick={() => formation(v)}>{v}</button>)}
+                {(["4-3-3", "4-4-2", "3-5-2", "5-3-2"] as Formation[]).map((v) => <button key={v} className={match[managedSide].formation === v ? "lm-seg-on" : ""} onClick={() => formation(v)}>{v}</button>)}
               </div></div>
               <div className="lm-group"><h4>Pressão</h4><div className="lm-seg">
-                {["baixa", "média", "alta"].map((v, i) => <button key={v} className={match.home.pressing === i ? "lm-seg-on" : ""} onClick={() => pressing(i)}>{v}</button>)}
+                {["baixa", "média", "alta"].map((v, i) => <button key={v} className={match[managedSide].pressing === i ? "lm-seg-on" : ""} onClick={() => pressing(i)}>{v}</button>)}
               </div></div>
               <p className="lm-hint">Pressão alta recupera mais bolas, mas cansa o time e gera mais cartões.</p>
             </div>
@@ -178,9 +180,9 @@ export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, home
             <div className="lm-squad">
               <p className="lm-hint">{subOut ? "Agora escolha quem entra." : "Toque em quem vai sair."}</p>
               <ul>
-                {match.home.lineup.map((p) => (
+                {match[managedSide].lineup.map((p) => (
                   <li key={p.id}>
-                    <button className={`lm-pl ${subOut === p.id ? "lm-pl-sel" : ""}`} disabled={p.sentOff || match.home.subsLeft === 0 || match.finished} onClick={() => setSubOut(subOut === p.id ? null : p.id)}>
+                    <button className={`lm-pl ${subOut === p.id ? "lm-pl-sel" : ""}`} disabled={p.sentOff || match[managedSide].subsLeft === 0 || match.finished} onClick={() => setSubOut(subOut === p.id ? null : p.id)}>
                       <span className="lm-pos">{p.pos}</span><b>{p.name}{p.goals > 0 && " ⚽".repeat(p.goals)}{p.yellow && <i className="lm-yc" />}{p.sentOff && <i className="lm-rc" />}</b>
                       <span className="lm-energy"><i style={{ width: `${p.energy}%` }} className={p.energy < 55 ? "lm-low" : ""} /></span>
                     </button>
@@ -191,9 +193,9 @@ export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, home
                 <>
                   <h4 className="lm-bench-h">Banco</h4>
                   <ul>
-                    {match.home.bench.map((p) => (
+                    {match[managedSide].bench.map((p) => (
                       <li key={p.id}>
-                        <button className="lm-pl lm-pl-bench" onClick={() => { setMatch((m) => substitute(m, "home", subOut, p.id)); setSubOut(null); }}>
+                        <button className="lm-pl lm-pl-bench" onClick={() => { setMatch((m) => substitute(m, managedSide, subOut, p.id)); setSubOut(null); }}>
                           <span className="lm-pos">{p.pos}</span><b>{p.name}</b><span className="lm-rt">{p.rating}</span>
                         </button>
                       </li>

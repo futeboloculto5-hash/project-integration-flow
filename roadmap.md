@@ -9,6 +9,7 @@
 - [x] Integrate market controls and test rules, persistence and the real-data UI flow.
 
 # Functional seasons
-- [ ] Add additive season state, league calendars, goals/assists, relegation/promotion, knockouts and club evolution.
-- [ ] Connect available real calendar/results references with protected API reads and clearly labeled fallback simulations.
-- [ ] Integrate season controls, archive history and verify rules, persistence and the signed-in flow.
+- [x] Add additive season state, league calendars, goals/assists, relegation/promotion, knockouts and club evolution.
+- [x] Connect real calendar/results references with protected API reads and clearly labeled fallback simulations.
+- [x] Integrate season controls and archive history; verify rules, complete guest browser flow and snapshot/cloud persistence tests.
+- [ ] Verify hosted authenticated recovery and live season API reads: blocked by Lovable Cloud returning database inaccessible while minting the user's session.
