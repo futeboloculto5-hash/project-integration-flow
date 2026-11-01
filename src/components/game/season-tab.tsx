@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import { CalendarDays, RefreshCw, Trophy } from 'lucide-react';
+import { RefreshCw, Trophy } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { type CareerV2, type Fixture } from '@/lib/game/career';
-import { allFixtures, applySeasonReference, careerClub, divisionOf, leaders, leagueFixtures, seasonTable, type SeasonReference } from '@/lib/game/seasons';
+import { applySeasonReference, careerClub, divisionOf, leaders, seasonTable, type SeasonReference } from '@/lib/game/seasons';
 import { Crest } from './onboarding';
 
 export function SeasonTab({ career, update, calendar = false }: { career: CareerV2; update: (c: CareerV2) => void; calendar?: boolean }) {
@@ -73,6 +73,9 @@ export function SeasonTab({ career, update, calendar = false }: { career: Career
         <p className="g-mini">Referência oficial separada da carreira · Brasileirão Série A · {career.season}</p>
         {reference ? <>
           <p className="g-mini">API-Football · {reference.verifiedAt?.slice(0,10)} · {reference.fixtures.length} partidas{reference.unavailable.length ? ' · cobertura parcial' : ''}</p>
+          <h3 className="g-h">Classificação oficial</h3>
+          <ul className="g-news">{reference.standings.map(row => <li key={row.rank}><b>{row.rank}. {row.team.name} · {row.points} pts</b><p>{row.all.played} jogos · API-Football</p></li>)}</ul>
+          {!reference.standings.length && <p className="g-mini">Classificação não disponibilizada nesta consulta.</p>}
           <h3 className="g-h">Resultados oficiais</h3>
           <ul className="g-news">{reference.fixtures.filter(f => f.hg != null && f.ag != null).slice(-20).map(f => <li key={f.id}><b>{state?.clubs.find(c => c.apiId === f.home)?.name ?? `Clube API ${f.home}`} {f.hg} × {f.ag} {state?.clubs.find(c => c.apiId === f.away)?.name ?? `Clube API ${f.away}`}</b><p>{f.date} · {f.round}</p></li>)}</ul>
           <h3 className="g-h">Artilharia oficial</h3><ul className="g-news">{reference.scorers.slice(0,10).map(p => <li key={`${p.name}:${p.club}`}><b>{p.name} · {p.goals ?? '—'} gols</b><p>{p.club}</p></li>)}</ul>

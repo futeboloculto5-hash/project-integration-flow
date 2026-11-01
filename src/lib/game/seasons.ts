@@ -1,11 +1,11 @@
 import { CLUBS, clubById, type Club } from './clubs';
-import { addDays, aiSquad, bestEleven, computeTable, generateSquad, playerValue, playerWage, refreshMarket, seeded, teamRating, type CareerV2, type Fixture, type Player, type Row } from './career';
+import { addDays, advanceDay, aiSquad, bestEleven, computeTable, generateSquad, playerValue, playerWage, refreshMarket, seeded, teamRating, type CareerV2, type Fixture, type Player, type Row } from './career';
 import { simulateMatch } from '@/lib/career/simulation';
 
 export type Goal = { clubId: string; playerId: string; player: string; assistId?: string; assist?: string; minute: number };
 export type SeasonArchive = { year: string; divisions: Record<string, string[]>; fixtures: Fixture[]; cup: Fixture[]; tables: Record<string, Row[]>; relegated: string[]; promoted: string[]; cupWinner?: string; leaders: Leader[] };
 export type SeasonState = { schema: 1; divisions: Record<string, string[]>; clubs: Club[]; cup: Fixture[]; history: SeasonArchive[]; reference?: SeasonReference };
-export type SeasonReference = { year: string; source: 'API-Football'; verifiedAt: string | null; fixtures: { id: number; date: string; home: number; away: number; hg: number | null; ag: number | null; round: string }[]; standings: unknown[]; scorers: { name: string; club: string; goals: number | null; assists: number | null }[]; assists: { name: string; club: string; goals: number | null; assists: number | null }[]; unavailable: string[] };
+export type SeasonReference = { year: string; source: 'API-Football'; verifiedAt: string | null; fixtures: { id: number; date: string; home: number; away: number; hg: number | null; ag: number | null; round: string }[]; standings: { rank: number; team: { name: string }; points: number; all: { played: number } }[]; scorers: { name: string; club: string; goals: number | null; assists: number | null }[]; assists: { name: string; club: string; goals: number | null; assists: number | null }[]; unavailable: string[] };
 export type Leader = { playerId: string; player: string; clubId: string; goals: number; assists: number };
 export const careerClub = (c: CareerV2, id: string) => c.seasonState?.clubs.find(x => x.id === id) ?? clubById(id);
 export const divisionOf = (c: CareerV2, id = c.clubId) => Object.entries(c.seasonState?.divisions ?? { A: CLUBS.map(x => x.id) }).find(([, ids]) => ids.includes(id))?.[0] ?? 'A';
@@ -107,7 +107,13 @@ export function leaders(fixtures: Fixture[]): Leader[] {
 
 export function startNextSeason(c: CareerV2): { career: CareerV2; error?: string } {
   if (!seasonFinished(c)) return { career: c, error: 'Conclua todas as partidas da liga e da copa antes de iniciar outra temporada.' };
-  const next = structuredClone(c), state = next.seasonState;
+  const latest = allFixtures(c).map(f => f.date).sort().at(-1) ?? c.date;
+  const nextYear = String(Number(c.season) + 1);
+  const targetDate = `${nextYear}-03-24` > latest ? `${nextYear}-03-24` : addDays(latest, 7);
+  // Offseason uses the same daily finance/loans/contracts path, never silently skipping charges.
+  let offseason = c;
+  for (let days = 0; days < 730 && offseason.date < targetDate; days++) offseason = advanceDay(offseason).career;
+  const next = structuredClone(offseason), state = next.seasonState;
   if (!state) return { career: c, error: 'Temporada indisponível.' };
   const a = seasonTable(next, 'A'), b = seasonTable(next, 'B');
   const relegated = a.slice(-4).map(x => x.clubId), promoted = b.slice(0, 4).map(x => x.clubId);
@@ -115,10 +121,9 @@ export function startNextSeason(c: CareerV2): { career: CareerV2; error?: string
   state.history.push({ year: c.season, divisions: structuredClone(state.divisions), fixtures: structuredClone(c.fixtures), cup: structuredClone(state.cup), tables: { A: a, B: b }, relegated, promoted, ...(cupWinner ? { cupWinner } : {}), leaders: leaders(allFixtures(c)) });
   state.divisions['A'] = [...a.map(x => x.clubId).filter(id => !relegated.includes(id)), ...promoted];
   state.divisions['B'] = [...b.map(x => x.clubId).filter(id => !promoted.includes(id)), ...relegated];
-  next.season = String(Number(c.season) + 1);
-  const latest = allFixtures(c).map(f => f.date).sort().at(-1) ?? c.date;
+  next.season = nextYear;
   // Never move the clock backwards when an old career has an unusually late calendar.
-  next.date = `${next.season}-03-24` > latest ? `${next.season}-03-24` : addDays(latest, 7);
+  next.date = offseason.date;
   delete state.reference;
   next.fixtures = Object.entries(state.divisions).flatMap(([division, ids]) => roundRobin(ids, next.season, division, addDays(next.date, 5)));
   const entrants = a.slice(0, 12).map(x => x.clubId).concat(b.slice(0, 4).map(x => x.clubId));
