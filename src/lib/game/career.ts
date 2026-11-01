@@ -209,10 +209,10 @@ export const currentRound = (c: CareerV2) => leagueFixtures(c).filter(f => f.hg 
 export function addDays(date: string, n: number) { const d = new Date(`${date}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
 
 /** Advance one day. Blocked on match day until the match is played. */
-export function advanceDay(c: CareerV2): { career: CareerV2; blocked?: string } {
+export function advanceDay(c: CareerV2, inPlace = false): { career: CareerV2; blocked?: string } {
   const nf = nextFixture(c);
   if (nf && c.date >= nf.date) return { career: c, blocked: "Hoje é dia de jogo! Jogue a partida para continuar." };
-  const next: CareerV2 = structuredClone(c);
+  const next: CareerV2 = inPlace ? c : structuredClone(c);
   next.date = addDays(c.date, 1);
   simulateDue(next, next.date);
   processMarketDay(next);

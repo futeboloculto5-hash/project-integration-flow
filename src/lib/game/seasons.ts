@@ -111,8 +111,8 @@ export function startNextSeason(c: CareerV2): { career: CareerV2; error?: string
   const nextYear = String(Number(c.season) + 1);
   const targetDate = `${nextYear}-03-24` > latest ? `${nextYear}-03-24` : addDays(latest, 7);
   // Offseason uses the same daily finance/loans/contracts path, never silently skipping charges.
-  let offseason = c;
-  for (let days = 0; days < 730 && offseason.date < targetDate; days++) offseason = advanceDay(offseason).career;
+  let offseason = structuredClone(c);
+  for (let days = 0; days < 730 && offseason.date < targetDate; days++) offseason = advanceDay(offseason, true).career;
   const next = structuredClone(offseason), state = next.seasonState;
   if (!state) return { career: c, error: 'Temporada indisponível.' };
   const a = seasonTable(next, 'A'), b = seasonTable(next, 'B');
