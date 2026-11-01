@@ -1,5 +1,6 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
-import { createCareer, completeRound, computeTable, buyPlayer, payDebt } from "./career";
+import { createCareer, completeRound, computeTable, buyPlayer, payDebt, advanceToMatch } from "./career";
+import { initializeSeason, recordFixture, simulateDue, seasonFinished, startNextSeason } from './seasons';
 import { importWorldSquad, proposeDeal, renewContract } from './transfers';
 
 const db = vi.hoisted(() => ({ rows: [] as any[], writes: [] as any[], failure: false, hold: null as null | (() => void) }));
@@ -16,7 +17,7 @@ vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: () => ({
 async function storage() { return import("./storage"); }
 function snapshot() {
   let c = createCareer("Treinador persistente", "flamengo");
-  c = completeRound(c, 3, 1);
+  c = completeRound(advanceToMatch(c), 3, 1);
   const p = c.market[0];
   if (p) c = buyPlayer({ ...c, balance: 900_000_000 }, p.id).career;
   c = payDebt(c, 1_000_000).career;
@@ -99,5 +100,18 @@ describe("Career persistence", () => {
     expect(restored?.transferHistory?.[0]?.kind).toBe('renew');
     expect(restored?.aiBalances?.['world-529']).toBe(98_000_000);
     expect(restored?.loans?.[0]?.until).toBe('2025-08-01');
+  });
+  it('persists promotion, archives, knockout results and player development across a fresh sign-in', async () => {
+    let c = initializeSeason(createCareer('Temporadas', 'flamengo'));
+    for (const f of c.fixtures) recordFixture(c, f, 2, 1);
+    for (let i=0;i<4;i++) { for (const f of c.seasonState?.cup ?? []) recordFixture(c,f,1,1); simulateDue(c,'2026-12-31'); }
+    expect(seasonFinished(c)).toBe(true);
+    c = startNextSeason(c).career;
+    const s = await storage(); const id = await s.saveCareer('owner',null,c); localStorage.clear(); vi.resetModules();
+    const restored = await (await storage()).loadCareer('owner');
+    expect(restored.rowId).toBe(id); expect(restored.career).toEqual(c);
+    expect(restored.career?.season).toBe('2026');
+    expect(restored.career?.seasonState?.history[0]?.relegated).toHaveLength(4);
+    expect(restored.career?.seasonState?.history[0]?.cup).toHaveLength(15);
   });
 });

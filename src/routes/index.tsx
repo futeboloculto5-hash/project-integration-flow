@@ -7,9 +7,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Clube Campeão World | Gestão de futebol" },
-      { name: "description", content: "Escolha seu clube do Brasileirão, monte o elenco e dispute 38 rodadas ao vivo." },
+      { name: "description", content: "Gerencie seu clube por várias temporadas, dispute ligas e mata-matas e acompanhe transferências e evolução dos jogadores." },
       { property: "og:title", content: "Clube Campeão World | Gestão de futebol" },
-      { property: "og:description", content: "Escolha seu clube do Brasileirão, monte o elenco e dispute 38 rodadas ao vivo." },
+      { property: "og:description", content: "Gerencie seu clube por várias temporadas, dispute ligas e mata-matas e acompanhe transferências e evolução dos jogadores." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

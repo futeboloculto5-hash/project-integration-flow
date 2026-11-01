@@ -1,5 +1,4 @@
 import { CLUBS, COMPANIES, KIT_BRANDS, clubById } from "./clubs";
-import { simulateMatch } from "@/lib/career/simulation";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 import { allFixtures, initializeSeason, leagueFixtures, progressCup, recordFixture, simulateDue, type Goal, type SeasonState } from './seasons';
 
@@ -333,7 +332,7 @@ function addSponsorOffer(c: CareerV2, r: () => number) {
   const taken = new Set(c.sponsors.map((s) => s.slot));
   const slots = (Object.keys(SLOT_BASE) as SponsorSlot[]).filter((s) => s !== "Material esportivo");
   const slot = slots[Math.floor(r() * slots.length)]!;
-  const pos = computeTable(c.fixtures).findIndex((x) => x.clubId === c.clubId) + 1;
+  const pos = computeTable(leagueFixtures(c)).findIndex((x) => x.clubId === c.clubId) + 1;
   const prestige = (clubById(c.clubId).rating - 60) / 25 + (pos > 0 && pos <= 6 ? 0.2 : 0);
   const company = (slot === "Máster" ? ["Betano", "Superbet", "Itaú Unibanco", "Nubank", "Banco do Brasil", "Magazine Luiza", "Ambev", "Mercado Livre", "Esportes da Sorte", "PicPay"] : COMPANIES)[Math.floor(r() * (slot === "Máster" ? 10 : COMPANIES.length))]!;
   if (c.sponsors.some((s) => s.company === company)) return;
@@ -399,7 +398,7 @@ export function payDebt(c: CareerV2, amount: number): { career: CareerV2; error?
 }
 
 export function gateIncome(c: CareerV2) {
-  const table = computeTable(c.fixtures);
+  const table = computeTable(leagueFixtures(c));
   const pos = table.findIndex((r) => r.clubId === c.clubId) + 1;
   const hype = 0.95 - (pos - 1) * 0.015;
   const priceFactor = Math.max(0.25, 1.25 - c.stadium.ticketPrice / 160);
