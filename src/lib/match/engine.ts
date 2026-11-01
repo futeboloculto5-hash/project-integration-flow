@@ -34,7 +34,10 @@ export type MatchEvent = { minute: number; side?: Side; type: MatchEventType; te
 
 export type MatchStats = { shots: number; onTarget: number; possession: number; corners: number; fouls: number; xg: number };
 
+export type MatchGoal = { side: Side; playerId: string; player: string; assistId?: string; assist?: string; minute: number };
 export type MatchState = {
+  goals: MatchGoal[];
+  managedSide: Side;
   minute: number;
   second: number; // sub-steps within minute (0-2)
   half: 1 | 2;
@@ -90,11 +93,11 @@ export function createTeam(name: string, short: string, color: string, rating: n
 
 const emptyStats = (): MatchStats => ({ shots: 0, onTarget: 0, possession: 0, corners: 0, fouls: 0, xg: 0 });
 
-export function createMatch(home: TeamState, away: TeamState, seed: string): MatchState {
+export function createMatch(home: TeamState, away: TeamState, seed: string, managedSide: Side = "home"): MatchState {
   let s = 7;
   for (const c of seed) s = (s * 31 + c.charCodeAt(0)) >>> 0;
   return {
-    minute: 0, second: 0, half: 1, finished: false, paused: false,
+    goals: [], managedSide, minute: 0, second: 0, half: 1, finished: false, paused: false,
     score: { home: 0, away: 0 }, ball: { x: 50, y: 50, side: "home" },
     home, away, events: [{ minute: 0, type: "kickoff", text: `Bola rolando! ${home.name} x ${away.name}` }],
     stats: { home: emptyStats(), away: emptyStats() }, momentum: 0, flash: null, seed: s, addedTime: 0,
@@ -173,6 +176,9 @@ export function step(prev: MatchState): MatchState {
     st.stats[atkSide].xg += quality;
     const roll = rng(st);
     if (roll < quality) {
+      const options = atk.lineup.filter(p => p.id !== shooter.id && p.pos !== "GOL" && !p.sentOff);
+      const assist = rng(st) < 0.75 ? options[Math.floor(rng(st) * options.length)] : undefined;
+      st.goals.push({ side: atkSide, playerId: shooter.id, player: shooter.name, minute: st.minute, ...(assist ? { assistId: assist.id, assist: assist.name } : {}) });
       st.score[atkSide] += 1; shooter.goals += 1; shooter.form += 1.2;
       st.stats[atkSide].onTarget += 1;
       const how = pick(st, ["chute colocado no ângulo", "cabeçada firme", "bomba de fora da área", "toque de cavadinha", "finalização cruzada", "rebote empurrado para as redes"]);
@@ -225,12 +231,13 @@ export function step(prev: MatchState): MatchState {
 }
 
 function aiManage(st: MatchState) {
-  const t = st.away;
-  const diff = st.score.away - st.score.home;
+  const side: Side = st.managedSide === "home" ? "away" : "home";
+  const t = st[side];
+  const diff = st.score[side] - st.score[st.managedSide];
   const want: Mentality = diff < 0 ? "ofensiva" : diff > 0 ? "defensiva" : "equilibrada";
   if (t.mentality !== want) {
     t.mentality = want;
-    push(st, { minute: st.minute, side: "away", type: "tactic", text: `${t.short} muda postura: ${want}.` });
+    push(st, { minute: st.minute, side, type: "tactic", text: `${t.short} muda postura: ${want}.` });
   }
   if (t.subsLeft > 0 && t.bench.length) {
     const tired = [...t.lineup].filter((p) => p.pos !== "GOL" && !p.sentOff).sort((a, b) => a.energy - b.energy)[0];
@@ -239,7 +246,7 @@ function aiManage(st: MatchState) {
       const sub = t.bench.splice(inIdx >= 0 ? inIdx : 0, 1)[0]!;
       t.lineup = t.lineup.map((p) => (p.id === tired.id ? sub : p));
       t.subsLeft -= 1;
-      push(st, { minute: st.minute, side: "away", type: "sub", text: `Substituição ${t.short}: sai ${tired.name}, entra ${sub.name}.` });
+      push(st, { minute: st.minute, side, type: "sub", text: `Substituição ${t.short}: sai ${tired.name}, entra ${sub.name}.` });
     }
   }
 }
