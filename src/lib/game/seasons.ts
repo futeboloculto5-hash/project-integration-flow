@@ -113,8 +113,8 @@ export function startNextSeason(c: CareerV2): { career: CareerV2; error?: string
   const relegated = a.slice(-4).map(x => x.clubId), promoted = b.slice(0, 4).map(x => x.clubId);
   const cupWinner = state.cup.find(f => f.round === 4)?.winner;
   state.history.push({ year: c.season, divisions: structuredClone(state.divisions), fixtures: structuredClone(c.fixtures), cup: structuredClone(state.cup), tables: { A: a, B: b }, relegated, promoted, ...(cupWinner ? { cupWinner } : {}), leaders: leaders(allFixtures(c)) });
-  state.divisions.A = [...a.map(x => x.clubId).filter(id => !relegated.includes(id)), ...promoted];
-  state.divisions.B = [...b.map(x => x.clubId).filter(id => !promoted.includes(id)), ...relegated];
+  state.divisions['A'] = [...a.map(x => x.clubId).filter(id => !relegated.includes(id)), ...promoted];
+  state.divisions['B'] = [...b.map(x => x.clubId).filter(id => !promoted.includes(id)), ...relegated];
   next.season = String(Number(c.season) + 1);
   const latest = allFixtures(c).map(f => f.date).sort().at(-1) ?? c.date;
   // Never move the clock backwards when an old career has an unusually late calendar.
@@ -137,7 +137,7 @@ export function startNextSeason(c: CareerV2): { career: CareerV2; error?: string
     next.otherSquads ??= {}; next.otherSquads[id] = developed;
     // Simulated academy recruitment replenishes depleted AI squads, never replaces owned players.
     if (developed.length < 22) next.otherSquads[id].push(...generateSquad(id, teamRating(developed), `academy-${next.season}`).slice(0, 22 - developed.length).map(p => ({ ...p, age: 18, contractUntil: addDays(next.date, 730) })));
-    next.aiBalances ??= {}; next.aiBalances[id] = (next.aiBalances[id] ?? careerClub(next, id).budget) + (state.divisions.A?.includes(id) ? 20_000_000 : 8_000_000);
+    next.aiBalances ??= {}; next.aiBalances[id] = (next.aiBalances[id] ?? careerClub(next, id).budget) + (state.divisions['A']?.includes(id) ? 20_000_000 : 8_000_000);
   }
   next.market = refreshMarket(next, next.date);
   next.news.unshift({ id: `season-${next.season}`, date: next.date, kind: 'info', title: `Temporada ${next.season} · Série ${divisionOf(next)}`, body: 'Nova temporada simulada: acesso e rebaixamento aplicados, jogadores evoluídos e histórico preservado.' });
@@ -157,7 +157,7 @@ export function applySeasonReference(c: CareerV2, reference: SeasonReference): C
   });
   const existing = leagueFixtures(next, 'A');
   const pairs = new Set(mapped.map(f => `${f.home}:${f.away}`));
-  if (existing.every(f => f.hg == null) && mapped.length === 380 && pairs.size === 380 && mapped.every(f => f.date >= c.date) && mapped.every(f => next.seasonState?.divisions.A?.includes(f.home) && next.seasonState.divisions.A.includes(f.away))) {
+  if (existing.every(f => f.hg == null) && mapped.length === 380 && pairs.size === 380 && mapped.every(f => f.date >= c.date) && mapped.every(f => next.seasonState?.divisions['A']?.includes(f.home) && next.seasonState.divisions['A']?.includes(f.away))) {
     next.fixtures = [...mapped, ...next.fixtures.filter(f => (f.division ?? 'A') !== 'A')];
   }
   // Official scores never overwrite career results; they remain a separate reference view.

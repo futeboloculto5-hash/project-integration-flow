@@ -42,7 +42,7 @@ describe('Functional seasons', () => {
     recordFixture(c,f,1,0,[{clubId:f.home,playerId:'scorer',player:'Atacante',assistId:'passer',assist:'Meia',minute:42}]);
     expect(leaders([f]).find(p=>p.playerId==='scorer')?.goals).toBe(1);
     expect(leaders([f]).find(p=>p.playerId==='passer')?.assists).toBe(1);
-    const old={...f,goals:undefined}; expect(leaders([old])).toHaveLength(0);
+    const old={...f}; delete old.goals; expect(leaders([old])).toHaveLength(0);
   });
   it('resolves 15 knockout games including penalties and one champion', () => {
     const c=finish(fresh()); expect(c.seasonState?.cup).toHaveLength(15);
@@ -54,7 +54,7 @@ describe('Functional seasons', () => {
     expect(result.season).toBe('2026'); expect(result.clubId).toBe('flamengo'); expect(result.manager).toBe('Temporadas');
     expect(result.seasonState?.history[0]?.relegated).toHaveLength(4); expect(result.seasonState?.history[0]?.promoted).toHaveLength(4);
     expect(result.seasonState?.history[0]?.fixtures).toEqual(c.fixtures);
-    expect(divisionOf(result)).toBe('B'); expect(result.seasonState?.divisions.A).toHaveLength(20);
+    expect(divisionOf(result)).toBe('B'); expect(result.seasonState?.divisions['A']).toHaveLength(20);
     expect(result.fixtures.every(f=>f.hg==null)).toBe(true); expect(result.squad[0]?.age).toBe((c.squad[0]?.age??0)+1);
     const ai=Object.keys(c.otherSquads??{})[0]; if (!ai) throw Error('AI'); expect(result.otherSquads?.[ai]?.[0]?.age).toBe((c.otherSquads?.[ai]?.[0]?.age??0)+1);
   });
