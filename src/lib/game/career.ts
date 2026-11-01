@@ -1,10 +1,11 @@
 import { CLUBS, COMPANIES, KIT_BRANDS, clubById } from "./clubs";
 import { simulateMatch } from "@/lib/career/simulation";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
+import { allFixtures, initializeSeason, leagueFixtures, progressCup, recordFixture, simulateDue, type Goal, type SeasonState } from './seasons';
 
 export type Pos = "GOL" | "DEF" | "MEI" | "ATA";
 export type Player = { id: string; name: string; pos: Pos; age: number; rating: number; value: number; wage: number; clubId: string; real?: boolean; apiId?: number; contractUntil?: string | undefined; ageUnknown?: boolean };
-export type Fixture = { round: number; date: string; home: string; away: string; hg?: number; ag?: number };
+export type Fixture = { round: number; date: string; home: string; away: string; hg?: number; ag?: number; id?: string; division?: string; competition?: 'league' | 'cup'; scheduleSource?: 'simulated' | 'API-Football'; resultSource?: 'simulated'; goals?: Goal[]; penalties?: [number, number]; winner?: string };
 export type NewsItem = { id: string; date: string; title: string; body: string; kind: "info" | "offer" | "transfer" | "result" };
 export type Offer = { id: string; playerId: string; fromClub: string; fee: number; expires: string };
 
@@ -33,6 +34,7 @@ export type CareerV2 = {
   loans?: Loan[];
   transferHistory?: TransferRecord[];
   aiBalances?: Record<string, number>;
+  seasonState?: SeasonState;
   ledger: { week: string; income: number; expense: number; items: { label: string; value: number }[] }[];
 };
 
@@ -119,11 +121,13 @@ export function makeFixtures(seed: string): Fixture[] {
 
 // ---------- table ----------
 export type Row = { clubId: string; p: number; w: number; d: number; l: number; gf: number; ga: number; pts: number; form: ("V" | "E" | "D")[] };
-export function computeTable(fixtures: Fixture[]): Row[] {
-  const rows = new Map<string, Row>(CLUBS.map((c) => [c.id, { clubId: c.id, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] }]));
+export function computeTable(fixtures: Fixture[], ids?: string[]): Row[] {
+  const participants = ids ?? (fixtures.length ? [...new Set(fixtures.flatMap(f => [f.home, f.away]))] : CLUBS.map(c => c.id));
+  const rows = new Map<string, Row>(participants.map(id => [id, { clubId: id, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] }]));
   for (const f of fixtures) {
     if (f.hg == null || f.ag == null) continue;
-    const h = rows.get(f.home)!, a = rows.get(f.away)!;
+    const h = rows.get(f.home), a = rows.get(f.away);
+    if (!h || !a) continue;
     h.p++; a.p++; h.gf += f.hg; h.ga += f.ag; a.gf += f.ag; a.ga += f.hg;
     if (f.hg > f.ag) { h.w++; h.pts += 3; a.l++; h.form.push("V"); a.form.push("D"); }
     else if (f.hg < f.ag) { a.w++; a.pts += 3; h.l++; h.form.push("D"); a.form.push("V"); }
@@ -200,8 +204,8 @@ export const money = (v: number) => {
 };
 
 // ---------- flow ----------
-export const nextFixture = (c: CareerV2) => c.fixtures.find((f) => f.hg == null && (f.home === c.clubId || f.away === c.clubId));
-export const currentRound = (c: CareerV2) => nextFixture(c)?.round ?? 39;
+export const nextFixture = (c: CareerV2) => allFixtures(c).find(f => f.hg == null && (f.home === c.clubId || f.away === c.clubId));
+export const currentRound = (c: CareerV2) => leagueFixtures(c).filter(f => f.hg == null && (f.home === c.clubId || f.away === c.clubId)).sort((a,b) => a.date.localeCompare(b.date))[0]?.round ?? 39;
 
 export function addDays(date: string, n: number) { const d = new Date(`${date}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
 
@@ -211,6 +215,7 @@ export function advanceDay(c: CareerV2): { career: CareerV2; blocked?: string } 
   if (nf && c.date >= nf.date) return { career: c, blocked: "Hoje é dia de jogo! Jogue a partida para continuar." };
   const next: CareerV2 = structuredClone(c);
   next.date = addDays(c.date, 1);
+  simulateDue(next, next.date);
   processMarketDay(next);
   const r = seeded(`day:${next.date}:${c.clubId}`);
   // weekly wages on Mondays
@@ -245,21 +250,22 @@ export function advanceDay(c: CareerV2): { career: CareerV2; blocked?: string } 
 
 export function advanceToMatch(c: CareerV2) {
   let cur = c; let guard = 0;
-  while (guard++ < 30) { const r = advanceDay(cur); if (r.blocked) break; cur = r.career; }
+  const target = nextFixture(c)?.date;
+  while (guard++ < 400 && target && cur.date < target) { const r = advanceDay(cur); if (r.blocked) break; cur = r.career; }
   return cur;
 }
 
 /** Record the user's match and simulate every other game of that round. */
-export function completeRound(c: CareerV2, hg: number, ag: number): CareerV2 {
+export function completeRound(c: CareerV2, hg: number, ag: number, goals?: Goal[]): CareerV2 {
   const nf = nextFixture(c);
   if (!nf) return c;
   const next: CareerV2 = structuredClone(c);
-  for (const f of next.fixtures) {
-    if (f.round !== nf.round) continue;
-    if (f.home === nf.home && f.away === nf.away) { f.hg = hg; f.ag = ag; continue; }
-    const res = simulateMatch(aiRating(next, f.home) + 2, aiRating(next, f.away), `${f.round}:${f.home}:${f.away}`);
-    f.hg = res.homeGoals; f.ag = res.awayGoals;
-  }
+  if (c.date < nf.date || !Number.isInteger(hg) || !Number.isInteger(ag) || hg < 0 || ag < 0) return c;
+  const target = allFixtures(next).find(f => f.home === nf.home && f.away === nf.away && f.round === nf.round && f.competition === nf.competition);
+  if (!target) return c;
+  recordFixture(next, target, hg, ag, goals);
+  simulateDue(next, nf.date);
+  progressCup(next);
   const isHome = nf.home === c.clubId;
   const my = isHome ? hg : ag, opp = isHome ? ag : hg;
   const club = clubById(c.clubId);
@@ -297,7 +303,7 @@ export function sellPlayer(c: CareerV2, playerId: string, fee: number, toClub?: 
 // ---------- finances ----------
 export function ensureFields(c: CareerV2): CareerV2 {
   const club = clubById(c.clubId);
-  return {
+  return initializeSeason({
     ...c,
     debt: c.debt ?? club.debt,
     stadium: c.stadium ?? { capacity: club.capacity, ticketPrice: 60, level: 1 },
@@ -306,7 +312,7 @@ export function ensureFields(c: CareerV2): CareerV2 {
     ledger: c.ledger ?? [],
     squad: c.squad.map(p => ({ ...p, contractUntil: p.contractUntil ?? addDays(c.date, 730) })),
     negotiations: c.negotiations ?? [], loans: c.loans ?? [], transferHistory: c.transferHistory ?? [], worldClubs: c.worldClubs ?? [], aiBalances: c.aiBalances ?? {},
-  };
+  });
 }
 
 function initialSponsors(clubId: string): Sponsor[] {

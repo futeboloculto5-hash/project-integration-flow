@@ -38,7 +38,12 @@ export const CLUBS: Club[] = [
   { id: "vitoria", name: "Vitória", short: "VIT", city: "Salvador", stadium: "Barradão", color: "#d6202f", color2: "#111111", rating: 71, budget: 18_000_000, apiId: 136, capacity: 30793, debt: 90_000_000 },
 ];
 
-export const clubById = (id: string) => CLUBS.find((c) => c.id === id)!;
+export function clubById(id: string): Club {
+  const club = CLUBS.find(c => c.id === id);
+  if (club) return club;
+  if (/^sim-b-\d+$/.test(id)) return { id, name: `Clube simulado ${id.slice(6)}`, short: `B${id.slice(6)}`, city: 'Simulação', stadium: 'Estádio simulado', color: '#16864a', color2: '#ffffff', rating: 65, budget: 10_000_000, apiId: -Number(id.slice(6)), capacity: 12000, debt: 0 };
+  throw new Error(`Clube não encontrado: ${id}`);
+}
 
 // Real Brazilian companies used for sponsorship negotiations (deal values are simulated in-game).
 export const COMPANIES = [
