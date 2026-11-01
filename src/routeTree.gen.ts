@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ApiFootballMarketRouteImport } from './routes/api/football/market'
 import { Route as ApiFootballPlayersRouteImport } from './routes/api/football/players'
+import { Route as ApiFootballSeasonRouteImport } from './routes/api/football/season'
 import { Route as ApiFootballSquadRouteImport } from './routes/api/football/squad'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const ApiFootballPlayersRoute = ApiFootballPlayersRouteImport.update({
   path: '/api/football/players',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiFootballSeasonRoute = ApiFootballSeasonRouteImport.update({
+  id: '/api/football/season',
+  path: '/api/football/season',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiFootballSquadRoute = ApiFootballSquadRouteImport.update({
   id: '/api/football/squad',
   path: '/api/football/squad',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/api/football/market': typeof ApiFootballMarketRoute
   '/api/football/players': typeof ApiFootballPlayersRoute
+  '/api/football/season': typeof ApiFootballSeasonRoute
   '/api/football/squad': typeof ApiFootballSquadRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/api/football/market': typeof ApiFootballMarketRoute
   '/api/football/players': typeof ApiFootballPlayersRoute
+  '/api/football/season': typeof ApiFootballSeasonRoute
   '/api/football/squad': typeof ApiFootballSquadRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/api/football/market': typeof ApiFootballMarketRoute
   '/api/football/players': typeof ApiFootballPlayersRoute
+  '/api/football/season': typeof ApiFootballSeasonRoute
   '/api/football/squad': typeof ApiFootballSquadRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/api/football/market'
     | '/api/football/players'
+    | '/api/football/season'
     | '/api/football/squad'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/api/football/market'
     | '/api/football/players'
+    | '/api/football/season'
     | '/api/football/squad'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/api/football/market'
     | '/api/football/players'
+    | '/api/football/season'
     | '/api/football/squad'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiFootballMarketRoute: typeof ApiFootballMarketRoute
   ApiFootballPlayersRoute: typeof ApiFootballPlayersRoute
+  ApiFootballSeasonRoute: typeof ApiFootballSeasonRoute
   ApiFootballSquadRoute: typeof ApiFootballSquadRoute
 }
 
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFootballPlayersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/football/season': {
+      id: '/api/football/season'
+      path: '/api/football/season'
+      fullPath: '/api/football/season'
+      preLoaderRoute: typeof ApiFootballSeasonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/football/squad': {
       id: '/api/football/squad'
       path: '/api/football/squad'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   ApiFootballMarketRoute: ApiFootballMarketRoute,
   ApiFootballPlayersRoute: ApiFootballPlayersRoute,
+  ApiFootballSeasonRoute: ApiFootballSeasonRoute,
   ApiFootballSquadRoute: ApiFootballSquadRoute,
 }
 export const routeTree = rootRouteImport
