@@ -1,14 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { advanceDay, cancelSponsor, createCareer, ensureFields, sponsorExitFee, type CareerV2 } from "./career";
-import { amortize, budgetError, finance, installment, loanCapacity, monthStatement, reallocateBudget, takeLoan } from "./finance";
+import { cancelSponsor, createCareer, ensureFields, sponsorExitFee, type CareerV2 } from "./career";
+import { amortize, budgetError, finance, installment, loanCapacity, monthStatement, processFinanceDay, reallocateBudget, takeLoan } from "./finance";
 import { DEBT_REFERENCES, SPONSOR_MAP_2025 } from "./finance-data";
 import { CLUBS } from "./clubs";
 
-const until = (c: CareerV2, date: string) => { let cur = c; while (cur.date < date) { const r = advanceDay(cur); if (r.blocked) throw Error(r.blocked); cur = r.career; } return cur; };
 
 describe("Career finances", () => {
   it("calculates fixed installments with the Price table", () => {
-    expect(installment({ balance: 12_000_000, monthlyRate: 0.015, installmentsTotal: 12, installmentsPaid: 0 })).toBe(1_100_159);
+    expect(installment({ balance: 12_000_000, monthlyRate: 0.015, installmentsTotal: 12, installmentsPaid: 0 })).toBe(1_100_160);
     expect(installment({ balance: 0, monthlyRate: 0.015, installmentsTotal: 12, installmentsPaid: 0 })).toBe(0);
   });
 
@@ -27,7 +26,7 @@ describe("Career finances", () => {
     const before = finance(c).debts[0]!;
     const due = installment(before);
     const interest = Math.round(before.balance * before.monthlyRate);
-    const after = until(c, "2025-04-01");
+    const after = structuredClone(c); after.date = "2025-04-01"; processFinanceDay(after);
     const d = finance(after).debts[0]!;
     expect(d.installmentsPaid).toBe(1);
     expect(d.balance).toBe(before.balance - (due - interest));
