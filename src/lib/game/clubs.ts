@@ -11,12 +11,12 @@ export type Club = {
   apiId: number; // API-Football team id
   capacity: number;
   debt: number; // R$
-  master?: string; // real 2025 shirt sponsor when known
+  master?: string; // 2025 shirt sponsor; see SPONSOR_MAP_2025 (IBOPE Repucom) for the verified list
 };
 
 // Brasileirão Série A 2025
 export const CLUBS: Club[] = [
-  { id: "atletico-mg", name: "Atlético-MG", short: "CAM", city: "Belo Horizonte", stadium: "Arena MRV", color: "#1f1f1f", color2: "#ffffff", rating: 79, budget: 60_000_000, apiId: 1062, capacity: 46000, debt: 1400_000_000, master: "Betano" },
+  { id: "atletico-mg", name: "Atlético-MG", short: "CAM", city: "Belo Horizonte", stadium: "Arena MRV", color: "#1f1f1f", color2: "#ffffff", rating: 79, budget: 60_000_000, apiId: 1062, capacity: 46000, debt: 1400_000_000, master: "H2bet" },
   { id: "bahia", name: "Bahia", short: "BAH", city: "Salvador", stadium: "Arena Fonte Nova", color: "#1f6fd1", color2: "#e1262d", rating: 77, budget: 55_000_000, apiId: 118, capacity: 47907, debt: 94_000_000 },
   { id: "botafogo", name: "Botafogo", short: "BOT", city: "Rio de Janeiro", stadium: "Nilton Santos", color: "#1a1a1a", color2: "#ffffff", rating: 81, budget: 70_000_000, apiId: 120, capacity: 44661, debt: 950_000_000, master: "VBet" },
   { id: "ceara", name: "Ceará", short: "CEA", city: "Fortaleza", stadium: "Castelão", color: "#111111", color2: "#ffffff", rating: 71, budget: 20_000_000, apiId: 129, capacity: 63903, debt: 110_000_000 },
