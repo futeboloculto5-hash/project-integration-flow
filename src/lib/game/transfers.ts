@@ -22,10 +22,8 @@ function budget(c: CareerV2, id: string) {
 function cash(c: CareerV2, id: string, amount: number) {
   if (id === 'livre') return;
   if (id === c.clubId) {
-    c.balance += amount;
-    const wk = currentWeek(c);
-    if (amount >= 0) wk.income += amount; else wk.expense -= amount;
-    wk.items.push({ label: 'Mercado de transferências (simulação)', value: amount });
+    book(c, amount >= 0 ? 'venda_jogadores' : 'compra_jogadores', 'Mercado de transferências (simulação)', amount);
+    trackTransferCash(c, amount);
   } else { c.aiBalances ??= {}; c.aiBalances[id] = budget(c, id) + amount; }
 }
 function record(c: CareerV2, p: Player, from: string, to: string, kind: TransferRecord['kind'], fee: number, wage: number, until?: string) {
@@ -60,6 +58,8 @@ export function proposeDeal(c: CareerV2, playerId: string, terms: DealTerms): { 
   if (c.loans?.some(x => x.playerId === p.id)) return { career: c, error: 'Jogador já está emprestado.' };
   if (c.negotiations?.some(x => x.playerId === p.id && ['pending', 'counter', 'accepted'].includes(x.status))) return { career: c, error: 'Já existe uma negociação aberta.' };
   if (terms.fee > c.balance) return { career: c, error: 'Saldo insuficiente.' };
+  const overBudget = budgetError(c, terms.fee, terms.wage);
+  if (overBudget) return { career: c, error: overBudget };
   const next = structuredClone(c);
   next.negotiations ??= [];
   next.negotiations.unshift({ ...terms, id: `deal-${c.date}-${p.id}-${next.negotiations.length}`, playerId, fromClub: p.clubId, created: c.date, expires: addDays(c.date, 7), status: 'pending' });
@@ -79,6 +79,7 @@ export function transferPlayer(c: CareerV2, playerId: string, from: string, to: 
   const next = structuredClone(c);
   if (terms.fee > budget(next, to)) return { career: c, error: 'Clube comprador sem saldo suficiente.' };
   if (terms.wage < p.wage) return { career: c, error: 'Jogador recusou o salário oferecido.' };
+  if (to === c.clubId) { const overBudget = budgetError(c, terms.fee, terms.wage); if (overBudget) return { career: c, error: overBudget }; }
   if (to !== c.clubId && terms.fee > Math.round(p.value * (terms.kind === 'loan' ? 0.16 : 1.2))) return { career: c, error: 'O clube recusou o valor pedido.' };
   const until = addDays(c.date, terms.months * 30);
   const signed = { ...p, clubId: to, wage: terms.wage, contractUntil: terms.kind === 'buy' ? until : p.contractUntil };

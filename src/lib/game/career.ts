@@ -1,4 +1,4 @@
-import { CLUBS, COMPANIES, KIT_BRANDS, clubById } from "./clubs";
+import { CLUBS, KIT_BRANDS, clubById } from "./clubs";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 import { amortize, book, createFinance, finance, ledgerWeek, processFinanceDay, type FinanceState } from './finance';
 import { SECTOR_WEIGHTS_2025, SPONSOR_COMPANIES, SPONSOR_MAP_2025, startingDebt, type DataStatus } from './finance-data';
