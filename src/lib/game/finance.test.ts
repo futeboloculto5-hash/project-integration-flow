@@ -16,7 +16,7 @@ describe("Career finances", () => {
     expect(cam.debt).toBe(1_772_000_000);
     expect(finance(cam).debts[0]?.status).toBe("oficial");
     const cor = createCareer("T", "corinthians");
-    expect(DEBT_REFERENCES.corinthians?.metric).toBe("Passivo total");
+    expect(DEBT_REFERENCES["corinthians"]?.metric).toBe("Passivo total");
     expect(cor.debt).toBe(CLUBS.find((x) => x.id === "corinthians")!.debt);
     expect(finance(cor).debts[0]?.status).toBe("estimativa");
   });
