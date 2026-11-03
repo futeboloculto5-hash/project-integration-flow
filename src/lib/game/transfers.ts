@@ -1,5 +1,6 @@
 import { CLUBS } from './clubs';
-import { addDays, aiSquad, currentWeek, money, seeded, squadFromApi, type CareerV2, type Player } from './career';
+import { addDays, aiSquad, money, seeded, squadFromApi, type CareerV2, type Player } from './career';
+import { book, budgetError, trackTransferCash } from './finance';
 
 export type WorldClub = { id: string; apiId: number; name: string; country: string | null; fetchedAt: string | null };
 export type DealTerms = { kind: 'buy' | 'loan'; fee: number; wage: number; months: number };
