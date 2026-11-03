@@ -42,8 +42,8 @@ export type CareerV2 = {
 
 export type SponsorSlot = "Máster" | "Material esportivo" | "Manga" | "Costas" | "Naming rights";
 /** `real` / `brandStatus` describe only the brand identity. Contract values are always simulated. */
-export type Sponsor = { id: string; company: string; slot: SponsorSlot; weekly: number; until: string; real?: boolean; brandStatus?: DataStatus; brandSource?: string; sector?: string; bonusWin?: number; startedAt?: string };
-export type SponsorOffer = { id: string; company: string; slot: SponsorSlot; weekly: number; weeks: number; expires: string; sector?: string; bonusWin?: number; countered?: boolean };
+export type Sponsor = { id: string; company: string; slot: SponsorSlot; weekly: number; until: string; real?: boolean; brandStatus?: DataStatus; brandSource?: string | undefined; sector?: string | undefined; bonusWin?: number | undefined; startedAt?: string | undefined };
+export type SponsorOffer = { id: string; company: string; slot: SponsorSlot; weekly: number; weeks: number; expires: string; sector?: string | undefined; bonusWin?: number | undefined; countered?: boolean };
 
 // ---------- deterministic random ----------
 export function seeded(seed: string) {
