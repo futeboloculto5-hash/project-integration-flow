@@ -129,7 +129,42 @@ export type DebtReference = {
  * Club debt references. Only figures read in the club's own financial statements are
  * marked "oficial"; anything else stays an estimate used solely as a game starting point.
  */
-export const DEBT_REFERENCES: Record<string, DebtReference> = {};
+const official = (value: number, metric: string, entity: string, sourceTitle: string, sourceUrl: string, note: string): DebtReference => ({ value, metric, fiscalYear: 2025, entity, status: "oficial", sourceTitle, sourceUrl, note });
+const LIAB = "Soma dos passivos circulante e não circulante publicados no balanço. Passivo total não equivale a dívida.";
+
+export const DEBT_REFERENCES: Record<string, DebtReference> = {
+  "atletico-mg": official(1_772_000_000, "Endividamento líquido", "SAF (inclui Arena MRV)", "Relatório Integrado 2025 – Atlético Mineiro SAF", "https://atletico.com.br/wp-content/uploads/2026/04/20260430-Relatorio-Integrado-AM-SAFGALO.pdf", "Indicador do relatório da administração, arredondado em R$ milhões."),
+  bahia: official(425_787_000, "Passivo total", "SAF", "Demonstrações financeiras 2025 – Esporte Clube Bahia SAF", "https://esporteclubebahia.com.br/wp-content/uploads/2026/04/Esporte-Clube-Bahia-SAF-Demonstracoes-Financeiras-e-Relatorio-dos-Auditores-Independentes.pdf", LIAB),
+  ceara: official(217_216_333, "Passivo total", "Associação", "Demonstrações contábeis 2025 – Ceará Sporting Club", "https://transparencia.cearasc.com/wp-content/uploads/2024/05/Demonstracoes-2025-com-relatorio-adm.pdf", LIAB),
+  corinthians: official(2_757_292_000, "Passivo total", "Associação", "Demonstrações financeiras 2025 – SC Corinthians Paulista", "https://futebolpaulista.com.br/Repositorio/Institucional/2025/Demonstra%C3%A7%C3%B5es%20Financeiras%20-%20Sport%20Club%20Corinthians%20Paulista%20-%20Federa%C3%A7%C3%A3o%20Paulista.pdf", `${LIAB} Documento do clube publicado pela Federação Paulista.`),
+  cruzeiro: official(1_363_690_000, "Passivo total", "SAF", "Informativo financeiro 2025 – Cruzeiro EC SAF", "https://cruzeiro-website-project-documents.s3.us-east-1.amazonaws.com/Documentos+obrigat%C3%B3rios+SITE/FINANCEIRO/%5B3.1.4%5D+Informativo+Financeiro+2025.pdf", LIAB),
+  fluminense: official(1_042_916_000, "Passivo total", "Associação", "Demonstrações financeiras 2025 – Fluminense FC", "https://transparenciafluminense.com.br/public/download/b87bed12954890a8af4b5df47633ced9fdf85923", `${LIAB} Auditoria com ressalva.`),
+  fortaleza: official(290_815_000, "Passivo total", "SAF", "Demonstrações contábeis 2025 – Fortaleza EC SAF", "https://transparencia.fortaleza1918.com.br/wp-content/uploads/2026/04/DEMONSTRACOES-CONTABEIS-FEC-SAF-31-12-2025.pdf", `${LIAB} Somente a SAF.`),
+  gremio: official(935_630_000, "Passivo total", "Associação", "Demonstrações contábeis 2025 – Grêmio FBPA", "https://gremio.net/documentos/GREMIO_-_DFS+RAI_2025_-_final_-_23-03-2026_CD_(1).pdf", LIAB),
+  internacional: official(1_273_794_000, "Passivo total", "Associação", "Relatório anual 2025 – SC Internacional", "https://static.internacional.com.br/cms/assets/ra_2025_6be6c85b2a.pdf", `${LIAB} Inclui receitas diferidas.`),
+  juventude: official(29_314_316, "Passivo total", "Associação", "Relatório de gestão 2025 – EC Juventude", "https://r2.juventude.com.br/Juventude/multimedia/notices/01KN2GXFP48G9DHNS1484JJSTT.pdf", LIAB),
+  bragantino: official(772_375_000, "Passivo total", "Red Bull Bragantino Futebol Ltda.", "Demonstrações contábeis 2025 – Red Bull Bragantino", "https://futebolpaulista.com.br/Repositorio/Institucional/2025/3333-26%20%20Relat%C3%B3rio%20dos%20auditores%20independentes%20RB%20Bragantino%202025.pdf", LIAB),
+  santos: official(1_231_959_000, "Passivo total", "Associação", "Demonstrações financeiras 2025 – Santos FC", "https://futebolpaulista.com.br/Repositorio/Institucional/2025/Demonstra%C3%A7%C3%B5es_Financeiras%202025%20assinada%20SFC.pdf", `${LIAB} Inclui receitas a realizar e contingências.`),
+  "sao-paulo": official(858_205_000, "Endividamento líquido", "Associação", "Demonstrações financeiras 2025 – São Paulo FC", "https://cdn.saopaulofc.net/2026/04/420-2026-7-spfc-df-31-12-2025-rai-pdf-ass-1-1_completo.pdf", "Relatório da administração: endividamento final em 31/12/2025."),
+  vasco: official(1_096_298_000, "Passivo total", "SAF", "Demonstrações contábeis 2025 – Vasco da Gama SAF", "https://media.vasco.com.br/static/2026/04/VASCO_DEMONSTRACOES_CONTABEIS_2025.pdf", `${LIAB} Valores ajustados a valor presente da recuperação judicial.`),
+  vitoria: official(407_767_000, "Passivo total", "Associação (consolidado)", "Demonstrações financeiras 2025 – EC Vitória", "https://ecvitoria.com.br/wp-content/uploads/2026/07/Esporte-Clube-Vitoria_Demonstracoes-Financeiras-2025.pdf", `${LIAB} Auditoria com ressalva.`),
+};
+
+/** Official statements found but no figure could be read: Botafogo, Flamengo, Mirassol, Sport. Palmeiras not yet consulted. */
+export const DEBT_PENDING: Record<string, string> = {
+  botafogo: "Demonstrações 2025 publicadas pelo clube, mas o documento não pôde ser lido.",
+  flamengo: "Demonstrações 2025 publicadas pelo clube, mas o documento não pôde ser lido integralmente.",
+  mirassol: "Notas explicativas 2025 localizadas, sem total de dívida verificável.",
+  sport: "Portal de transparência sem documento legível com valores.",
+  palmeiras: "Demonstração oficial ainda não consultada.",
+};
+
+/** Opening debt of a new career: an official net-debt figure when available, otherwise the game estimate. */
+export function startingDebt(clubId: string, gameEstimate: number): { value: number; status: DataStatus; note: string } {
+  const ref = DEBT_REFERENCES[clubId];
+  if (ref?.value && ref.metric === "Endividamento líquido") return { value: ref.value, status: "oficial", note: `Saldo inicial: ${ref.metric} ${ref.fiscalYear} (${ref.sourceTitle}). Juros e prazo simulados.` };
+  return { value: gameEstimate, status: "estimativa", note: "Saldo inicial estimado pelo jogo, não confirmado como dívida em demonstração oficial. Juros e prazo simulados." };
+}
 
 export function debtReference(clubId: string, gameEstimate: number): DebtReference {
   return DEBT_REFERENCES[clubId] ?? {
