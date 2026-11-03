@@ -1,6 +1,6 @@
 import type { CareerV2 } from "./career";
 import { clubById } from "./clubs";
-import { STAFF_SALARY_IBGE_2024, debtReference, type DataStatus } from "./finance-data";
+import { STAFF_SALARY_IBGE_2024, startingDebt, type DataStatus } from "./finance-data";
 
 export type FinanceCategory =
   | "bilheteria" | "patrocinio" | "bonus_patrocinio" | "premiacao" | "venda_jogadores" | "emprestimo_recebido"
@@ -90,12 +90,13 @@ function boardBudget(c: CareerV2, season: string): FinanceState["budget"] {
 
 export function createFinance(c: CareerV2): FinanceState {
   const club = clubById(c.clubId);
-  const ref = debtReference(c.clubId, club.debt);
+  const start = startingDebt(c.clubId, club.debt);
+  const isOfficial = start.status === "oficial" && start.value === c.debt;
   const debts: DebtContract[] = c.debt > 0 ? [{
     id: "debt-estrutural", label: "Dívida histórica renegociada", kind: "estrutural", original: c.debt, balance: c.debt,
     monthlyRate: STRUCTURAL_DEBT.monthlyRate, installmentsTotal: STRUCTURAL_DEBT.installments, installmentsPaid: 0, startedAt: c.date,
-    status: ref.status === "oficial" && ref.value === c.debt ? "oficial" : "estimativa",
-    note: ref.status === "oficial" && ref.value === c.debt ? `Saldo inicial: ${ref.metric} ${ref.fiscalYear ?? ""} (${ref.sourceTitle}). Juros e prazo simulados.` : "Saldo inicial estimado pelo jogo. Juros e prazo simulados.",
+    status: isOfficial ? "oficial" : "estimativa",
+    note: isOfficial ? start.note : "Saldo inicial estimado pelo jogo, não confirmado como dívida em demonstração oficial. Juros e prazo simulados.",
   }] : [];
   const staffCount = Math.round(60 + Math.max(0, club.rating - 65) * 6);
   return { version: 1, debts, months: {}, budget: boardBudget(c, c.season), staff: { count: staffCount, monthlySalary: STAFF_SALARY_IBGE_2024 } };
