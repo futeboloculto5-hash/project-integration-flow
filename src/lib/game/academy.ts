@@ -193,6 +193,7 @@ function rollover(c: CareerV2, a: AcademyState) {
 export function processAcademyDay(c: CareerV2) {
   const a = academy(c);
   if (a.season !== c.season) rollover(c, a);
+  if (c.seasonState && a.competitions.every((x) => x.rows.length === 0)) a.competitions = competitions(c, a.season);
   const dow = new Date(`${c.date}T00:00:00Z`).getUTCDay();
   if (dow === 1) {
     train(c, a);
