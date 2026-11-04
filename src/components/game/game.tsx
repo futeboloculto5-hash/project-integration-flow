@@ -14,6 +14,7 @@ import { Crest, Onboarding } from "./onboarding";
 import { ClubTab } from "./club-tab";
 import { WorldMarket } from "./world-market";
 import { SeasonTab } from "./season-tab";
+import { AcademyTab } from "./academy-tab";
 import { careerClub, divisionOf, initializeSeason, seasonFinished, seasonTable, startNextSeason, type Goal } from "@/lib/game/seasons";
 
 type Tab = "inicio" | "calendario" | "tabela" | "elenco" | "mercado" | "clube";
@@ -230,9 +231,18 @@ const POS_ORDER: Pos[] = ["GOL", "DEF", "MEI", "ATA"];
 function SquadTab({ career, update }: { career: CareerV2; update: (c: CareerV2) => void }) {
   const xi = bestEleven(career.squad, career.formation);
   const [sel, setSel] = useState<Player | null>(null);
+  const [view, setView] = useState<"pro" | "base">("pro");
   const sorted = [...career.squad].sort((a, b) => POS_ORDER.indexOf(a.pos) - POS_ORDER.indexOf(b.pos) || b.rating - a.rating);
+  const toggle = (
+    <div className="g-seg">
+      <button className={view === "pro" ? "on" : ""} onClick={() => setView("pro")}>PROFISSIONAL</button>
+      <button className={view === "base" ? "on" : ""} onClick={() => setView("base")}>BASE{(career.academy?.prospects.length ?? 0) > 0 && <i className="g-dot" />}</button>
+    </div>
+  );
+  if (view === "base") return <div className="g-stack">{toggle}<AcademyTab career={career} update={update} /></div>;
   return (
     <div className="g-stack">
+      {toggle}
       <section className="g-card">
         <h3 className="g-h"><Shirt /> FORMAÇÃO · FORÇA {teamRating(career.squad, career.formation)}</h3>
         <div className="g-seg">
@@ -246,7 +256,7 @@ function SquadTab({ career, update }: { career: CareerV2; update: (c: CareerV2) 
             <li key={p.id}>
               <button onClick={() => setSel(p)} className={xi.includes(p) ? "g-starter" : ""}>
                 <span className={`g-pos-tag g-pos-${p.pos}`}>{p.pos}</span>
-                <b>{p.name}</b><small>{p.age}a</small>
+                <b>{p.name}{p.academy && <em className="g-tag-base">BASE</em>}</b><small>{p.age}a</small>
                 <span className="g-ovr">{p.rating}</span>
               </button>
             </li>
