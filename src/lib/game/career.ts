@@ -2,10 +2,11 @@ import { CLUBS, KIT_BRANDS, clubById } from "./clubs";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 import { amortize, book, createFinance, finance, ledgerWeek, processFinanceDay, type FinanceState } from './finance';
 import { SECTOR_WEIGHTS_2025, SPONSOR_COMPANIES, SPONSOR_MAP_2025, startingDebt, type DataStatus } from './finance-data';
+import { academy, processAcademyDay, type AcademyState } from './academy';
 import { allFixtures, initializeSeason, leagueFixtures, progressCup, recordFixture, simulateDue, type Goal, type SeasonState } from './seasons';
 
 export type Pos = "GOL" | "DEF" | "MEI" | "ATA";
-export type Player = { id: string; name: string; pos: Pos; age: number; rating: number; value: number; wage: number; clubId: string; real?: boolean; apiId?: number; contractUntil?: string | undefined; ageUnknown?: boolean };
+export type Player = { id: string; name: string; pos: Pos; age: number; rating: number; value: number; wage: number; clubId: string; real?: boolean; apiId?: number; contractUntil?: string | undefined; ageUnknown?: boolean; academy?: boolean; potential?: number };
 export type Fixture = { round: number; date: string; home: string; away: string; hg?: number; ag?: number; id?: string; division?: string; competition?: 'league' | 'cup'; scheduleSource?: 'simulated' | 'API-Football'; resultSource?: 'simulated'; goals?: Goal[]; penalties?: [number, number]; winner?: string };
 export type NewsItem = { id: string; date: string; title: string; body: string; kind: "info" | "offer" | "transfer" | "result" };
 export type Offer = { id: string; playerId: string; fromClub: string; fee: number; expires: string };
@@ -37,6 +38,7 @@ export type CareerV2 = {
   aiBalances?: Record<string, number>;
   seasonState?: SeasonState;
   finance?: FinanceState;
+  academy?: AcademyState;
   ledger: { week: string; income: number; expense: number; items: { label: string; value: number }[] }[];
 };
 
@@ -223,6 +225,7 @@ export function advanceDay(c: CareerV2, inPlace = false): { career: CareerV2; bl
   processMarketDay(next);
   const r = seeded(`day:${next.date}:${c.clubId}`);
   processFinanceDay(next); // wages, staff, sponsors, upkeep, installments and interest
+  processAcademyDay(next); // youth training, scouting, youth competitions and yearly intake
   if (next.stadium.building && next.date >= next.stadium.building.until) {
     next.stadium.capacity += next.stadium.building.seats; next.stadium.level += 1;
     next.news.unshift({ id: `stad-${next.date}`, date: next.date, kind: "info", title: "Obra concluída no estádio!", body: `Capacidade agora: ${next.stadium.capacity.toLocaleString("pt-BR")} lugares.` });
@@ -315,6 +318,7 @@ export function ensureFields(c: CareerV2): CareerV2 {
     squad: c.squad.map(p => ({ ...p, contractUntil: p.contractUntil ?? addDays(c.date, 730) })),
     negotiations: c.negotiations ?? [], loans: c.loans ?? [], transferHistory: c.transferHistory ?? [], worldClubs: c.worldClubs ?? [], aiBalances: c.aiBalances ?? {},
   });
+  academy(next); // older saves get an academy without touching anything else
   finance(next); // older saves: existing debt becomes an installment contract, nothing is reset
   return next;
 }

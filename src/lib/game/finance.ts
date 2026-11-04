@@ -4,16 +4,16 @@ import { STAFF_SALARY_IBGE_2024, startingDebt, type DataStatus } from "./finance
 
 export type FinanceCategory =
   | "bilheteria" | "patrocinio" | "bonus_patrocinio" | "premiacao" | "venda_jogadores" | "emprestimo_recebido"
-  | "salarios_jogadores" | "salarios_funcionarios" | "manutencao" | "juros" | "amortizacao" | "compra_jogadores" | "obras" | "multas";
+  | "salarios_jogadores" | "salarios_funcionarios" | "categorias_base" | "manutencao" | "juros" | "amortizacao" | "compra_jogadores" | "obras" | "multas";
 
 export const CATEGORY_LABEL: Record<FinanceCategory, string> = {
   bilheteria: "Bilheteria", patrocinio: "Patrocínios", bonus_patrocinio: "Bônus de patrocínio", premiacao: "Premiação",
   venda_jogadores: "Venda de jogadores", emprestimo_recebido: "Empréstimos recebidos",
-  salarios_jogadores: "Salários do elenco", salarios_funcionarios: "Salários de funcionários", manutencao: "Manutenção do estádio",
+  salarios_jogadores: "Salários do elenco", salarios_funcionarios: "Salários de funcionários", categorias_base: "Categorias de base", manutencao: "Manutenção do estádio",
   juros: "Juros", amortizacao: "Amortização de dívidas", compra_jogadores: "Compra de jogadores", obras: "Obras", multas: "Multas contratuais",
 };
 export const INCOME: FinanceCategory[] = ["bilheteria", "patrocinio", "bonus_patrocinio", "premiacao", "venda_jogadores", "emprestimo_recebido"];
-export const EXPENSE: FinanceCategory[] = ["salarios_jogadores", "salarios_funcionarios", "manutencao", "juros", "amortizacao", "compra_jogadores", "obras", "multas"];
+export const EXPENSE: FinanceCategory[] = ["salarios_jogadores", "salarios_funcionarios", "categorias_base", "manutencao", "juros", "amortizacao", "compra_jogadores", "obras", "multas"];
 
 export type DebtContract = {
   id: string;
