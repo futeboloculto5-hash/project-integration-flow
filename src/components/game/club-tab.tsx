@@ -303,7 +303,7 @@ function Sources({ career }: { career: CareerV2 }) {
           <p className="g-mini"><b>Uso no jogo:</b> {s.usedFor}</p>
           {s.url && <a className="g-link" href={s.url} target="_blank" rel="noreferrer"><ExternalLink /> Abrir fonte</a>}
           {s.id === "ibope-2025" && <p className="g-mini">Setores (marcas únicas): {Object.entries(SECTOR_WEIGHTS_2025).map(([k, v]) => `${k} ${v} (${Math.round((v / total) * 100)}%)`).join(" · ")}.</p>}
-          {s.id === "ibge-cempre-2024" && <p className="g-mini">No seu clube: {f.staff.count} funcionários (quantidade simulada) × {money(f.staff.monthlySalary)}/mês.</p>}
+          {s.id === "ibge-cempre-2024" && <p className="g-mini">No seu clube: {f.staff.count} funcionários (quantidade simulada) × R$ {f.staff.monthlySalary.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}/mês (sem encargos).</p>}
           {s.id === "modelo-jogo" && <p className="g-mini">Dívida histórica: {(STRUCTURAL_DEBT.monthlyRate * 100).toLocaleString("pt-BR")}% ao mês em {STRUCTURAL_DEBT.installments} parcelas. Empréstimos: {LOAN_OPTIONS.map((o) => `${o.months}x a ${(o.monthlyRate * 100).toLocaleString("pt-BR")}%`).join(", ")}.</p>}
         </section>
       ))}
