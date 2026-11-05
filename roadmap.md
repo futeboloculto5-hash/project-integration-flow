@@ -19,3 +19,8 @@
 - [x] Debts as installment contracts (Price), interest, early payment, bank loans; official 2025 club statements recorded with source/date/metric.
 - [x] Sponsorship contracts with IBOPE Repucom 2025 brands, simulated values/bonuses, counter-offers and rescission; sources tab.
 - [ ] Official debt figures for Botafogo, Flamengo, Mirassol, Sport and Palmeiras: club documents could not be read or were not yet consulted.
+
+# Youth academy
+- [x] Sub-15/17/20 squads, weekly training with focus/intensity, attribute growth, injuries and academy costs.
+- [x] Scouts, prospect reports, signings, promotion to the professional squad and yearly intake/ageing.
+- [x] Youth competitions with CBF-verified names (Sub-20, Sub-17) and simulated results; saved in the career snapshot; tests added.
