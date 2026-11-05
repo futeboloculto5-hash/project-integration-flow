@@ -16,3 +16,4 @@
 - Imported users from the old app are matched by verified email via `claim_legacy_account()` on sign-in; `legacy_users` is service-role only.
 - Season rules live in `src/lib/game/seasons.ts` as additive snapshot state: official references never overwrite career results, and rollover archives competitions before applying division changes and player development.
 - Career money rules live in `src/lib/game/finance.ts` (every cash movement goes through `book()`), with reference data and source metadata in `src/lib/game/finance-data.ts`; each figure carries a data-origin status so official, research, estimated and simulated values are never mixed.
+- Youth academy rules live in `src/lib/game/academy.ts` as additive snapshot state run from `advanceDay`; youth players, scouts and youth results are always simulated, and only competition names verified on cbf.com.br are labeled official.
