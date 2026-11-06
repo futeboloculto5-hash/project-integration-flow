@@ -15,6 +15,13 @@
       "when": 1792368173503,
       "tag": "0001_football_shared_cache_budget",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793923660721,
+      "tag": "0002_careers_backup_20261105",
+      "breakpoints": true
     }
   ]
 }
