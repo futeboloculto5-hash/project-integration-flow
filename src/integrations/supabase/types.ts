@@ -14,6 +14,118 @@ export type Database = {
   }
   public: {
     Tables: {
+      bux_catalog: {
+        Row: {
+          amount: number
+          club_id: string | null
+          duration_days: number | null
+          id: string
+          kind: string
+          name: string
+        }
+        Insert: {
+          amount: number
+          club_id?: string | null
+          duration_days?: number | null
+          id: string
+          kind: string
+          name: string
+        }
+        Update: {
+          amount?: number
+          club_id?: string | null
+          duration_days?: number | null
+          id?: string
+          kind?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      bux_transactions: {
+        Row: {
+          amount: number
+          balance_after: number
+          created_at: string
+          id: string
+          idempotency_key: string
+          item_id: string
+          kind: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          balance_after: number
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          item_id: string
+          kind: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          item_id?: string
+          kind?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bux_transactions_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "bux_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bux_unlocks: {
+        Row: {
+          item_id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          item_id: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          item_id?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bux_unlocks_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "bux_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bux_wallets: {
+        Row: {
+          balance: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       careers: {
         Row: {
           balance: number
@@ -181,6 +293,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bux_apply: {
+        Args: { p_item: string; p_key: string; p_reward: boolean }
+        Returns: Json
+      }
+      bux_claim_reward: {
+        Args: { p_item: string; p_key: string }
+        Returns: Json
+      }
+      bux_purchase: { Args: { p_item: string; p_key: string }; Returns: Json }
       claim_legacy_account: { Args: never; Returns: number }
       reserve_football_request: { Args: { p_key: string }; Returns: string }
     }

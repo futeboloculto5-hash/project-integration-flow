@@ -1,3 +1,4 @@
+import { buffEffect } from "./bux";
 import { addDays, playerValue, playerWage, seeded, type CareerV2, type Player, type Pos } from "./career";
 import { book, budgetError } from "./finance";
 import type { DataStatus } from "./finance-data";
@@ -119,7 +120,8 @@ function train(c: CareerV2, a: AcademyState) {
     const r = seeded(`train:${c.date}:${y.id}`);
     const plan = a.training[y.category];
     const int = INTENSITY[plan.intensity];
-    if (r() < int.injury) { y.injuredUntil = addDays(c.date, 7 + Math.floor(r() * 21)); c.news.unshift({ id: `inj-${y.id}-${c.date}`, date: c.date, kind: "info", title: `Lesão na base: ${y.name}`, body: `${y.category} · fora até ${y.injuredUntil.split("-").reverse().join("/")}. Treino ${plan.intensity}.` }); continue; }
+    const med = buffEffect(c.buxBuffs ?? [], c.date);
+    if (r() < int.injury * med.injuryChanceMult) { y.injuredUntil = addDays(c.date, Math.max(1, Math.round((7 + Math.floor(r() * 21)) * med.recoveryDaysMult))); c.news.unshift({ id: `inj-${y.id}-${c.date}`, date: c.date, kind: "info", title: `Lesão na base: ${y.name}`, body: `${y.category} · fora até ${y.injuredUntil.split("-").reverse().join("/")}. Treino ${plan.intensity}.` }); continue; }
     const room = Math.max(0, y.potential - overall(y));
     const ageFactor = y.age <= 16 ? 1.2 : y.age <= 18 ? 1 : 0.7;
     const gain = (room / 40) * ageFactor * int.gain * (1 + (a.level - 1) * 0.1);

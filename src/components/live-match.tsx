@@ -19,6 +19,8 @@ type Props = {
   homeFormation?: Formation;
   awayFormation?: Formation;
   managedSide?: Side;
+  /** Efeitos de Bux ativos para o time do técnico. */
+  boost?: { energyDrainMult: number; halftimeEnergyBonus: number };
   onFinish: (score: { home: number; away: number; goals: MatchGoal[] }) => void;
   onClose: () => void;
 };
@@ -27,10 +29,11 @@ const SPEEDS = [1, 2, 4] as const;
 const TICK_MS = 260;
 type Tab = "lances" | "tatica" | "elenco" | "stats";
 
-export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, homeFormation, awayFormation, managedSide = "home", onFinish, onClose }: Props) {
+export function LiveMatch({ home, away, roster, seed, homeSquad, awaySquad, homeFormation, awayFormation, managedSide = "home", boost, onFinish, onClose }: Props) {
   const initial = useMemo(() => {
     const h = createTeam(home.name, home.short, home.color, home.rating, homeSquad ? toMatch(homeSquad) : makeSquad(`${seed}-h`, home.rating, roster), homeFormation ?? "4-3-3");
     const a = createTeam(away.name, away.short, away.color, away.rating, awaySquad ? toMatch(awaySquad) : makeSquad(`${seed}-a`, away.rating), awayFormation ?? "4-4-2");
+    if (boost) Object.assign(managedSide === "home" ? h : a, boost);
     const m = createMatch(h, a, seed, managedSide);
     return { ...m, paused: true };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
