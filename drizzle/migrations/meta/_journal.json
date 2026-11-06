@@ -22,6 +22,13 @@
       "when": 1793923660721,
       "tag": "0002_careers_backup_20261105",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793924054600,
+      "tag": "0003_bux",
+      "breakpoints": true
     }
   ]
 }
