@@ -17,6 +17,8 @@ export type MatchPlayer = {
 };
 
 export type TeamState = {
+  /** Bux: multiplicador de desgaste e bônus de energia no intervalo (somente o time do técnico). */
+  energyDrainMult?: number; halftimeEnergyBonus?: number;
   name: string;
   short: string;
   color: string;
@@ -202,7 +204,7 @@ export function step(prev: MatchState): MatchState {
     const t = st[side];
     for (const p of t.lineup) {
       if (p.sentOff) continue;
-      p.energy = Math.max(15, p.energy - (0.14 + t.pressing * 0.07 + (t.mentality === "ofensiva" ? 0.04 : 0)) * (p.pos === "GOL" ? 0.3 : 1));
+      p.energy = Math.max(15, p.energy - (0.14 + t.pressing * 0.07 + (t.mentality === "ofensiva" ? 0.04 : 0)) * (p.pos === "GOL" ? 0.3 : 1) * (t.energyDrainMult ?? 1));
     }
   }
 
@@ -219,7 +221,7 @@ export function step(prev: MatchState): MatchState {
       st.half = 2; st.minute = 45; st.addedTime = 2 + Math.floor(rng(st) * 4);
       st.ball = { x: 50, y: 50, side: "away" };
       st.paused = true;
-      for (const t of [st.home, st.away]) for (const p of t.lineup) p.energy = Math.min(100, p.energy + 12);
+      for (const t of [st.home, st.away]) for (const p of t.lineup) p.energy = Math.min(100, p.energy + 12 + (t.halftimeEnergyBonus ?? 0));
     } else if (st.half === 1 && st.minute === 44) {
       st.addedTime = 1 + Math.floor(rng(st) * 3);
     } else if (st.half === 2 && st.minute >= 90 + st.addedTime) {

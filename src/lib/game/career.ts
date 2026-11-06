@@ -13,6 +13,8 @@ export type Offer = { id: string; playerId: string; fromClub: string; fee: numbe
 
 export type CareerV2 = {
   version: 2;
+  /** Bônus de Bux ativos nesta carreira (validade em datas do jogo). */
+  buxBuffs?: import("./bux").ActiveBuff[];
   manager: string;
   clubId: string;
   season: string;
