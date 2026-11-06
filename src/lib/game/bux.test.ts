@@ -102,7 +102,7 @@ describe('Bux · buffs de energia e médicos', () => {
 });
 
 describe('Bux · catálogo e consistência com o SQL', () => {
-  const sql = readFileSync(resolve(__dirname, '../../../drizzle/migrations/0002_bux.sql'), 'utf8');
+  const sql = readFileSync(resolve(__dirname, '../../../supabase/pending-migrations/bux.sql'), 'utf8');
   const rows = [...sql.matchAll(/^\('([a-z_]+)','([a-z_]+)','([^']+)',(\d+),(NULL|\d+),(NULL|'[a-z-]+')\)[,;]$/gm)]
     .map(m => ({ id: m[1]!, kind: m[2]!, name: m[3]!, amount: Number(m[4]), duration: m[5] === 'NULL' ? undefined : Number(m[5]), club: m[6] === 'NULL' ? undefined : m[6]!.slice(1, -1) }));
 

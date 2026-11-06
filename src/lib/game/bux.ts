@@ -1,6 +1,6 @@
 // Bux: moeda FICTÍCIA do Clube Campeão WORLD. Não tem relação com dinheiro real.
 // Preços, recompensas e efeitos abaixo são regras internas do jogo, definidas pelo próprio jogo.
-// A fonte da verdade do saldo é o servidor (drizzle/migrations/0002_bux.sql); este módulo espelha
+// A fonte da verdade do saldo é o servidor (supabase/pending-migrations/bux.sql); este módulo espelha
 // as mesmas regras para a interface e é checado contra o SQL por bux.test.ts.
 
 export const BUX_NOTICE = "Bux é uma moeda fictícia do jogo. Preços e efeitos são regras internas, sem relação com dinheiro real.";
