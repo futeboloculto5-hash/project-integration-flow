@@ -62,6 +62,54 @@ export type Database = {
         }
         Relationships: []
       }
+      careers_backup_20261105: {
+        Row: {
+          balance: number | null
+          club_id: string | null
+          club_name: string | null
+          created_at: string | null
+          current_date: string | null
+          data: Json | null
+          id: string | null
+          legacy_id: string | null
+          legacy_user_id: string | null
+          season: string | null
+          transfer_budget: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          balance?: number | null
+          club_id?: string | null
+          club_name?: string | null
+          created_at?: string | null
+          current_date?: string | null
+          data?: Json | null
+          id?: string | null
+          legacy_id?: string | null
+          legacy_user_id?: string | null
+          season?: string | null
+          transfer_budget?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          balance?: number | null
+          club_id?: string | null
+          club_name?: string | null
+          created_at?: string | null
+          current_date?: string | null
+          data?: Json | null
+          id?: string | null
+          legacy_id?: string | null
+          legacy_user_id?: string | null
+          season?: string | null
+          transfer_budget?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       football_api_budget: {
         Row: {
           blocked_until: string | null
