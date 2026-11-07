@@ -114,3 +114,16 @@ export function buffEffect(buffs: ActiveBuff[], date: string): Required<BuxEffec
   return out;
 }
 export const activeBuffs = (buffs: ActiveBuff[], date: string) => buffs.filter((b) => b.until >= date);
+
+// ---------- estado da conta (espelho do servidor, só para exibir) ----------
+export type BuxAccount = { balance: number; unlocked: string[]; welcomeClaimed: boolean; recent: BuxTx[] };
+
+/** Texto dos efeitos de um item, exatamente o que o motor aplica. Lesões e recuperação valem para a base. */
+export function effectLines(item: BuxItem): string[] {
+  const e = item.effect ?? {}, out: string[] = [];
+  if (e.energyDrainMult !== undefined) out.push(`Desgaste de energia −${Math.round((1 - e.energyDrainMult) * 100)}%`);
+  if (e.halftimeEnergyBonus) out.push(`+${e.halftimeEnergyBonus} de energia no intervalo`);
+  if (e.injuryChanceMult !== undefined) out.push(`Lesões na base −${Math.round((1 - e.injuryChanceMult) * 100)}%`);
+  if (e.recoveryDaysMult !== undefined) out.push(`Recuperação ${Math.round((1 - e.recoveryDaysMult) * 100)}% mais rápida`);
+  return out;
+}

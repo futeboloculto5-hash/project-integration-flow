@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Landmark, Building2, Handshake, Wallet, Hammer, Ticket, BookOpen, PiggyBank, ExternalLink } from "lucide-react";
+import { Landmark, Building2, Handshake, Wallet, Hammer, Ticket, BookOpen, PiggyBank, ExternalLink, Coins } from "lucide-react";
 import { toast } from "sonner";
 import { clubById } from "@/lib/game/clubs";
 import { EXPANSION, SPONSOR_EXIT_FEE, acceptSponsor, cancelSponsor, counterSponsor, expandStadium, gateIncome, money, payDebt, sponsorExitFee, type CareerV2 } from "@/lib/game/career";
 import { CATEGORY_LABEL, EXPENSE, INCOME, LOAN_OPTIONS, OVERDRAFT_RATE, STRUCTURAL_DEBT, finance, installment, loanCapacity, monthStatement, monthlyInstallments, payroll, reallocateBudget, takeLoan, transferRemaining, weeklyFixed } from "@/lib/game/finance";
+import { BuxShop } from "./bux-shop";
 import { DEBT_PENDING, DEBT_REFERENCES, SECTOR_WEIGHTS_2025, SOURCES, SPONSOR_MAP_2025, STATUS_LABEL, sourceById, type DataStatus } from "@/lib/game/finance-data";
 
-type Sub = "financas" | "divida" | "estadio" | "patrocinio" | "fontes";
+type Sub = "financas" | "divida" | "estadio" | "patrocinio" | "bux" | "fontes";
 type Props = { career: CareerV2; update: (c: CareerV2) => void };
 
 export function Tag({ status }: { status: DataStatus }) {
@@ -16,13 +17,13 @@ const fmtDate = (d: string) => new Date(`${d}T12:00:00Z`).toLocaleDateString("pt
 const monthName = (k: string) => new Date(`${k}-15T12:00:00Z`).toLocaleDateString("pt-BR", { month: "long", year: "numeric", timeZone: "UTC" });
 const apply = (r: { career: CareerV2; error?: string | undefined }, update: Props["update"], ok: string) => { if (r.error) toast.error(r.error); else { update(r.career); toast.success(ok); } };
 
-export function ClubTab({ career, update }: Props) {
+export function ClubTab({ career, update, userId = null }: Props & { userId?: string | null }) {
   const [sub, setSub] = useState<Sub>("financas");
   const club = clubById(career.clubId);
   return (
     <div className="g-stack">
       <div className="g-seg g-seg-icons">
-        {([["financas", Wallet, "Finanças"], ["divida", Landmark, "Dívidas"], ["estadio", Building2, "Estádio"], ["patrocinio", Handshake, "Patrocínio"], ["fontes", BookOpen, "Fontes"]] as const).map(([k, Icon, l]) => (
+        {([["financas", Wallet, "Finanças"], ["divida", Landmark, "Dívidas"], ["estadio", Building2, "Estádio"], ["patrocinio", Handshake, "Patrocínio"], ["bux", Coins, "Bux"], ["fontes", BookOpen, "Fontes"]] as const).map(([k, Icon, l]) => (
           <button key={k} className={sub === k ? "on" : ""} onClick={() => setSub(k)}>
             <Icon />{l}{k === "patrocinio" && career.sponsorOffers.length > 0 && <i className="g-dot" />}
           </button>
@@ -32,6 +33,7 @@ export function ClubTab({ career, update }: Props) {
       {sub === "divida" && <Debt career={career} update={update} />}
       {sub === "estadio" && <Stadium career={career} update={update} stadiumName={club.stadium} city={club.city} />}
       {sub === "patrocinio" && <Sponsors career={career} update={update} />}
+      {sub === "bux" && <BuxShop career={career} update={update} userId={userId} />}
       {sub === "fontes" && <Sources career={career} />}
     </div>
   );

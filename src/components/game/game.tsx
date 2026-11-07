@@ -15,6 +15,7 @@ import { ClubTab } from "./club-tab";
 import { WorldMarket } from "./world-market";
 import { SeasonTab } from "./season-tab";
 import { AcademyTab } from "./academy-tab";
+import { buffEffect } from "@/lib/game/bux";
 import { careerClub, divisionOf, initializeSeason, seasonFinished, seasonTable, startNextSeason, type Goal } from "@/lib/game/seasons";
 
 type Tab = "inicio" | "calendario" | "tabela" | "elenco" | "mercado" | "clube";
@@ -135,7 +136,7 @@ export function Game({ userId }: { userId: string | null }) {
         {tab === "tabela" && <SeasonTab career={career} update={update} />}
         {tab === "elenco" && <SquadTab career={career} update={update} />}
         {tab === "mercado" && <WorldMarket career={career} update={update} />}
-        {tab === "clube" && <ClubTab career={career} update={update} />}
+        {tab === "clube" && <ClubTab career={career} update={update} userId={userId} />}
       </main>
 
       <nav className="g-nav">
@@ -168,11 +169,14 @@ function LiveFixture({ career, onDone, onClose }: { career: CareerV2; onDone: (h
   const home = careerClub(career, nf.home), away = careerClub(career, nf.away);
   const order = (sq: Player[], formation: CareerV2['formation']) => { const xi = bestEleven(sq, formation); return [...xi, ...sq.filter(p => !xi.includes(p)).sort((a,b) => b.rating-a.rating).slice(0,7)]; };
   const hs = isHome ? career.squad : aiSquad(career,nf.home), as = isHome ? aiSquad(career,nf.away) : career.squad;
+  const fx = buffEffect(career.buxBuffs ?? [], career.date);
+  const boost = fx.energyDrainMult < 1 || fx.halftimeEnergyBonus > 0 ? { energyDrainMult: fx.energyDrainMult, halftimeEnergyBonus: fx.halftimeEnergyBonus } : undefined;
   return <LiveMatch
     home={{ name: home.name, short: home.short, color: home.color, rating: teamRating(hs) }}
     away={{ name: away.name, short: away.short, color: away.color, rating: teamRating(as) }}
     homeSquad={order(hs,isHome ? career.formation : '4-4-2')} awaySquad={order(as,isHome ? '4-4-2' : career.formation)}
     homeFormation={isHome ? career.formation : '4-4-2'} awayFormation={isHome ? '4-4-2' : career.formation} managedSide={isHome ? 'home' : 'away'}
+    {...(boost ? { boost } : {})}
     seed={`${career.season}:${nf.competition}:${nf.round}:${nf.home}:${nf.away}`}
     onFinish={(score) => { if (done.current) return; done.current = true; onDone(score.home,score.away,score.goals.map(g => ({ ...g, clubId: g.side === 'home' ? nf.home : nf.away }))); }} onClose={onClose}
   />;
