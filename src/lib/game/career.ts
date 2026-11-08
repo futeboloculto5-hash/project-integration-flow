@@ -1,4 +1,5 @@
 import { CLUBS, KIT_BRANDS, clubById } from "./clubs";
+import { brDay, trackMatch } from "./bux";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 import { amortize, book, createFinance, finance, ledgerWeek, processFinanceDay, type FinanceState } from './finance';
 import { SECTOR_WEIGHTS_2025, SPONSOR_COMPANIES, SPONSOR_MAP_2025, startingDebt, type DataStatus } from './finance-data';
@@ -15,6 +16,8 @@ export type CareerV2 = {
   version: 2;
   /** Bônus de Bux ativos nesta carreira (validade em datas do jogo). */
   buxBuffs?: import("./bux").ActiveBuff[];
+  /** Progresso das metas diárias de Bux (dia real do Brasil). */
+  buxDaily?: import("./bux").DailyProgress;
   manager: string;
   clubId: string;
   season: string;
@@ -262,7 +265,7 @@ export function advanceToMatch(c: CareerV2) {
 }
 
 /** Record the user's match and simulate every other game of that round. */
-export function completeRound(c: CareerV2, hg: number, ag: number, goals?: Goal[]): CareerV2 {
+export function completeRound(c: CareerV2, hg: number, ag: number, goals?: Goal[], today: string = brDay()): CareerV2 {
   const nf = nextFixture(c);
   if (!nf) return c;
   const next: CareerV2 = structuredClone(c);
@@ -274,6 +277,7 @@ export function completeRound(c: CareerV2, hg: number, ag: number, goals?: Goal[
   progressCup(next);
   const isHome = nf.home === c.clubId;
   const my = isHome ? hg : ag, opp = isHome ? ag : hg;
+  next.buxDaily = trackMatch(next.buxDaily, today, { my, opp, cup: nf.competition === 'cup' });
   const club = clubById(c.clubId);
   const gate = isHome ? gateIncome(c) : null;
   const award = my > opp ? 1_200_000 : my === opp ? 500_000 : 200_000;

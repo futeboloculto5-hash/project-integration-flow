@@ -1,72 +1,84 @@
 // Bux: moeda FICTÍCIA do Clube Campeão WORLD. Não tem relação com dinheiro real.
-// Preços, recompensas e efeitos abaixo são regras internas do jogo, definidas pelo próprio jogo.
-// A fonte da verdade do saldo é o servidor (drizzle/migrations/0003_bux.sql); este módulo espelha
-// as mesmas regras para a interface e é checado contra o SQL por bux.test.ts.
+// Preços, metas e efeitos abaixo são regras internas do jogo, definidas pelo próprio jogo.
+// A fonte da verdade do saldo é o servidor (drizzle/migrations/0003_bux.sql e 0004_bux_economia.sql);
+// este módulo espelha as mesmas regras para a interface e é checado contra o SQL por bux.test.ts.
+import { CLUBS } from "./clubs";
 
 export const BUX_NOTICE = "Bux é uma moeda fictícia do jogo. Preços e efeitos são regras internas, sem relação com dinheiro real.";
 
-export type BuxKind = "club_unlock" | "energy_buff" | "medical_buff" | "reward";
+export type BuxKind = "club_unlock" | "energy_buff" | "medical_buff" | "goal";
 /** Multiplicadores (1 = sem efeito) e bônus (0 = sem efeito). */
 export type BuxEffect = { energyDrainMult?: number; halftimeEnergyBonus?: number; injuryChanceMult?: number; recoveryDaysMult?: number };
-/** `amount` é o preço (itens) ou o prêmio (recompensas), sempre em Bux. */
-export type BuxItem = { id: string; kind: BuxKind; name: string; amount: number; durationDays?: number; clubId?: string; effect?: BuxEffect };
+export type DailyMetric = "played" | "wins" | "cupWins" | "goals" | "cleanSheets" | "seasons";
+/** `amount` é o preço (itens) ou o prêmio (metas), sempre em Bux. */
+export type BuxItem = { id: string; kind: BuxKind; name: string; amount: number; durationDays?: number; clubId?: string; effect?: BuxEffect; goal?: { metric: DailyMetric; target: number } };
 
-export const BUX_DAILY_REWARD_CAP = 600;
-export const WELCOME_KEY = "reward:reward_welcome:account";
+/** Teto de Bux que as metas podem render por dia (dia do Brasil). */
+export const BUX_DAILY_CAP = 20;
+export const BUX_TIMEZONE = "America/Sao_Paulo";
+export const FREE_CLUB_COUNT = 4;
+export const brDay = (d: Date = new Date()) => d.toLocaleDateString("sv-SE", { timeZone: BUX_TIMEZONE });
+
+// ---------- clubes: os 4 mais fracos são grátis; os demais custam de 5 a 100 Bux conforme a força ----------
+export const clubUnlockId = (clubId: string) => `club_${clubId.replace(/-/g, "_")}`;
+const byStrength = [...CLUBS].sort((a, b) => a.rating - b.rating || a.budget - b.budget || a.id.localeCompare(b.id));
+export const FREE_CLUBS = byStrength.slice(0, FREE_CLUB_COUNT).map((c) => c.id);
+const paidClubs = byStrength.slice(FREE_CLUB_COUNT);
+const lowest = paidClubs[0]!.rating, highest = paidClubs[paidClubs.length - 1]!.rating;
+/** Mais fraco entre os pagos = 5 Bux; mais forte = 100 Bux; no meio, proporcional à força, em múltiplos de 5. */
+export const clubPrice = (rating: number) => Math.max(5, Math.min(100, Math.round((5 + ((rating - lowest) / (highest - lowest)) * 95) / 5) * 5));
 
 export const BUX_CATALOG: BuxItem[] = [
-  { id: "club_botafogo", kind: "club_unlock", name: "Desbloquear Botafogo", amount: 800, clubId: "botafogo" },
-  { id: "club_flamengo", kind: "club_unlock", name: "Desbloquear Flamengo", amount: 1500, clubId: "flamengo" },
-  { id: "club_palmeiras", kind: "club_unlock", name: "Desbloquear Palmeiras", amount: 1500, clubId: "palmeiras" },
-  { id: "energy_basic", kind: "energy_buff", name: "Energia básica", amount: 120, durationDays: 7, effect: { energyDrainMult: 0.85 } },
-  { id: "energy_pro", kind: "energy_buff", name: "Energia profissional", amount: 300, durationDays: 14, effect: { energyDrainMult: 0.7, halftimeEnergyBonus: 6 } },
-  { id: "medical_basic", kind: "medical_buff", name: "Departamento médico básico", amount: 150, durationDays: 14, effect: { injuryChanceMult: 0.8, recoveryDaysMult: 0.85 } },
-  { id: "medical_pro", kind: "medical_buff", name: "Departamento médico profissional", amount: 400, durationDays: 30, effect: { injuryChanceMult: 0.6, recoveryDaysMult: 0.7 } },
-  { id: "reward_welcome", kind: "reward", name: "Boas-vindas", amount: 100 },
-  { id: "reward_first_win", kind: "reward", name: "Primeira vitória da carreira", amount: 50 },
-  { id: "reward_season_played", kind: "reward", name: "Temporada concluída", amount: 200 },
-  { id: "reward_cup_champion", kind: "reward", name: "Campeão da copa", amount: 300 },
-  { id: "reward_promotion", kind: "reward", name: "Acesso à divisão superior", amount: 250 },
+  ...paidClubs.map((c): BuxItem => ({ id: clubUnlockId(c.id), kind: "club_unlock", name: `Desbloquear ${c.name}`, amount: clubPrice(c.rating), clubId: c.id })),
+  { id: "energy_basic", kind: "energy_buff", name: "Energia básica", amount: 10, durationDays: 7, effect: { energyDrainMult: 0.85 } },
+  { id: "energy_pro", kind: "energy_buff", name: "Energia profissional", amount: 25, durationDays: 14, effect: { energyDrainMult: 0.7, halftimeEnergyBonus: 6 } },
+  { id: "medical_basic", kind: "medical_buff", name: "Departamento médico básico", amount: 12, durationDays: 14, effect: { injuryChanceMult: 0.8, recoveryDaysMult: 0.85 } },
+  { id: "medical_pro", kind: "medical_buff", name: "Departamento médico profissional", amount: 30, durationDays: 30, effect: { injuryChanceMult: 0.6, recoveryDaysMult: 0.7 } },
+  { id: "goal_play_5", kind: "goal", name: "Jogar 5 partidas", amount: 3, goal: { metric: "played", target: 5 } },
+  { id: "goal_win_10", kind: "goal", name: "Ganhar 10 partidas", amount: 5, goal: { metric: "wins", target: 10 } },
+  { id: "goal_season", kind: "goal", name: "Terminar uma temporada", amount: 10, goal: { metric: "seasons", target: 1 } },
+  { id: "goal_cup_win", kind: "goal", name: "Vencer uma partida de copa", amount: 4, goal: { metric: "cupWins", target: 1 } },
+  { id: "goal_score_10", kind: "goal", name: "Marcar 10 gols", amount: 3, goal: { metric: "goals", target: 10 } },
+  { id: "goal_clean_3", kind: "goal", name: "Não sofrer gols em 3 partidas", amount: 4, goal: { metric: "cleanSheets", target: 3 } },
 ];
 export const buxItem = (id: string) => BUX_CATALOG.find((x) => x.id === id);
-/** Clubes que só entram numa carreira nova depois de desbloqueados. Carreiras já criadas nunca são revalidadas. */
-export const BUX_LOCKED_CLUBS = BUX_CATALOG.filter((x) => x.kind === "club_unlock").map((x) => x.clubId as string);
-export const isClubAvailable = (w: BuxWallet, clubId: string) => {
-  const unlock = BUX_CATALOG.find((x) => x.kind === "club_unlock" && x.clubId === clubId);
-  return !unlock || w.unlocked.includes(unlock.id);
-};
+export const BUX_GOALS = BUX_CATALOG.filter((x) => x.kind === "goal");
+/** Gratuito ou já desbloqueado na conta. Só terá efeito na tela de escolha quando existir "Nova carreira". */
+export const isClubAvailable = (unlocked: string[], clubId: string) => FREE_CLUBS.includes(clubId) || unlocked.includes(clubUnlockId(clubId));
 
+// ---------- carteira (espelha o servidor; usada nos testes e para validar) ----------
 export type BuxError = "unknown_item" | "wrong_operation" | "invalid_key" | "insufficient_funds" | "already_unlocked" | "key_reused" | "daily_cap";
 export type BuxTx = { key: string; kind: "grant" | "purchase"; item: string; amount: number; balanceAfter: number; day: string };
 export type BuxWallet = { version: 1; balance: number; tx: BuxTx[]; unlocked: string[] };
 export type BuxResult = { wallet: BuxWallet; duplicate?: true; error?: BuxError };
+/** Visão da conta vinda do servidor, só para exibir. */
+export type BuxAccount = { balance: number; unlocked: string[]; claimedToday: string[]; earnedToday: number; recent: BuxTx[] };
 
 export const newWallet = (): BuxWallet => ({ version: 1, balance: 0, tx: [], unlocked: [] });
-
-/** Chave de recompensa: a de boas-vindas é única por conta; as demais valem uma vez por escopo (ex.: carreira + temporada). */
-export const rewardKey = (rewardId: string, scope: string) => rewardId === "reward_welcome" ? WELCOME_KEY : `reward:${rewardId}:${scope}`;
+/** Cada meta vale uma vez por dia: a chave carrega a data, e o servidor só aceita a data de hoje. */
+export const goalKey = (goalId: string, day: string) => `goal:${goalId}:${day}`;
 
 /** Mesma regra do SQL (bux_apply). Idempotente por chave: repetir a chave nunca cobra nem paga duas vezes. */
-function apply(w: BuxWallet, itemId: string, key: string, reward: boolean, today: string): BuxResult {
+function apply(w: BuxWallet, itemId: string, key: string, goal: boolean, today: string): BuxResult {
   const item = buxItem(itemId);
   if (!item) return { wallet: w, error: "unknown_item" };
-  if ((item.kind === "reward") !== reward) return { wallet: w, error: "wrong_operation" };
+  if ((item.kind === "goal") !== goal) return { wallet: w, error: "wrong_operation" };
   if (typeof key !== "string" || key.length < 8 || key.length > 120) return { wallet: w, error: "invalid_key" };
-  if (reward && (itemId === "reward_welcome" ? key !== WELCOME_KEY : !key.startsWith(`reward:${itemId}:`))) return { wallet: w, error: "invalid_key" };
+  if (goal && key !== goalKey(itemId, today)) return { wallet: w, error: "invalid_key" };
   const prior = w.tx.find((t) => t.key === key);
   if (prior) return prior.item === itemId ? { wallet: w, duplicate: true } : { wallet: w, error: "key_reused" };
-  const delta = reward ? item.amount : -item.amount;
+  const delta = goal ? item.amount : -item.amount;
   if (w.balance + delta < 0) return { wallet: w, error: "insufficient_funds" };
-  if (item.kind === "club_unlock" && w.unlocked.includes(itemId)) return { wallet: w, error: "already_unlocked" };
-  if (reward && itemId !== "reward_welcome") {
-    const earned = w.tx.filter((t) => t.kind === "grant" && t.item !== "reward_welcome" && t.day === today).reduce((s, t) => s + t.amount, 0);
-    if (earned + item.amount > BUX_DAILY_REWARD_CAP) return { wallet: w, error: "daily_cap" };
+  if (goal) {
+    const earned = w.tx.filter((t) => t.kind === "grant" && t.day === today).reduce((s, t) => s + t.amount, 0);
+    if (earned + item.amount > BUX_DAILY_CAP) return { wallet: w, error: "daily_cap" };
   }
+  if (item.kind === "club_unlock" && w.unlocked.includes(itemId)) return { wallet: w, error: "already_unlocked" };
   const balance = w.balance + delta;
-  return { wallet: { version: 1, balance, unlocked: item.kind === "club_unlock" ? [...w.unlocked, itemId] : w.unlocked, tx: [...w.tx, { key, kind: reward ? "grant" : "purchase", item: itemId, amount: delta, balanceAfter: balance, day: today }] } };
+  return { wallet: { version: 1, balance, unlocked: item.kind === "club_unlock" ? [...w.unlocked, itemId] : w.unlocked, tx: [...w.tx, { key, kind: goal ? "grant" : "purchase", item: itemId, amount: delta, balanceAfter: balance, day: today }] } };
 }
 export const purchase = (w: BuxWallet, itemId: string, key: string, today: string) => apply(w, itemId, key, false, today);
-export const claimReward = (w: BuxWallet, rewardId: string, scope: string, today: string) => apply(w, rewardId, rewardKey(rewardId, scope), true, today);
+export const claimGoal = (w: BuxWallet, goalId: string, today: string) => apply(w, goalId, goalKey(goalId, today), true, today);
 
 /** Detecta saldo alterado à mão: devolve a lista de problemas (vazia = carteira íntegra). */
 export function walletIntegrity(w: BuxWallet): string[] {
@@ -77,7 +89,7 @@ export function walletIntegrity(w: BuxWallet): string[] {
     if (!item) { problems.push(`item desconhecido: ${t.item}`); continue; }
     if (keys.has(t.key)) problems.push(`chave repetida: ${t.key}`);
     keys.add(t.key);
-    if (t.amount !== (item.kind === "reward" ? item.amount : -item.amount)) problems.push(`valor fora do catálogo: ${t.item}`);
+    if (t.amount !== (item.kind === "goal" ? item.amount : -item.amount)) problems.push(`valor fora do catálogo: ${t.item}`);
     running += t.amount;
     if (running < 0) problems.push("saldo negativo no histórico");
     if (t.balanceAfter !== running) problems.push(`saldo do histórico não confere: ${t.key}`);
@@ -88,7 +100,21 @@ export function walletIntegrity(w: BuxWallet): string[] {
   return problems;
 }
 
-// ---------- buffs (aplicados pelo motor da partida e pela base; ver AGENTS.md) ----------
+// ---------- metas diárias: progresso contado na carreira, por dia real (Brasil) ----------
+export type DailyProgress = { day: string } & Record<DailyMetric, number>;
+export const emptyProgress = (day: string): DailyProgress => ({ day, played: 0, wins: 0, cupWins: 0, goals: 0, cleanSheets: 0, seasons: 0 });
+const fresh = (p: DailyProgress | undefined, day: string) => (p && p.day === day ? p : emptyProgress(day));
+export function trackMatch(p: DailyProgress | undefined, day: string, m: { my: number; opp: number; cup: boolean }): DailyProgress {
+  const b = fresh(p, day), win = m.my > m.opp;
+  return { ...b, played: b.played + 1, wins: b.wins + (win ? 1 : 0), cupWins: b.cupWins + (win && m.cup ? 1 : 0), goals: b.goals + m.my, cleanSheets: b.cleanSheets + (m.opp === 0 ? 1 : 0) };
+}
+export const trackSeason = (p: DailyProgress | undefined, day: string): DailyProgress => { const b = fresh(p, day); return { ...b, seasons: b.seasons + 1 }; };
+export function goalProgress(goal: BuxItem, p: DailyProgress | undefined, day: string) {
+  const target = goal.goal?.target ?? 1, value = p && p.day === day && goal.goal ? p[goal.goal.metric] : 0;
+  return { value: Math.min(value, target), target, done: value >= target };
+}
+
+// ---------- buffs (aplicados pelo motor da partida e pela base) ----------
 export type ActiveBuff = { itemId: string; until: string };
 const addIso = (date: string, n: number) => { const d = new Date(`${date}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
 
@@ -114,9 +140,6 @@ export function buffEffect(buffs: ActiveBuff[], date: string): Required<BuxEffec
   return out;
 }
 export const activeBuffs = (buffs: ActiveBuff[], date: string) => buffs.filter((b) => b.until >= date);
-
-// ---------- estado da conta (espelho do servidor, só para exibir) ----------
-export type BuxAccount = { balance: number; unlocked: string[]; welcomeClaimed: boolean; recent: BuxTx[] };
 
 /** Texto dos efeitos de um item, exatamente o que o motor aplica. Lesões e recuperação valem para a base. */
 export function effectLines(item: BuxItem): string[] {

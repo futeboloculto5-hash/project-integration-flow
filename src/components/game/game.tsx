@@ -105,7 +105,7 @@ export function Game({ userId }: { userId: string | null }) {
 
   if (loading) return <div className="g-loading"><div className="g-spinner" /></div>;
   if (loadError) return <div className="g-loading"><div className="g-stack"><p>Não foi possível recuperar sua carreira.</p><Button onClick={() => setLoadAttempt((n) => n + 1)}><RefreshCw /> Tentar novamente</Button></div></div>;
-  if (!career) return <Onboarding onStart={start} busy={busy} />;
+  if (!career) return <Onboarding onStart={start} busy={busy} userId={userId} />;
 
   const club = clubById(career.clubId);
   const nf = nextFixture(career);

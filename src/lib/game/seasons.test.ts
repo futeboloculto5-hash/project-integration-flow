@@ -70,3 +70,31 @@ describe('Functional seasons', () => {
     expect(m.goals.length).toBe(m.score.home+m.score.away); expect(m.events.filter(e=>e.type==='tactic').every(e=>e.side==='home')).toBe(true);
   });
 });
+describe('Metas diárias de Bux na carreira', () => {
+  it('uma partida do usuário alimenta o progresso do dia e não altera a carreira original', () => {
+    const c0 = advanceToMatch(fresh()), snapshot = structuredClone(c0);
+    const nf = nextFixture(c0); if (!nf) throw Error('fixture');
+    const my = nf.home === c0.clubId ? [3, 0] : [0, 3]; // vitória por 3 a 0 do usuário
+    const c1 = completeRound(c0, my[0]!, my[1]!, undefined, '2026-11-08');
+    expect(c1.buxDaily).toMatchObject({ day: '2026-11-08', played: 1, wins: 1, goals: 3, cleanSheets: 1, seasons: 0 });
+    expect(c0).toEqual(snapshot); expect(c0.buxDaily).toBeUndefined();
+  });
+  it('em outro dia real o progresso recomeça do zero', () => {
+    let c = advanceToMatch(fresh()); const nf = nextFixture(c); if (!nf) throw Error('fixture');
+    const win = nf.home === c.clubId ? [1, 0] : [0, 1];
+    c = completeRound(c, win[0]!, win[1]!, undefined, '2026-11-08');
+    c = advanceToMatch(c); const n2 = nextFixture(c); if (!n2) throw Error('fixture');
+    const loss = n2.home === c.clubId ? [0, 2] : [2, 0];
+    c = completeRound(c, loss[0]!, loss[1]!, undefined, '2026-11-09');
+    expect(c.buxDaily).toMatchObject({ day: '2026-11-09', played: 1, wins: 0, goals: 0 });
+  });
+  it('terminar a temporada conta uma vez e só no dia em que terminou', () => {
+    const done = finish(fresh());
+    const r = startNextSeason(done, '2026-11-08');
+    expect(r.error).toBeUndefined(); expect(r.career.buxDaily).toMatchObject({ day: '2026-11-08', seasons: 1 });
+  });
+  it('carreira antiga, sem o campo, continua funcionando', () => {
+    const old = advanceToMatch(fresh()); delete (old as { buxDaily?: unknown }).buxDaily;
+    expect(() => completeRound(old, 1, 0, undefined, '2026-11-08')).not.toThrow();
+  });
+});

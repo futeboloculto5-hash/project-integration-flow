@@ -1,6 +1,7 @@
 import { CLUBS, clubById, type Club } from './clubs';
 import { addDays, advanceDay, aiSquad, bestEleven, computeTable, generateSquad, playerValue, playerWage, refreshMarket, seeded, teamRating, type CareerV2, type Fixture, type Player, type Row } from './career';
 import { simulateMatch } from '@/lib/career/simulation';
+import { brDay, trackSeason } from './bux';
 
 export type Goal = { clubId: string; playerId: string; player: string; assistId?: string; assist?: string; minute: number };
 export type SeasonArchive = { year: string; divisions: Record<string, string[]>; fixtures: Fixture[]; cup: Fixture[]; tables: Record<string, Row[]>; relegated: string[]; promoted: string[]; cupWinner?: string; leaders: Leader[] };
@@ -105,7 +106,7 @@ export function leaders(fixtures: Fixture[]): Leader[] {
   return [...map.values()].sort((a, b) => b.goals - a.goals || b.assists - a.assists || a.player.localeCompare(b.player));
 }
 
-export function startNextSeason(c: CareerV2): { career: CareerV2; error?: string } {
+export function startNextSeason(c: CareerV2, today: string = brDay()): { career: CareerV2; error?: string } {
   if (!seasonFinished(c)) return { career: c, error: 'Conclua todas as partidas da liga e da copa antes de iniciar outra temporada.' };
   const latest = allFixtures(c).map(f => f.date).sort().at(-1) ?? c.date;
   const nextYear = String(Number(c.season) + 1);
@@ -145,6 +146,7 @@ export function startNextSeason(c: CareerV2): { career: CareerV2; error?: string
     next.aiBalances ??= {}; next.aiBalances[id] = (next.aiBalances[id] ?? careerClub(next, id).budget) + (state.divisions['A']?.includes(id) ? 20_000_000 : 8_000_000);
   }
   next.market = refreshMarket(next, next.date);
+  next.buxDaily = trackSeason(next.buxDaily, today);
   next.news.unshift({ id: `season-${next.season}`, date: next.date, kind: 'info', title: `Temporada ${next.season} · Série ${divisionOf(next)}`, body: 'Nova temporada simulada: acesso e rebaixamento aplicados, jogadores evoluídos e histórico preservado.' });
   return { career: next };
 }

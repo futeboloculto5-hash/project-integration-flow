@@ -1,75 +1,106 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { CLUBS } from './clubs';
 import {
-  BUX_CATALOG, BUX_DAILY_REWARD_CAP, BUX_LOCKED_CLUBS, activeBuffs, buffEffect, claimReward, isClubAvailable,
-  newWallet, purchase, startBuff, walletIntegrity, type BuxWallet,
+  BUX_CATALOG, BUX_DAILY_CAP, BUX_GOALS, FREE_CLUBS, activeBuffs, brDay, buffEffect, claimGoal, clubPrice, clubUnlockId, emptyProgress, goalKey,
+  goalProgress, isClubAvailable, newWallet, purchase, startBuff, trackMatch, trackSeason, walletIntegrity, type BuxWallet,
 } from './bux';
 
 const DAY = '2026-11-05';
 const key = (n: number) => `compra-${String(n).padStart(4, '0')}`;
-const funded = (...rewards: [string, string][]) => rewards.reduce((w, [id, scope]) => claimReward(w, id, scope, DAY).wallet, newWallet());
-const rich = (): BuxWallet => {
-  let w = claimReward(newWallet(), 'reward_welcome', 'x', DAY).wallet;
-  for (let day = 1; day <= 8; day++) for (const [id, scope] of [['reward_cup_champion', `c:${day}`], ['reward_season_played', `s:${day}`]] as const) w = claimReward(w, id, scope, `2026-12-0${day}`).wallet;
+/** Carteira com Bux suficiente: metas em vários dias (20 por dia). */
+const rich = (days = 10): BuxWallet => {
+  let w = newWallet();
+  for (let d = 1; d <= days; d++) for (const g of ['goal_season', 'goal_win_10']) w = claimGoal(w, g, `2026-12-${String(d).padStart(2, '0')}`).wallet;
   return w;
 };
 
-describe('Bux · carteira e compras', () => {
+describe('Bux · clubes: preços por força', () => {
+  const paid = CLUBS.filter(c => !FREE_CLUBS.includes(c.id));
+  it('os 4 mais fracos são grátis e os outros 16 são pagos', () => {
+    expect(FREE_CLUBS).toHaveLength(4); expect(paid).toHaveLength(CLUBS.length - 4);
+    const weakest = Math.max(...CLUBS.filter(c => FREE_CLUBS.includes(c.id)).map(c => c.rating));
+    for (const c of paid) expect(c.rating).toBeGreaterThanOrEqual(weakest);
+    expect(FREE_CLUBS).toEqual(expect.arrayContaining(['juventude', 'sport']));
+  });
+  it('preço vai de 5 (mais fraco pago) a 100 (mais forte) e nunca cai com a força', () => {
+    const prices = paid.map(c => ({ r: c.rating, p: clubPrice(c.rating) }));
+    expect(Math.min(...prices.map(x => x.p))).toBe(5); expect(Math.max(...prices.map(x => x.p))).toBe(100);
+    expect(clubPrice(CLUBS.find(c => c.id === 'palmeiras')!.rating)).toBe(100);
+    for (const a of prices) for (const b of prices) if (a.r < b.r) expect(a.p).toBeLessThanOrEqual(b.p);
+    for (const { p } of prices) { expect(p).toBeGreaterThanOrEqual(5); expect(p).toBeLessThanOrEqual(100); expect(p % 5).toBe(0); }
+  });
+  it('o catálogo tem um item de desbloqueio para cada clube pago e nenhum para os grátis', () => {
+    const unlocks = BUX_CATALOG.filter(i => i.kind === 'club_unlock');
+    expect(unlocks.map(i => i.clubId).sort()).toEqual(paid.map(c => c.id).sort());
+    for (const id of FREE_CLUBS) expect(BUX_CATALOG.some(i => i.id === clubUnlockId(id))).toBe(false);
+  });
+  it('clube grátis está sempre disponível; pago só depois da compra', () => {
+    expect(isClubAvailable([], 'sport')).toBe(true); expect(isClubAvailable([], 'flamengo')).toBe(false);
+    expect(isClubAvailable(['club_flamengo'], 'flamengo')).toBe(true);
+  });
+});
+
+describe('Bux · carteira, metas e compras', () => {
   it('começa com zero e não compra sem saldo', () => {
     const r = purchase(newWallet(), 'energy_basic', key(1), DAY);
     expect(r.error).toBe('insufficient_funds'); expect(r.wallet.balance).toBe(0);
   });
-  it('recompensa credita o valor do catálogo e a compra debita o preço do catálogo', () => {
-    let w = funded(['reward_welcome', 'account']); expect(w.balance).toBe(100);
-    w = claimReward(w, 'reward_cup_champion', 'c1:2026', DAY).wallet; expect(w.balance).toBe(400);
+  it('meta credita o valor do catálogo e a compra debita o preço do catálogo', () => {
+    let w = claimGoal(newWallet(), 'goal_season', DAY).wallet; expect(w.balance).toBe(10);
+    w = claimGoal(w, 'goal_win_10', DAY).wallet; expect(w.balance).toBe(15);
     const r = purchase(w, 'energy_basic', key(2), DAY);
-    expect(r.error).toBeUndefined(); expect(r.wallet.balance).toBe(280);
+    expect(r.error).toBeUndefined(); expect(r.wallet.balance).toBe(5);
     expect(walletIntegrity(r.wallet)).toEqual([]);
   });
-  it('repetir a mesma chave (clique duplo, nova tentativa de rede) não cobra duas vezes', () => {
-    const w = funded(['reward_cup_champion', 'a']);
+  it('a mesma meta no mesmo dia paga uma vez; no dia seguinte paga de novo', () => {
+    const w = claimGoal(newWallet(), 'goal_win_10', DAY).wallet;
+    const again = claimGoal(w, 'goal_win_10', DAY);
+    expect(again.duplicate).toBe(true); expect(again.wallet.balance).toBe(5);
+    expect(claimGoal(w, 'goal_win_10', '2026-11-06').wallet.balance).toBe(10);
+  });
+  it('teto de 20 Bux por dia nas metas; o dia seguinte libera de novo', () => {
+    let w = newWallet();
+    for (const g of ['goal_season', 'goal_win_10', 'goal_cup_win']) w = claimGoal(w, g, DAY).wallet; // 10+5+4 = 19
+    expect(w.balance).toBe(19);
+    const over = claimGoal(w, 'goal_play_5', DAY); // +3 = 22 > 20
+    expect(over.error).toBe('daily_cap'); expect(over.wallet.balance).toBe(19);
+    expect(claimGoal(w, 'goal_play_5', '2026-11-06').error).toBeUndefined();
+    const all = BUX_GOALS.reduce((s, g) => s + g.amount, 0); expect(all).toBeGreaterThan(BUX_DAILY_CAP); // o teto realmente limita
+  });
+  it('a chave da meta tem de ser a de hoje (não dá para resgatar data inventada)', () => {
+    expect(goalKey('goal_season', DAY)).toBe('goal:goal_season:2026-11-05');
+    const w = newWallet();
+    expect(purchase(w, 'goal_season', goalKey('goal_season', DAY), DAY).error).toBe('wrong_operation');
+  });
+  it('repetir a mesma chave de compra (clique duplo, nova tentativa de rede) não cobra duas vezes', () => {
+    const w = rich(1);
     const first = purchase(w, 'energy_basic', key(3), DAY).wallet;
     const again = purchase(first, 'energy_basic', key(3), DAY);
-    expect(again.duplicate).toBe(true); expect(again.wallet).toBe(first); expect(again.wallet.balance).toBe(180);
+    expect(again.duplicate).toBe(true); expect(again.wallet).toBe(first); expect(again.wallet.balance).toBe(5);
   });
   it('mesma chave para outro item é recusada', () => {
-    const w = funded(['reward_cup_champion', 'a']);
-    const first = purchase(w, 'energy_basic', key(4), DAY).wallet;
+    const first = purchase(rich(1), 'energy_basic', key(4), DAY).wallet;
     expect(purchase(first, 'medical_basic', key(4), DAY).error).toBe('key_reused');
   });
-  it('recompensa repetida no mesmo escopo paga uma vez; boas-vindas é única por conta', () => {
-    let w = claimReward(newWallet(), 'reward_first_win', 'c1:2026', DAY).wallet;
-    const again = claimReward(w, 'reward_first_win', 'c1:2026', DAY);
-    expect(again.duplicate).toBe(true); expect(again.wallet.balance).toBe(50);
-    w = claimReward(again.wallet, 'reward_welcome', 'a', DAY).wallet;
-    expect(claimReward(w, 'reward_welcome', 'b', DAY).duplicate).toBe(true); expect(w.balance).toBe(150);
-  });
-  it('limita o ganho diário de recompensas (escopos inventados não rendem infinito)', () => {
-    let w = newWallet(); let granted = 0;
-    for (let i = 0; i < 10; i++) { const r = claimReward(w, 'reward_cup_champion', `fake-${i}`, DAY); if (!r.error) granted += 300; w = r.wallet; }
-    expect(granted).toBe(Math.floor(BUX_DAILY_REWARD_CAP / 300) * 300);
-    expect(claimReward(w, 'reward_season_played', 'x', DAY).error).toBe('daily_cap');
-    expect(claimReward(w, 'reward_season_played', 'x', '2026-11-06').error).toBeUndefined();
-  });
-  it('rejeita item inexistente, operação trocada e chave inválida', () => {
-    const w = funded(['reward_cup_champion', 'a']);
+  it('rejeita item inexistente, operação trocada, recompensa antiga e chave inválida', () => {
+    const w = rich(1);
     expect(purchase(w, 'nao_existe', key(5), DAY).error).toBe('unknown_item');
-    expect(purchase(w, 'reward_welcome', key(5), DAY).error).toBe('wrong_operation');
-    expect(claimReward(w, 'energy_basic', 's', DAY).error).toBe('wrong_operation');
+    expect(purchase(w, 'reward_welcome', key(5), DAY).error).toBe('unknown_item');
+    expect(claimGoal(w, 'energy_basic', DAY).error).toBe('wrong_operation');
     expect(purchase(w, 'energy_basic', 'curta', DAY).error).toBe('invalid_key');
   });
   it('clube só pode ser desbloqueado uma vez e passa a ficar disponível', () => {
-    let w = rich(); expect(isClubAvailable(w, 'flamengo')).toBe(false); expect(isClubAvailable(w, 'bahia')).toBe(true);
+    let w = rich(20); expect(isClubAvailable(w.unlocked, 'flamengo')).toBe(false);
     w = purchase(w, 'club_flamengo', key(6), DAY).wallet;
-    expect(isClubAvailable(w, 'flamengo')).toBe(true);
+    expect(isClubAvailable(w.unlocked, 'flamengo')).toBe(true);
     const second = purchase(w, 'club_flamengo', key(7), DAY);
     expect(second.error).toBe('already_unlocked'); expect(second.wallet.balance).toBe(w.balance);
     expect(walletIntegrity(w)).toEqual([]);
   });
   it('detecta saldo, histórico ou desbloqueios adulterados', () => {
-    const w = purchase(rich(), 'club_botafogo', key(8), DAY).wallet;
+    const w = purchase(rich(20), 'club_botafogo', key(8), DAY).wallet;
     expect(walletIntegrity(w)).toEqual([]);
     expect(walletIntegrity({ ...w, balance: w.balance + 1000 })).not.toEqual([]);
     expect(walletIntegrity({ ...w, unlocked: [...w.unlocked, 'club_palmeiras'] })).not.toEqual([]);
@@ -77,8 +108,39 @@ describe('Bux · carteira e compras', () => {
     expect(walletIntegrity({ ...w, tx: [...w.tx, w.tx[0]!] })).not.toEqual([]);
   });
   it('sobrevive a JSON sem mudar', () => {
-    const w = purchase(rich(), 'medical_pro', key(9), DAY).wallet;
+    const w = purchase(rich(20), 'medical_pro', key(9), DAY).wallet;
     expect(JSON.parse(JSON.stringify(w))).toEqual(w);
+  });
+});
+
+describe('Bux · progresso das metas diárias', () => {
+  it('conta partidas, vitórias, copa, gols e jogos sem sofrer gol', () => {
+    let p = trackMatch(undefined, DAY, { my: 2, opp: 0, cup: false });
+    p = trackMatch(p, DAY, { my: 1, opp: 1, cup: false });
+    p = trackMatch(p, DAY, { my: 3, opp: 1, cup: true });
+    expect(p).toEqual({ day: DAY, played: 3, wins: 2, cupWins: 1, goals: 6, cleanSheets: 1, seasons: 0 });
+  });
+  it('muda o dia, zera o progresso', () => {
+    const p = trackMatch(undefined, DAY, { my: 1, opp: 0, cup: false });
+    expect(trackMatch(p, '2026-11-06', { my: 0, opp: 2, cup: false })).toEqual({ ...emptyProgress('2026-11-06'), played: 1, goals: 0 });
+    expect(trackSeason(p, '2026-11-06').seasons).toBe(1); expect(trackSeason(p, '2026-11-06').played).toBe(0);
+  });
+  it('não altera o objeto original', () => {
+    const p = trackMatch(undefined, DAY, { my: 1, opp: 0, cup: false }), copy = structuredClone(p);
+    trackMatch(p, DAY, { my: 5, opp: 0, cup: true }); trackSeason(p, DAY);
+    expect(p).toEqual(copy);
+  });
+  it('meta concluída só quando o alvo é atingido; progresso de outro dia não vale', () => {
+    const win10 = BUX_GOALS.find(g => g.id === 'goal_win_10')!;
+    let p = emptyProgress(DAY); p = { ...p, wins: 9 };
+    expect(goalProgress(win10, p, DAY)).toEqual({ value: 9, target: 10, done: false });
+    expect(goalProgress(win10, { ...p, wins: 12 }, DAY)).toEqual({ value: 10, target: 10, done: true });
+    expect(goalProgress(win10, { ...p, wins: 12 }, '2026-11-06').done).toBe(false);
+    expect(goalProgress(win10, undefined, DAY).done).toBe(false);
+  });
+  it('brDay devolve a data no fuso de Brasília', () => {
+    expect(brDay(new Date('2026-11-06T02:30:00Z'))).toBe('2026-11-05'); // ainda é dia 5 em Brasília (23:30)
+    expect(brDay(new Date('2026-11-06T04:00:00Z'))).toBe('2026-11-06');
   });
 });
 
@@ -102,27 +164,39 @@ describe('Bux · buffs de energia e médicos', () => {
 });
 
 describe('Bux · catálogo e consistência com o SQL', () => {
-  const sql = readFileSync(resolve(__dirname, '../../../drizzle/migrations/0003_bux.sql'), 'utf8');
-  const rows = [...sql.matchAll(/^\('([a-z_]+)','([a-z_]+)','([^']+)',(\d+),(NULL|\d+),(NULL|'[a-z-]+')\)[,;]$/gm)]
+  const dir = resolve(__dirname, '../../../drizzle/migrations');
+  const file = readdirSync(dir).find(f => f.includes('bux_economia'));
+  const sql = file ? readFileSync(resolve(dir, file), 'utf8') : '';
+  const rows = [...sql.matchAll(/^\('([a-z0-9_]+)','([a-z_]+)','([^']+)',(\d+),(NULL|\d+),(NULL|'[a-z-]+')\)[,;]?$/gm)]
     .map(m => ({ id: m[1]!, kind: m[2]!, name: m[3]!, amount: Number(m[4]), duration: m[5] === 'NULL' ? undefined : Number(m[5]), club: m[6] === 'NULL' ? undefined : m[6]!.slice(1, -1) }));
 
+  it('a migração da economia existe', () => { expect(file).toBeDefined(); });
   it('o catálogo do SQL é idêntico ao do TypeScript (ids, tipos, preços, prazos, clubes)', () => {
     expect(rows).toHaveLength(BUX_CATALOG.length);
     expect(rows).toEqual(BUX_CATALOG.map(i => ({ id: i.id, kind: i.kind, name: i.name, amount: i.amount, duration: i.durationDays, club: i.clubId })));
   });
-  it('o limite diário é o mesmo nos dois lados', () => { expect(sql).toContain(`v_earned + v_item.amount > ${BUX_DAILY_REWARD_CAP}`); });
-  it('clubes bloqueados existem no jogo e têm preço', () => {
-    for (const id of BUX_LOCKED_CLUBS) expect(CLUBS.some(c => c.id === id)).toBe(true);
-    expect(BUX_LOCKED_CLUBS).toHaveLength(3);
+  it('o limite diário e o fuso são os mesmos nos dois lados', () => {
+    expect(sql).toContain(`v_earned + v_item.amount > ${BUX_DAILY_CAP}`);
+    expect(sql).toContain("'America/Sao_Paulo'");
+    expect(sql).toContain("p_key <> 'goal:' || p_item || ':' || v_today");
   });
-  it('todo item tem valor positivo e buffs têm prazo e efeito', () => {
-    for (const i of BUX_CATALOG) { expect(i.amount).toBeGreaterThan(0); if (i.kind.endsWith('_buff')) { expect(i.durationDays).toBeGreaterThan(0); expect(i.effect).toBeDefined(); } }
+  it('a migração não apaga carteiras, transações nem desbloqueios', () => {
+    expect(sql).not.toMatch(/DELETE\s+FROM|DROP\s+TABLE|TRUNCATE/i);
+    expect(sql).toContain('UPDATE public.bux_catalog SET active = false;');
+  });
+  it('todo item tem valor positivo e buffs têm prazo e efeito; metas têm alvo', () => {
+    for (const i of BUX_CATALOG) {
+      expect(i.amount).toBeGreaterThan(0);
+      if (i.kind.endsWith('_buff')) { expect(i.durationDays).toBeGreaterThan(0); expect(i.effect).toBeDefined(); }
+      if (i.kind === 'goal') expect(i.goal?.target).toBeGreaterThan(0);
+    }
   });
   it('SQL: cliente só lê; escrita só pelas funções; função interna não é chamável', () => {
-    expect(sql).not.toMatch(/CREATE POLICY[^;]*FOR (INSERT|UPDATE|DELETE|ALL)/);
-    expect(sql).not.toMatch(/GRANT[^;]*(INSERT|UPDATE|DELETE)[^;]*TO authenticated/);
+    const base = readFileSync(resolve(dir, '0003_bux.sql'), 'utf8');
+    expect(base).not.toMatch(/CREATE POLICY[^;]*FOR (INSERT|UPDATE|DELETE|ALL)/);
+    expect(base).not.toMatch(/GRANT[^;]*(INSERT|UPDATE|DELETE)[^;]*TO authenticated/);
     expect(sql).toContain('REVOKE ALL ON FUNCTION public.bux_apply(text, text, boolean) FROM PUBLIC, anon, authenticated;');
-    for (const t of ['bux_catalog', 'bux_wallets', 'bux_transactions', 'bux_unlocks']) expect(sql).toContain(`ALTER TABLE public.${t} ENABLE ROW LEVEL SECURITY;`);
-    expect(sql).toContain('FOR UPDATE;'); expect(sql).toContain('UNIQUE (user_id, idempotency_key)'); expect(sql).toContain('CHECK (balance >= 0)');
+    for (const t of ['bux_catalog', 'bux_wallets', 'bux_transactions', 'bux_unlocks']) expect(base).toContain(`ALTER TABLE public.${t} ENABLE ROW LEVEL SECURITY;`);
+    expect(sql).toContain('FOR UPDATE;'); expect(base).toContain('UNIQUE (user_id, idempotency_key)'); expect(base).toContain('CHECK (balance >= 0)');
   });
 });
