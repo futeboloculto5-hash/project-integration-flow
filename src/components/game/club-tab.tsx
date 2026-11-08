@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Landmark, Building2, Handshake, Wallet, Hammer, Ticket, BookOpen, PiggyBank, ExternalLink, Coins } from "lucide-react";
 import { toast } from "sonner";
-import { clubById } from "@/lib/game/clubs";
+import { legacyClubs } from "@/lib/game/club-provider";
 import { EXPANSION, SPONSOR_EXIT_FEE, acceptSponsor, cancelSponsor, counterSponsor, expandStadium, gateIncome, money, payDebt, sponsorExitFee, type CareerV2 } from "@/lib/game/career";
 import { CATEGORY_LABEL, EXPENSE, INCOME, LOAN_OPTIONS, OVERDRAFT_RATE, STRUCTURAL_DEBT, finance, installment, loanCapacity, monthStatement, monthlyInstallments, payroll, reallocateBudget, takeLoan, transferRemaining, weeklyFixed } from "@/lib/game/finance";
 import { BuxShop } from "./bux-shop";
@@ -19,7 +19,7 @@ const apply = (r: { career: CareerV2; error?: string | undefined }, update: Prop
 
 export function ClubTab({ career, update, userId = null }: Props & { userId?: string | null }) {
   const [sub, setSub] = useState<Sub>("financas");
-  const club = clubById(career.clubId);
+  const club = legacyClubs.get(career.clubId);
   return (
     <div className="g-stack">
       <div className="g-seg g-seg-icons">
@@ -314,9 +314,9 @@ function Sources({ career }: { career: CareerV2 }) {
         <p className="g-mini">Exercício 2025, documentos dos próprios clubes, consultados em {fmtDate("2026-11-01")}. Passivo total e endividamento líquido são métricas diferentes e não devem ser comparados diretamente.</p>
         <ul className="g-src-list">
           {Object.entries(DEBT_REFERENCES).map(([id, r]) => (
-            <li key={id}><b>{clubById(id).name}</b><span>{r.metric}: {money(r.value ?? 0)} · {r.entity}</span><a href={r.sourceUrl} target="_blank" rel="noreferrer">{r.sourceTitle}</a></li>
+            <li key={id}><b>{legacyClubs.get(id).name}</b><span>{r.metric}: {money(r.value ?? 0)} · {r.entity}</span><a href={r.sourceUrl} target="_blank" rel="noreferrer">{r.sourceTitle}</a></li>
           ))}
-          {Object.entries(DEBT_PENDING).map(([id, note]) => <li key={id}><b>{clubById(id).name}</b><span>Não verificado: {note}</span></li>)}
+          {Object.entries(DEBT_PENDING).map(([id, note]) => <li key={id}><b>{legacyClubs.get(id).name}</b><span>Não verificado: {note}</span></li>)}
         </ul>
         <p className="g-mini">Marca máster por clube: {sourceById("ibope-2025")?.publisher}.</p>
       </section>

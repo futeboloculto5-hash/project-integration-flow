@@ -1,4 +1,5 @@
-import { CLUBS, clubById, type Club } from './clubs';
+import { type Club } from './clubs';
+import { legacyClubs } from './club-provider';
 import { addDays, advanceDay, aiSquad, bestEleven, computeTable, generateSquad, playerValue, playerWage, refreshMarket, seeded, teamRating, type CareerV2, type Fixture, type Player, type Row } from './career';
 import { simulateMatch } from '@/lib/career/simulation';
 import { brDay, trackSeason } from './bux';
@@ -8,8 +9,8 @@ export type SeasonArchive = { year: string; divisions: Record<string, string[]>;
 export type SeasonState = { schema: 1; divisions: Record<string, string[]>; clubs: Club[]; cup: Fixture[]; history: SeasonArchive[]; reference?: SeasonReference };
 export type SeasonReference = { year: string; source: 'API-Football'; verifiedAt: string | null; fixtures: { id: number; date: string; home: number; away: number; hg: number | null; ag: number | null; round: string }[]; standings: { rank: number; team: { name: string }; points: number; all: { played: number } }[]; scorers: { name: string; club: string; goals: number | null; assists: number | null }[]; assists: { name: string; club: string; goals: number | null; assists: number | null }[]; unavailable: string[] };
 export type Leader = { playerId: string; player: string; clubId: string; goals: number; assists: number };
-export const careerClub = (c: CareerV2, id: string) => c.seasonState?.clubs.find(x => x.id === id) ?? clubById(id);
-export const divisionOf = (c: CareerV2, id = c.clubId) => Object.entries(c.seasonState?.divisions ?? { A: CLUBS.map(x => x.id) }).find(([, ids]) => ids.includes(id))?.[0] ?? 'A';
+export const careerClub = (c: CareerV2, id: string) => c.seasonState?.clubs.find(x => x.id === id) ?? legacyClubs.get(id);
+export const divisionOf = (c: CareerV2, id = c.clubId) => Object.entries(c.seasonState?.divisions ?? { A: legacyClubs.list().map(x => x.id) }).find(([, ids]) => ids.includes(id))?.[0] ?? 'A';
 export const leagueFixtures = (c: CareerV2, division = divisionOf(c)) => c.fixtures.filter(f => (f.division ?? 'A') === division);
 export const seasonTable = (c: CareerV2, division = divisionOf(c)) => computeTable(leagueFixtures(c, division), c.seasonState?.divisions[division]);
 export const allFixtures = (c: CareerV2) => [...c.fixtures, ...c.seasonState?.cup ?? []].sort((a, b) => a.date.localeCompare(b.date) || (a.competition === 'cup' ? 1 : -1));
@@ -19,10 +20,10 @@ export const seasonFinished = (c: CareerV2) => allFixtures(c).every(f => f.hg !=
 export function initializeSeason(c: CareerV2): CareerV2 {
   if (c.seasonState) return c;
   const next = structuredClone(c);
-  const reserves = Array.from({ length: 20 }, (_, i) => clubById(`sim-b-${i + 1}`));
+  const reserves = Array.from({ length: 20 }, (_, i) => legacyClubs.get(`sim-b-${i + 1}`));
   const b = reserves.map(x => x.id);
   const first = c.fixtures.map(f => f.date).sort()[0] ?? `${c.season}-03-29`;
-  next.seasonState = { schema: 1, clubs: [...CLUBS, ...reserves], divisions: { A: CLUBS.map(x => x.id), B: b }, cup: [], history: [] };
+  next.seasonState = { schema: 1, clubs: [...legacyClubs.list(), ...reserves], divisions: { A: legacyClubs.list().map(x => x.id), B: b }, cup: [], history: [] };
   next.otherSquads ??= {};
   for (const club of next.seasonState.clubs) {
     if (club.id === c.clubId || next.otherSquads[club.id]) continue;
@@ -30,7 +31,7 @@ export function initializeSeason(c: CareerV2): CareerV2 {
   }
   // The new second division starts at the current career date: no retroactive financial/result rewrite.
   next.fixtures = [...c.fixtures, ...roundRobin(b, c.season, 'B', c.date > first ? addDays(c.date, 2) : first)];
-  const entrants = [...CLUBS].sort((a, b) => b.rating - a.rating).slice(0, 16).map(x => x.id);
+  const entrants = [...legacyClubs.list()].sort((a, b) => b.rating - a.rating).slice(0, 16).map(x => x.id);
   if (!entrants.includes(c.clubId)) entrants[15] = c.clubId;
   next.seasonState.cup = cupRound(entrants, 1, addDays(c.date, 4), c.season);
   return next;

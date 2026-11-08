@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Lock, ChevronRight, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { CLUBS, type Club } from "@/lib/game/clubs";
+import { type Club } from "@/lib/game/clubs";
+import { legacyClubs } from "@/lib/game/club-provider";
 import { money } from "@/lib/game/career";
 import { brDay, buxItem, clubUnlockId, isClubAvailable, type BuxAccount } from "@/lib/game/bux";
 import { BUX_ERROR_TEXT, buxPurchase, loadBuxAccount } from "@/lib/game/bux-storage";
@@ -19,7 +20,7 @@ export function Onboarding({ onStart, busy, userId = null }: { onStart: (manager
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [name, setName] = useState("");
   const [clubId, setClubId] = useState<string | null>(null);
-  const club = CLUBS.find((c) => c.id === clubId);
+  const club = legacyClubs.list().find((c) => c.id === clubId);
   // Os 4 clubes mais fracos são grátis; os demais ficam bloqueados até serem desbloqueados com Bux (moeda fictícia).
   const [account, setAccount] = useState<BuxAccount | null>(null);
   const [reload, setReload] = useState(0);
@@ -64,9 +65,9 @@ export function Onboarding({ onStart, busy, userId = null }: { onStart: (manager
       {step === 2 && (
         <section className="g-onb-wide">
           <h1 className="g-title">ESCOLHA SEU CLUBE</h1>
-          <p className="g-sub">Brasileirão Série A 2025 · {CLUBS.length} clubes</p>
+          <p className="g-sub">Brasileirão Série A 2025 · {legacyClubs.list().length} clubes</p>
           <div className="g-club-grid">
-            {CLUBS.map((c) => (
+            {legacyClubs.list().map((c) => (
               <button key={c.id} className={`g-club ${clubId === c.id ? "g-club-on" : ""}`} onClick={() => setClubId(c.id)}>
                 <Crest club={c} />
                 <b>{c.name}</b>

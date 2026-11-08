@@ -1,4 +1,4 @@
-import { CLUBS } from './clubs';
+import { legacyClubs } from './club-provider';
 import { addDays, aiSquad, money, seeded, squadFromApi, type CareerV2, type Player } from './career';
 import { book, budgetError, trackTransferCash } from './finance';
 
@@ -8,17 +8,17 @@ export type Negotiation = DealTerms & { id: string; playerId: string; fromClub: 
 export type Loan = { playerId: string; owner: string; borrower: string; until: string; originalWage: number; originalContract?: string | undefined };
 export type TransferRecord = { id: string; date: string; player: string; playerId: string; from: string; to: string; kind: 'buy' | 'loan' | 'return' | 'renew' | 'release'; fee: number; wage: number; until?: string | undefined; ai: boolean };
 
-export const marketClubName = (c: CareerV2, id: string) => CLUBS.find(x => x.id === id)?.name ?? c.worldClubs?.find(x => x.id === id)?.name ?? (id === 'livre' ? 'Sem clube' : id);
+export const marketClubName = (c: CareerV2, id: string) => legacyClubs.find(id)?.name ?? c.worldClubs?.find(x => x.id === id)?.name ?? (id === 'livre' ? 'Sem clube' : id);
 export const playerIdentity = (p: Player) => p.apiId ? `api:${p.apiId}` : p.id.includes('-api-') ? `api:${p.id.split('-api-')[1]}` : p.id;
 const same = (a: Player, b: Player) => playerIdentity(a) === playerIdentity(b);
-export const clubSquad = (c: CareerV2, id: string): Player[] => id === c.clubId ? c.squad : c.otherSquads?.[id] ?? (CLUBS.some(x => x.id === id) ? aiSquad(c, id) : []);
+export const clubSquad = (c: CareerV2, id: string): Player[] => id === c.clubId ? c.squad : c.otherSquads?.[id] ?? (legacyClubs.has(id) ? aiSquad(c, id) : []);
 function putSquad(c: CareerV2, id: string, squad: Player[]) {
   if (id === c.clubId) c.squad = squad; else { c.otherSquads ??= {}; c.otherSquads[id] = squad; }
 }
 function budget(c: CareerV2, id: string) {
   if (id === c.clubId) return c.balance;
   c.aiBalances ??= {};
-  return c.aiBalances[id] ??= CLUBS.find(x => x.id === id)?.budget ?? 100_000_000; // game budget, never an official club valuation
+  return c.aiBalances[id] ??= legacyClubs.find(id)?.budget ?? 100_000_000; // game budget, never an official club valuation
 }
 function cash(c: CareerV2, id: string, amount: number) {
   if (id === 'livre') return;
@@ -36,14 +36,14 @@ function record(c: CareerV2, p: Player, from: string, to: string, kind: Transfer
 
 export function importWorldSquad(c: CareerV2, club: Omit<WorldClub, 'id'>, api: Parameters<typeof squadFromApi>[2]) {
   const next = structuredClone(c);
-  const id = CLUBS.find(x => x.apiId === club.apiId)?.id ?? `world-${club.apiId}`;
+  const id = legacyClubs.list().find(x => x.apiId === club.apiId)?.id ?? `world-${club.apiId}`;
   if (id === c.clubId) return next; // never replace the manager's squad
   next.worldClubs ??= [];
   next.worldClubs = [...next.worldClubs.filter(x => x.id !== id), { ...club, id }];
   // Once imported, the career's ownership is authoritative. A later API refresh must not undo deals.
   if (next.otherSquads?.[id]) return next;
   const occupied = [...next.squad, ...Object.values(next.otherSquads ?? {}).flat()];
-  const players = squadFromApi(id, CLUBS.find(x => x.id === id)?.rating ?? 76, api).filter(p => !occupied.some(x => same(x, p)));
+  const players = squadFromApi(id, legacyClubs.find(id)?.rating ?? 76, api).filter(p => !occupied.some(x => same(x, p)));
   putSquad(next, id, players.map(p => ({ ...p, contractUntil: addDays(next.date, 730) })));
   next.market = [...next.market, ...players.filter(p => !next.market.some(x => same(x, p)))];
   return next;
@@ -154,7 +154,7 @@ export function processMarketDay(c: CareerV2) {
   }
   const r = seeded(`ai-market:${c.date}`);
   if (r() > 0.35) return;
-  const ids = [...new Set([...CLUBS.map(x => x.id), ...Object.keys(c.otherSquads ?? {})])].filter(x => x !== c.clubId);
+  const ids = [...new Set([...legacyClubs.list().map(x => x.id), ...Object.keys(c.otherSquads ?? {})])].filter(x => x !== c.clubId);
   const from = ids[Math.floor(r() * ids.length)], to = ids[Math.floor(r() * ids.length)];
   if (!from || !to || from === to) return;
   const available = clubSquad(c, from).filter(p => !c.loans?.some(x => x.playerId === p.id));

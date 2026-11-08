@@ -1,5 +1,5 @@
 import type { CareerV2 } from "./career";
-import { clubById } from "./clubs";
+import { legacyClubs } from "./club-provider";
 import { STAFF_SALARY_IBGE_2024, startingDebt, type DataStatus } from "./finance-data";
 
 export type FinanceCategory =
@@ -89,7 +89,7 @@ function boardBudget(c: CareerV2, season: string): FinanceState["budget"] {
 }
 
 export function createFinance(c: CareerV2): FinanceState {
-  const club = clubById(c.clubId);
+  const club = legacyClubs.get(c.clubId);
   const start = startingDebt(c.clubId, club.debt);
   const isOfficial = start.status === "oficial" && start.value === c.debt;
   const debts: DebtContract[] = c.debt > 0 ? [{

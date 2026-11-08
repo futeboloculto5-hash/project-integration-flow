@@ -2,7 +2,7 @@
 // Preços, metas e efeitos abaixo são regras internas do jogo, definidas pelo próprio jogo.
 // A fonte da verdade do saldo é o servidor (drizzle/migrations/0003_bux.sql e 0004_bux_economia.sql);
 // este módulo espelha as mesmas regras para a interface e é checado contra o SQL por bux.test.ts.
-import { CLUBS } from "./clubs";
+import { legacyClubs } from "./club-provider";
 
 export const BUX_NOTICE = "Bux é uma moeda fictícia do jogo. Preços e efeitos são regras internas, sem relação com dinheiro real.";
 
@@ -21,7 +21,7 @@ export const brDay = (d: Date = new Date()) => d.toLocaleDateString("sv-SE", { t
 
 // ---------- clubes: os 4 mais fracos são grátis; os demais custam de 5 a 100 Bux conforme a força ----------
 export const clubUnlockId = (clubId: string) => `club_${clubId.replace(/-/g, "_")}`;
-const byStrength = [...CLUBS].sort((a, b) => a.rating - b.rating || a.budget - b.budget || a.id.localeCompare(b.id));
+const byStrength = [...legacyClubs.list()].sort((a, b) => a.rating - b.rating || a.budget - b.budget || a.id.localeCompare(b.id));
 export const FREE_CLUBS = byStrength.slice(0, FREE_CLUB_COUNT).map((c) => c.id);
 const paidClubs = byStrength.slice(FREE_CLUB_COUNT);
 const lowest = paidClubs[0]!.rating, highest = paidClubs[paidClubs.length - 1]!.rating;

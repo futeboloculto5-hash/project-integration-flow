@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Home, CalendarDays, ListOrdered, Shirt, ArrowLeftRight, Building2, Play, FastForward, SkipForward, Newspaper, Wallet, X, CloudCheck, CloudUpload, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { CLUBS, clubById } from "@/lib/game/clubs";
+import { legacyClubs } from "@/lib/game/club-provider";
 import {
   advanceDay, advanceToMatch, aiSquad, bestEleven, completeRound, computeTable, createCareer, currentRound,
   ensureFields, money, nextFixture, refreshMarket, sellPlayer, squadFromApi, teamRating, type CareerV2, type Player, type Pos,
@@ -56,7 +56,7 @@ export function Game({ userId }: { userId: string | null }) {
     fetchingSquads.current = true;
     (async () => {
       const result: Record<string, Player[]> = {};
-      const others = CLUBS.filter((c) => c.id !== career.clubId);
+      const others = legacyClubs.list().filter((c) => c.id !== career.clubId);
       for (let i = 0; i < others.length; i += 1) {
         await Promise.all(others.slice(i, i + 1).map(async (c) => {
           try {
@@ -94,7 +94,7 @@ export function Game({ userId }: { userId: string | null }) {
     setBusy(true);
     let real: Player[] | undefined;
     try {
-      const club = clubById(clubId);
+      const club = legacyClubs.get(clubId);
       const res = await fetch(`/api/football/squad?teamId=${club.apiId}`);
       if (res.ok) { const data = await res.json(); real = squadFromApi(clubId, club.rating, data.players ?? []); }
     } catch { /* fall back to generated squad */ }
@@ -107,7 +107,7 @@ export function Game({ userId }: { userId: string | null }) {
   if (loadError) return <div className="g-loading"><div className="g-stack"><p>Não foi possível recuperar sua carreira.</p><Button onClick={() => setLoadAttempt((n) => n + 1)}><RefreshCw /> Tentar novamente</Button></div></div>;
   if (!career) return <Onboarding onStart={start} busy={busy} userId={userId} />;
 
-  const club = clubById(career.clubId);
+  const club = legacyClubs.get(career.clubId);
   const nf = nextFixture(career);
   const matchDay = !!nf && career.date >= nf.date;
 
@@ -215,7 +215,7 @@ function HomeTab({ career, matchDay, onAdvance, onSkip, onPlay, onSimulate, onNe
       <div className="g-tiles">
         <button className="g-tile" onClick={() => goto("tabela")}><span>Posição</span><b>{pos}º</b><small>{row.pts} pts · {row.p} jogos</small></button>
         <button className="g-tile" onClick={() => goto("elenco")}><span>Força</span><b>{teamRating(career.squad, career.formation)}</b><small>{career.squad.length} jogadores</small></button>
-        <button className="g-tile" onClick={() => goto("clube")}><span>Dívida</span><b className="g-tile-debt">{money(career.debt).replace("R$ ", "")}</b><small>{clubById(career.clubId).stadium}</small></button>
+        <button className="g-tile" onClick={() => goto("clube")}><span>Dívida</span><b className="g-tile-debt">{money(career.debt).replace("R$ ", "")}</b><small>{legacyClubs.get(career.clubId).stadium}</small></button>
       </div>
 
       <section className="g-card">

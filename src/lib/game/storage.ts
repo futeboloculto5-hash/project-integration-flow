@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import type { CareerV2 } from "./career";
-import { clubById } from "./clubs";
+import { legacyClubs } from "./club-provider";
 
 const LOCAL_KEY = "ccw-career-v2";
 const accountKey = (userId: string) => `${LOCAL_KEY}:${userId}`;
@@ -54,7 +54,7 @@ function flush(userId: string): Promise<void> {
     while (state.pending) {
       const item = state.pending;
       const c = item.career;
-      const club = clubById(c.clubId);
+      const club = legacyClubs.get(c.clubId);
       const { data, error } = await supabase.from("careers").upsert({
         id: item.rowId, user_id: userId, club_id: c.clubId, club_name: club.name,
         season: c.season, current_date: `${c.date}T12:00:00Z`, balance: Math.round(c.balance),

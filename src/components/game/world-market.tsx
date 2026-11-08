@@ -3,7 +3,7 @@ import { ArrowLeftRight, Search, X, Send, Check, RefreshCw } from 'lucide-react'
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CLUBS } from '@/lib/game/clubs';
+import { legacyClubs } from '@/lib/game/club-provider';
 import { money, type CareerV2, type Player, type Pos } from '@/lib/game/career';
 import { acceptNegotiation, importWorldSquad, marketClubName, proposeDeal, renewContract, transferPlayer, type DealTerms, type WorldClub } from '@/lib/game/transfers';
 
@@ -21,7 +21,7 @@ export function WorldMarket({ career, update }: { career: CareerV2; update: (c: 
   const [terms, setTerms] = useState<DealTerms>({ kind: 'buy', fee: 0, wage: 0, months: 24 });
   const [buyer, setBuyer] = useState('');
   const current = useRef(career); current.current = career;
-  const choose = (p: Player) => { setSelected(p); setTerms({ kind: 'buy', fee: Math.round(p.value * (p.clubId === career.clubId ? 0.8 : 1.1)), wage: p.wage, months: 24 }); setBuyer(CLUBS.find(x => x.id !== career.clubId)?.id ?? ''); };
+  const choose = (p: Player) => { setSelected(p); setTerms({ kind: 'buy', fee: Math.round(p.value * (p.clubId === career.clubId ? 0.8 : 1.1)), wage: p.wage, months: 24 }); setBuyer(legacyClubs.list().find(x => x.id !== career.clubId)?.id ?? ''); };
   const act = (result: { career: CareerV2; error?: string }, message: string) => {
     if (result.error) { toast.error(result.error); return; }
     update(result.career); toast.success(message); setSelected(null);
@@ -47,14 +47,14 @@ export function WorldMarket({ career, update }: { career: CareerV2; update: (c: 
       if (!data.players?.length || !data.team) throw new Error('A API não disponibiliza elenco para este clube. Nenhum jogador foi inventado.');
       const next = importWorldSquad(current.current, { ...club, name: data.team, fetchedAt: data.verifiedAt }, data.players);
       update(next);
-      const id = CLUBS.find(x => x.apiId === club.apiId)?.id ?? `world-${club.apiId}`;
+      const id = legacyClubs.list().find(x => x.apiId === club.apiId)?.id ?? `world-${club.apiId}`;
       setClubFilter(id); setClubs([]);
       if (id === current.current.clubId) setError('Seu elenco atual foi preservado. Veja os contratos do seu clube.');
       else if (data.stale) setError('Elenco em cache: atualização indisponível no momento.');
     } catch (e) { setError(e instanceof Error ? e.message : 'Falha na consulta.'); }
     finally { setBusy(false); }
   };
-  const allClubs = [...CLUBS.map(x => ({ id: x.id, name: x.name })), ...(career.worldClubs ?? []).filter(x => !CLUBS.some(y => y.id === x.id))];
+  const allClubs = [...legacyClubs.list().map(x => ({ id: x.id, name: x.name })), ...(career.worldClubs ?? []).filter(x => !legacyClubs.list().some(y => y.id === x.id))];
   const players = career.market.filter(p => (clubFilter === 'all' || p.clubId === clubFilter) && (pos === 'all' || p.pos === pos) && p.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()));
   const owned = selected?.clubId === career.clubId;
   const pending = career.negotiations?.filter(x => ['pending', 'counter', 'accepted'].includes(x.status)).length ?? 0;

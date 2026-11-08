@@ -1,4 +1,5 @@
-import { CLUBS, KIT_BRANDS, clubById } from "./clubs";
+import { KIT_BRANDS } from "./clubs";
+import { legacyClubs } from "./club-provider";
 import { brDay, trackMatch } from "./bux";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 import { amortize, book, createFinance, finance, ledgerWeek, processFinanceDay, type FinanceState } from './finance';
@@ -104,7 +105,7 @@ export function squadFromApi(clubId: string, rating: number, api: { id: number |
 
 // ---------- calendar ----------
 export function makeFixtures(seed: string): Fixture[] {
-  const ids = CLUBS.map((c) => c.id);
+  const ids = legacyClubs.list().map((c) => c.id);
   const r = seeded(seed);
   for (let i = ids.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [ids[i], ids[j]] = [ids[j]!, ids[i]!]; }
   const n = ids.length;
@@ -132,7 +133,7 @@ export function makeFixtures(seed: string): Fixture[] {
 // ---------- table ----------
 export type Row = { clubId: string; p: number; w: number; d: number; l: number; gf: number; ga: number; pts: number; form: ("V" | "E" | "D")[] };
 export function computeTable(fixtures: Fixture[], ids?: string[]): Row[] {
-  const participants = ids ?? (fixtures.length ? [...new Set(fixtures.flatMap(f => [f.home, f.away]))] : CLUBS.map(c => c.id));
+  const participants = ids ?? (fixtures.length ? [...new Set(fixtures.flatMap(f => [f.home, f.away]))] : legacyClubs.list().map(c => c.id));
   const rows = new Map<string, Row>(participants.map(id => [id, { clubId: id, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] }]));
   for (const f of fixtures) {
     if (f.hg == null || f.ag == null) continue;
@@ -144,7 +145,7 @@ export function computeTable(fixtures: Fixture[], ids?: string[]): Row[] {
     else { h.d++; a.d++; h.pts++; a.pts++; h.form.push("E"); a.form.push("E"); }
   }
   return [...rows.values()].map((r) => ({ ...r, form: r.form.slice(-5) }))
-    .sort((x, y) => y.pts - x.pts || y.w - x.w || (y.gf - y.ga) - (x.gf - x.ga) || y.gf - x.gf || clubById(x.clubId).name.localeCompare(clubById(y.clubId).name));
+    .sort((x, y) => y.pts - x.pts || y.w - x.w || (y.gf - y.ga) - (x.gf - x.ga) || y.gf - x.gf || legacyClubs.get(x.clubId).name.localeCompare(legacyClubs.get(y.clubId).name));
 }
 
 // ---------- strength ----------
@@ -164,7 +165,7 @@ export const teamRating = (squad: Player[], formation?: CareerV2["formation"]) =
 export function aiSquad(career: CareerV2, clubId: string) {
   const stored = career.otherSquads?.[clubId];
   if (stored) return stored.filter(p => p.clubId === clubId);
-  const c = clubById(clubId);
+  const c = legacyClubs.get(clubId);
   return generateSquad(clubId, c.rating).filter((p) => !career.transferredIn.includes(p.id));
 }
 export function aiRating(career: CareerV2, clubId: string) {
@@ -173,7 +174,7 @@ export function aiRating(career: CareerV2, clubId: string) {
 
 // ---------- create ----------
 export function createCareer(manager: string, clubId: string, apiSquad?: Player[]): CareerV2 {
-  const club = clubById(clubId);
+  const club = legacyClubs.get(clubId);
   const squad = apiSquad && apiSquad.length >= 16 ? apiSquad : generateSquad(clubId, club.rating);
   const base: CareerV2 = {
     version: 2, manager, clubId, season: "2025", date: "2025-03-24", balance: club.budget,
@@ -190,13 +191,13 @@ export function createCareer(manager: string, clubId: string, apiSquad?: Player[
 export function refreshMarket(career: CareerV2, date: string): Player[] {
   const r = seeded(`market:${date}`);
   const pool: Player[] = [];
-  for (const c of CLUBS) {
+  for (const c of legacyClubs.list()) {
     if (c.id === career.clubId) continue;
     const sq = aiSquad(career, c.id);
     for (let i = 0; i < 2; i++) pool.push(sq[Math.floor(r() * sq.length)]!);
   }
   for (const club of career.worldClubs ?? []) {
-    if (CLUBS.some(x => x.id === club.id)) continue;
+    if (legacyClubs.list().some(x => x.id === club.id)) continue;
     pool.push(...(career.otherSquads?.[club.id] ?? []).filter(p => !career.loans?.some(l => l.playerId === p.id)));
   }
   // free agents
@@ -243,7 +244,7 @@ export function advanceDay(c: CareerV2, inPlace = false): { career: CareerV2; bl
   // AI offer for one of your players
   if (r() < 0.22 && next.squad.length > 18) {
     const target = [...next.squad].sort((a, b) => b.rating - a.rating)[Math.floor(r() * 8)]!;
-    const buyers = CLUBS.filter((x) => x.id !== c.clubId);
+    const buyers = legacyClubs.list().filter((x) => x.id !== c.clubId);
     const from = buyers[Math.floor(r() * buyers.length)]!;
     const fee = Math.round((target.value * (0.85 + r() * 0.5)) / 50_000) * 50_000;
     if (!next.offers.some((o) => o.playerId === target.id)) {
@@ -278,14 +279,14 @@ export function completeRound(c: CareerV2, hg: number, ag: number, goals?: Goal[
   const isHome = nf.home === c.clubId;
   const my = isHome ? hg : ag, opp = isHome ? ag : hg;
   next.buxDaily = trackMatch(next.buxDaily, today, { my, opp, cup: nf.competition === 'cup' });
-  const club = clubById(c.clubId);
+  const club = legacyClubs.get(c.clubId);
   const gate = isHome ? gateIncome(c) : null;
   const award = my > opp ? 1_200_000 : my === opp ? 500_000 : 200_000;
   book(next, "premiacao", `Premiação · rodada ${nf.round}`, award);
   if (gate) book(next, "bilheteria", `Bilheteria · ${gate.attendance.toLocaleString("pt-BR")} torcedores`, gate.income);
   if (my > opp) for (const s of next.sponsors) if (s.bonusWin) book(next, "bonus_patrocinio", `Bônus por vitória · ${s.company}`, s.bonusWin);
   const prize = award + (gate?.income ?? 0);
-  const oppClub = clubById(isHome ? nf.away : nf.home);
+  const oppClub = legacyClubs.get(isHome ? nf.away : nf.home);
   next.news.unshift({ id: `res-${nf.round}`, date: next.date, kind: "result", title: `${my > opp ? "Vitória" : my === opp ? "Empate" : "Derrota"}: ${club.short} ${my} x ${opp} ${oppClub.short}`, body: `Rodada ${nf.round} do Brasileirão.${gate ? ` Público: ${gate.attendance.toLocaleString("pt-BR")}.` : ""} Receita: ${money(prize)}.` });
   // Use the regular daily path so contracts, loans and salary charges cannot be skipped.
   return advanceDay(next).career;
@@ -305,7 +306,7 @@ export function sellPlayer(c: CareerV2, playerId: string, fee: number, toClub?: 
   if (c.squad.length <= 16) return { career: c, error: "Elenco mínimo de 16 jogadores." };
   const p = c.squad.find((x) => x.id === playerId);
   if (!p) return { career: c };
-  const buyer = toClub ?? CLUBS.find(x => x.id !== c.clubId && aiSquad(c, x.id).length < 32 && (c.aiBalances?.[x.id] ?? x.budget) >= fee)?.id;
+  const buyer = toClub ?? legacyClubs.list().find(x => x.id !== c.clubId && aiSquad(c, x.id).length < 32 && (c.aiBalances?.[x.id] ?? x.budget) >= fee)?.id;
   if (!buyer) return { career: c, error: 'Nenhum clube comprador tem saldo ou vaga.' };
   return transferPlayer(c, playerId, c.clubId, buyer, { kind: 'buy', fee, wage: p.wage, months: 24 });
 }
@@ -313,7 +314,7 @@ export function sellPlayer(c: CareerV2, playerId: string, fee: number, toClub?: 
 
 // ---------- finances ----------
 export function ensureFields(c: CareerV2): CareerV2 {
-  const club = clubById(c.clubId);
+  const club = legacyClubs.get(c.clubId);
   const next = initializeSeason({
     ...c,
     debt: c.debt ?? club.debt,
@@ -337,7 +338,7 @@ function labelSponsor(clubId: string, s: Sponsor): Sponsor {
 }
 
 function initialSponsors(clubId: string): Sponsor[] {
-  const club = clubById(clubId);
+  const club = legacyClubs.get(clubId);
   const map = SPONSOR_MAP_2025[clubId];
   const r = seeded(`sp:${clubId}`);
   const scale = club.rating >= 80 ? 1 : club.rating >= 75 ? 0.6 : 0.35;
@@ -366,7 +367,7 @@ function addSponsorOffer(c: CareerV2, r: () => number) {
   const slots = (Object.keys(SLOT_BASE) as SponsorSlot[]).filter((s) => s !== "Material esportivo");
   const slot = slots[Math.floor(r() * slots.length)]!;
   const pos = computeTable(leagueFixtures(c)).findIndex((x) => x.clubId === c.clubId) + 1;
-  const prestige = (clubById(c.clubId).rating - 60) / 25 + (pos > 0 && pos <= 6 ? 0.2 : 0);
+  const prestige = (legacyClubs.get(c.clubId).rating - 60) / 25 + (pos > 0 && pos <= 6 ? 0.2 : 0);
   // Máster space is dominated by betting brands in 2025 (IBOPE Repucom); other spaces follow the sector mix.
   const sector = slot === "Máster" && r() < 0.65 ? "Apostas" : pickSector(r);
   const pool = SPONSOR_COMPANIES.filter((x) => x.sector === sector);

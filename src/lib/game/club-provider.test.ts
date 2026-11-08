@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { readdirSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { CLUBS, clubById } from './clubs';
 import { createLegacyClubProvider, datapackClubId, legacyClubs, toPackClub } from './club-provider';
 import { validateDatapack } from '@/lib/datapack/validate';
@@ -59,5 +61,16 @@ describe('Clubes · ponte para o formato do datapack', () => {
   });
   it('a conversão preserva nome, cores, força e id da API', () => {
     for (const c of CLUBS) { const p = toPackClub(c); expect(p.name).toBe(c.name); expect(p.colors).toEqual([c.color, c.color2]); expect(p.rating).toBe(c.rating); expect(p.externalIds).toEqual({ apiFootball: c.apiId }); }
+  });
+});
+
+describe('Clubes · todo o jogo passa pela camada', () => {
+  it('nenhum arquivo do jogo usa CLUBS ou clubById diretamente (só clubs.ts, o provedor e os testes)', () => {
+    const root = resolve(__dirname, '../..');
+    const files: string[] = [];
+    const walk = (dir: string) => { for (const e of readdirSync(dir, { withFileTypes: true })) { const p = resolve(dir, e.name); if (e.isDirectory()) walk(p); else if (/\.tsx?$/.test(e.name)) files.push(p); } };
+    walk(root);
+    const offenders = files.filter(f => !/\.test\.tsx?$/.test(f) && !/lib\/game\/(clubs|club-provider)\.ts$/.test(f) && /\b(CLUBS|clubById)\b/.test(readFileSync(f, 'utf8')));
+    expect(offenders.map(f => f.replace(root, 'src'))).toEqual([]);
   });
 });
