@@ -159,3 +159,16 @@ describe('Jogadores · dados de teste não entram no jogo real', () => {
     expect(offenders.map(f => f.replace(root, 'src'))).toEqual([]);
   });
 });
+
+describe('Jogadores · carregamento sob demanda', () => {
+  it('importar o provedor antes do restante do jogo não quebra (sem problema de importação circular)', async () => {
+    const mod = await import('./player-provider');
+    expect(mod.legacyPlayers.list()).toHaveLength(880);
+  });
+  it('a carreira nova usa o elenco-base do provedor, com os mesmos jogadores de sempre', () => {
+    const c = career('santos');
+    expect(c.squad.map(p => ({ id: p.id, name: p.name, rating: p.rating, pos: p.pos }))).toEqual(generateSquad('santos', 74).map(p => ({ id: p.id, name: p.name, rating: p.rating, pos: p.pos })));
+    const aiA = createCareer('x', 'flamengo'), aiB = createCareer('y', 'flamengo');
+    expect(aiA.squad[0]).not.toBe(aiB.squad[0]); // objetos novos a cada carreira, nunca compartilhados
+  });
+});

@@ -108,7 +108,15 @@ export function createLegacyPlayerProvider(): PlayerProvider {
   })));
   return createPlayerProvider("jogo-atual", players);
 }
-export const legacyPlayers: PlayerProvider = createLegacyPlayerProvider();
+// Criado só no primeiro uso: assim career.ts pode importar este módulo sem problema de importação circular.
+let legacyCache: PlayerProvider | undefined;
+const legacy = () => (legacyCache ??= createLegacyPlayerProvider());
+export const legacyPlayers: PlayerProvider = {
+  get source() { return legacy().source; },
+  list: () => legacy().list(), find: (id) => legacy().find(id), get: (id) => legacy().get(id), has: (id) => legacy().has(id),
+  resolveId: (id) => legacy().resolveId(id), byClub: (clubId) => legacy().byClub(clubId), byPosition: (pos) => legacy().byPosition(pos),
+  search: (text, limit) => legacy().search(text, limit),
+};
 
 // ---------- fonte 2: datapack ----------
 const yearsBetween = (birth: string, asOf: string) => {

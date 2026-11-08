@@ -1,5 +1,6 @@
 import { KIT_BRANDS } from "./clubs";
 import { legacyClubs } from "./club-provider";
+import { legacyPlayers, toGamePlayer } from "./player-provider";
 import { brDay, trackMatch } from "./bux";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 import { amortize, book, createFinance, finance, ledgerWeek, processFinanceDay, type FinanceState } from './finance';
@@ -162,11 +163,15 @@ export const teamRating = (squad: Player[], formation?: CareerV2["formation"]) =
   return xi.length ? Math.round(xi.reduce((s, p) => s + p.rating, 0) / xi.length) : 60;
 };
 
+/** Elenco-base de um clube: vem do provedor de jogadores (mesmos jogadores que a fórmula gera). Clube sem base cai na fórmula, como antes. */
+function baseSquad(clubId: string): Player[] {
+  const base = legacyPlayers.byClub(clubId);
+  return base.length ? base.map(toGamePlayer) : generateSquad(clubId, legacyClubs.get(clubId).rating);
+}
 export function aiSquad(career: CareerV2, clubId: string) {
   const stored = career.otherSquads?.[clubId];
   if (stored) return stored.filter(p => p.clubId === clubId);
-  const c = legacyClubs.get(clubId);
-  return generateSquad(clubId, c.rating).filter((p) => !career.transferredIn.includes(p.id));
+  return baseSquad(clubId).filter((p) => !career.transferredIn.includes(p.id));
 }
 export function aiRating(career: CareerV2, clubId: string) {
   return teamRating(aiSquad(career, clubId));
@@ -175,7 +180,7 @@ export function aiRating(career: CareerV2, clubId: string) {
 // ---------- create ----------
 export function createCareer(manager: string, clubId: string, apiSquad?: Player[]): CareerV2 {
   const club = legacyClubs.get(clubId);
-  const squad = apiSquad && apiSquad.length >= 16 ? apiSquad : generateSquad(clubId, club.rating);
+  const squad = apiSquad && apiSquad.length >= 16 ? apiSquad : baseSquad(clubId);
   const base: CareerV2 = {
     version: 2, manager, clubId, season: "2025", date: "2025-03-24", balance: club.budget,
     squad, fixtures: makeFixtures(`${clubId}:${manager}:2025`), market: [], offers: [], news: [],
