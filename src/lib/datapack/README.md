@@ -17,3 +17,9 @@ Descreve e valida o formato dos datapacks do Clube Campeão WORLD. **Nada aqui �
 - `legacyId` liga um clube novo ao id que ele tem hoje no jogo (ex.: `flamengo`), para os saves antigos continuarem válidos.
 - O validador limita registros (500 mil) e problemas listados (200) e é linear: 20 mil jogadores validam em milissegundos.
 - Decidir o formato dos arquivos do pacote (JSON, NDJSON, divisão por arquivo) e converter de outras fontes ficam para as próximas etapas.
+
+## Etapa 2: camada de acesso aos clubes
+`src/lib/game/club-provider.ts` (fora desta pasta, porque conhece o jogo) oferece `ClubProvider` com `list`, `find`, `get` e `has`.
+Hoje só serve os 20 clubes atuais (`legacyClubs`): mesmos objetos, mesma ordem, e `get` se comporta como o antigo `clubById` (inclui `sim-b-N` e o mesmo erro para id desconhecido).
+`toPackClub` descreve um clube atual no formato do datapack, mantendo o id antigo em `legacyId`.
+Nenhum código do jogo usa isso ainda; religar os chamadores é a etapa 3.
