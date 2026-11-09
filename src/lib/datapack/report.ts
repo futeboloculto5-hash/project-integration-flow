@@ -14,7 +14,14 @@ export type ImportReport = {
   ok: boolean;
   /** Adaptador que reconheceu o formato (ausente se nenhum reconheceu). */
   formatId?: string;
-  pack?: { packId: string; version: string; name: string; origin: string };
+  pack?: {
+    packId: string; version: string; name: string; origin: string;
+    /** Temporadas que aparecem nas edições de competição do pacote (ordenadas). */
+    seasons: string[];
+    /** Confederações (regiões) dos países do pacote, sem repetição. */
+    confederations: string[];
+    countries: number;
+  };
   /** Totais EXATOS, mesmo quando a lista `issues` foi cortada. */
   errors: number;
   warnings: number;
