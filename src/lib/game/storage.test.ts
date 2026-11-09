@@ -2,6 +2,7 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { createCareer, completeRound, computeTable, buyPlayer, payDebt, advanceToMatch } from "./career";
 import { initializeSeason, recordFixture, simulateDue, seasonFinished, startNextSeason } from './seasons';
 import { importWorldSquad, proposeDeal, renewContract } from './transfers';
+import { decodeCareer } from './career-codec';
 
 const db = vi.hoisted(() => ({ rows: [] as any[], writes: [] as any[], failure: false, hold: null as null | (() => void) }));
 vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: () => ({
@@ -29,7 +30,7 @@ afterEach(() => { vi.useRealTimers(); });
 describe("Career persistence", () => {
   it("immediately saves guest changes before awaiting and recovers every field after reload", async () => {
     const c = snapshot(); const s = await storage(); const promise = s.saveCareer(null, null, c);
-    expect(JSON.parse(localStorage.getItem("ccw-career-v2") ?? "null")).toEqual(c);
+    expect(decodeCareer(JSON.parse(localStorage.getItem("ccw-career-v2") ?? "null"))).toEqual(c); // a forma gravada pode ser compacta; decodificada é igual à carreira
     await promise; vi.resetModules();
     const loaded = (await (await storage()).loadCareer(null)).career;
     expect(loaded).toEqual(c);
@@ -60,15 +61,15 @@ describe("Career persistence", () => {
     expect(db.writes).toHaveLength(1);
     const release = db.hold; db.hold = null; release?.();
     const [a,b] = await Promise.all([first,second]);
-    expect(a).toBe(b); expect(db.rows).toHaveLength(1); expect(db.rows[0].data).toEqual(latest);
+    expect(a).toBe(b); expect(db.rows).toHaveLength(1); expect(decodeCareer(db.rows[0].data)).toEqual(latest);
   });
   it("retries a failed cloud write automatically without losing the snapshot", async () => {
     vi.useFakeTimers(); db.failure = true; const s = await storage(); const c = snapshot();
     await expect(s.saveCareer("owner", null, c)).rejects.toThrow();
     expect(s.getSaveStatus("owner")).toBe("pending");
-    expect(JSON.parse(localStorage.getItem("ccw-career-v2:owner") ?? "null").career).toEqual(c);
+    expect(decodeCareer(JSON.parse(localStorage.getItem("ccw-career-v2:owner") ?? "null").career)).toEqual(c);
     db.failure = false; await vi.advanceTimersByTimeAsync(1100);
-    expect(s.getSaveStatus("owner")).toBe("saved"); expect(db.rows[0].data).toEqual(c);
+    expect(s.getSaveStatus("owner")).toBe("saved"); expect(decodeCareer(db.rows[0].data)).toEqual(c);
   });
   it("recovers an interrupted pending write after reload", async () => {
     const c = snapshot(); localStorage.setItem("ccw-career-v2:owner", JSON.stringify({career:c,rowId:"stable",updatedAt:"2026-10-17T00:00:00Z",dirty:true}));

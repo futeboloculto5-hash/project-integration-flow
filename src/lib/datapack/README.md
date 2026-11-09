@@ -28,3 +28,17 @@ Nenhum código do jogo usa isso ainda; religar os chamadores é a etapa 3.
 - `src/lib/game/player-provider.ts`: `PlayerProvider` (listar, achar por id estável **ou legado**, por clube, por posição, buscar por nome, existir). Fontes: `legacyPlayers` (elencos que o jogo já gera, com ids estáveis `plr:`), `createDatapackPlayerProvider` (datapack validado; pacote de teste só com `allowTestData`) e `composePlayerProviders` (o datapack manda nos clubes que cobre; ids antigos continuam resolvendo).
 - `src/lib/game/player-overlay.ts`: o que a carreira guarda sobre a base (só a diferença; jogador sem base fica inteiro) e `analyzeCareerPlayers`, que mede um save sem alterá-lo. `compactVerified` só compacta se a ida e volta for exata.
 - **Ainda não conectado:** o salvamento e os sistemas continuam usando o formato atual. A troca do formato do save é a etapa 5 e exige migração própria.
+
+## Etapa 5: ligação ao jogo e formato do save
+**Elencos-base pelo provedor.** `createCareer`, `aiSquad` e o elenco inicial dos clubes passam por `legacyPlayers` (mesmos jogadores da fórmula; resultado idêntico, conferido por testes e por uma comparação de 146 cenários antes/depois).
+Seguem fora do provedor, de propósito, por não terem base: jogadores da API-Football, agentes livres gerados no mercado, reforços de base e jogadores criados na carreira. Eles continuam guardados por inteiro.
+
+**Formato do save (`career-codec.ts`, aplicado só na fronteira do salvamento, em `storage.ts`).** Dentro do jogo a carreira é a mesma de sempre.
+- Sem `saveFormat`: formato clássico (todos os saves já criados). Continua abrindo em qualquer versão.
+- `saveFormat: 2`: os elencos dos outros clubes (`otherSquads`) saem e entra `playerStore`, só com a diferença para a base. Elenco do técnico, mercado, finanças, dívidas, calendário etc. ficam idênticos.
+- Cada jogador só é compactado se a reconstrução for exata; senão fica inteiro. Codificar de novo não muda nada.
+- Na primeira conversão de um save clássico, uma cópia do original fica **neste aparelho** em `ccw-career-v2[:id]:original`. Na nuvem a linha é sobrescrita pelo formato novo.
+- Se o save já existia e não pôde ser lido, o salvamento volta ao formato clássico (não arrisca).
+- Abrir recusa (sem gravar nem apagar nada) se o formato for desconhecido, o bloco de jogadores estiver incompleto ou a base de jogadores mudou desde a gravação (assinatura fixa em teste).
+
+**LIMITAÇÃO:** uma versão do jogo anterior a esta que abra um save `saveFormat: 2` não vê as mudanças dos elencos da IA (regenera pela fórmula). Saves clássicos abrem em qualquer versão.

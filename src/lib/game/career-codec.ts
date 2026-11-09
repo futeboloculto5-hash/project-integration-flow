@@ -66,7 +66,7 @@ export function encodeCareer(c: StoredCareer, provider: PlayerProvider = legacyP
 /** Reconstrói a carreira completa. Formato clássico passa direto (mesmo objeto). Erros NÃO apagam nada: quem chama mostra a falha. */
 export function decodeCareer(raw: StoredCareer, provider: PlayerProvider = legacyPlayers): CareerV2 {
   if (!isEncoded(raw)) {
-    const f = (raw as { saveFormat?: unknown }).saveFormat;
+    const f = (raw as unknown as { saveFormat?: unknown }).saveFormat;
     if (f !== undefined) throw new CodecError("unsupported_format", `Formato de save desconhecido: ${String(f)}. Atualize o jogo para abrir esta carreira.`);
     return raw;
   }
