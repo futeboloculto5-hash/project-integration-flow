@@ -410,3 +410,15 @@ describe('Relatórios', () => {
     expect(summarizeReport(r.report)).toContain('missing_license');
   });
 });
+
+describe('Desempenho defensivo', () => {
+  it('pacote hostil com o mesmo id externo/nome em milhares de jogadores não vira custo quadrático', () => {
+    const p = realLike({ clubs: 20, playersPerClub: 100 }); // 2000 jogadores
+    for (const x of p.players) { x.name = 'Mesmo Nome'; x.externalIds = { apiFootball: 1 }; x.birthDate = '2000-01-01'; delete x.age; }
+    const t0 = Date.now();
+    const r = importDatapack(asFiles(p));
+    expect(Date.now() - t0).toBeLessThan(3000);
+    expect(r.report.ok).toBe(true);
+    expect(codes(r, 'warning')).toContain('duplicate_scan_skipped');
+  });
+});

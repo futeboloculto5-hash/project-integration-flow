@@ -42,3 +42,25 @@ Seguem fora do provedor, de propósito, por não terem base: jogadores da API-Fo
 - Abrir recusa (sem gravar nem apagar nada) se o formato for desconhecido, o bloco de jogadores estiver incompleto ou a base de jogadores mudou desde a gravação (assinatura fixa em teste).
 
 **LIMITAÇÃO:** uma versão do jogo anterior a esta que abra um save `saveFormat: 2` não vê as mudanças dos elencos da IA (regenera pela fórmula). Saves clássicos abrem em qualquer versão.
+
+## Etapa 6: importação e conversão de datapacks
+Nada do jogo usa isto ainda (há um teste que garante). Os jogadores atuais continuam sendo os do jogo até a importação ser validada com um pacote real.
+
+**Pipeline** (`importDatapack`, em `import.ts`; qualquer erro rejeita o pacote INTEIRO e não instala nada):
+1. **Formato** — um adaptador (`adapters.ts`) reconhece os arquivos. Sem adaptador: erro `unknown_format` listando os suportados. Nunca se assume um formato.
+2. **Conversão** — o adaptador entrega o contrato interno (`ccw.datapack`). Hoje só existe o `ccw-native-v1` (leitura em `bundle.ts`).
+3. **Validação** — o validador do contrato roda SEMPRE; nenhum adaptador consegue pulá-lo.
+4. **Política** — pacote real (origem ≠ `teste`) precisa declarar `source.name` e `source.license` (senão erro); origem `teste` é recusada a menos que `allowTestData` (só testes); pacote real com marcas de teste (ids `…:teste-…`, nomes com "Teste") é rejeitado. Avisos: clube fora de qualquer competição, elencos fora de 11–60, etc.
+5. **Reconciliação com o jogo** — `legacyId` casa com os clubes permanentes. Cidade, estádio, cores e qualquer dado financeiro do pacote são IGNORADOS (informado no relatório); os clubes do jogo não são alterados.
+6. **Identidade** (`identity.ts`) — o id estável é a identidade. Candidatos a duplicata (mesmo id externo; mesmo nome + nascimento; mesmo nome + nacionalidade como "possível") vão para o relatório; **nada é unido automaticamente e nome igual sozinho nunca é candidato**. Grupos com mais de 50 iguais não são comparados par a par (proteção contra custo quadrático).
+7. **Versão e incremental** (`diff.ts`) — mesma versão e conteúdo = `unchanged`; mesma versão com conteúdo diferente = erro; versão menor = erro `downgrade`; maior = `update` com a diferença (jogadores adicionados, alterados, transferidos, sumidos; participantes de cada edição).
+
+**Loja** (`store.ts`): instala só depois de um relatório sem erros, de uma vez. Rejeição não altera nada. Jogador que some de uma versão nova fica **aposentado** (guarda o último clube e a última versão): continua resolvendo por id, e quem volta deixa de ser aposentado. Pacotes de packIds diferentes convivem; o mesmo id de jogador ou clube em dois pacotes é erro (`id_collision_other_pack`).
+
+**Fatias** (`slice.ts`): `sliceByCountry` (país e/ou confederação), `sliceByCompetition` e `catalogByCountry`. A fatia é um datapack válido (referências fechadas, contagens recalculadas) — dá para carregar só um país/liga em vez do mundo.
+
+**Ponte com o jogo** (`src/lib/game/datapack-bridge.ts`): `importDatapackForGame`, `worldPlayersFromStore`, `createWorldPlayerProvider` (pacotes mandam nos clubes que cobrem, o jogo atual vale para o resto, aposentados e ids antigos continuam resolvendo). Um save compactado só abre com o provedor para o qual foi gravado (`base_changed` caso contrário).
+
+**Medição** (51 mil jogadores, 1.500 clubes, 60 países, arquivo de 11 MB): ler+validar+importar ≈ 0,3 s; atualização de 10% dos jogadores ≈ 0,8 s; catálogo por país 6 ms; fatia de um país 3 ms; `PlayerProvider` de 51 mil ≈ 75 ms. Nenhuma otimização complexa foi necessária.
+
+**Como importar um pacote real no futuro:** (1) ter a amostra real e a autorização de uso; (2) escrever um adaptador novo (`DatapackAdapter`) só para esse formato, testado com a amostra, que entrega o contrato interno e registra a fonte e a licença no manifesto; (3) `importDatapackForGame(store, arquivos)` e ler o relatório; (4) só depois decidir ligar o provedor do mundo ao jogo.

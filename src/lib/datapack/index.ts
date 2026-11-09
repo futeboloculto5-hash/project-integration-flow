@@ -10,3 +10,4 @@ export * from "./identity";
 export * from "./diff";
 export { importDatapack, findTestMarkers, POLICY, type ImportOptions, type ImportResult, type ImportStatus, type GameClubRef, type ClubReconciliation } from "./import";
 export { createPackStore, gameClubIdOf, type PackStore, type InstalledPack, type RetiredPlayer } from "./store";
+export { sliceByCountry, sliceByCompetition, catalogByCountry, type SliceSelector, type PackCatalogEntry } from "./slice";

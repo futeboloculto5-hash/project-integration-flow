@@ -7,7 +7,7 @@ import { legacyClubs } from "./club-provider";
 import { makeId } from "@/lib/datapack/ids";
 import { positionToLegacy } from "@/lib/datapack/positions";
 import { validateDatapack } from "@/lib/datapack/validate";
-import type { ClubId, DataStatus, PlayerId } from "@/lib/datapack/types";
+import type { ClubId, DataStatus, Player as PackPlayer, PlayerId } from "@/lib/datapack/types";
 
 /** Dados-base de um jogador, na forma que o jogo entende (posição de 4 letras, `rating`, id de clube do jogo). */
 export type BasePlayer = {
@@ -133,15 +133,20 @@ export function playersFromDatapack(input: unknown, opts: { asOf: string; allowT
   const { pack } = r;
   if (pack.manifest.origin === "teste" && !opts.allowTestData) throw new Error("Datapack de TESTE recusado: dados de teste não entram no jogo real.");
   const clubOf = new Map<ClubId, string>(pack.clubs.map((c) => [c.id, c.legacyId ?? c.id.slice("club:".length)]));
-  return pack.players.map((p): BasePlayer => {
-    const age = p.age ?? (p.birthDate ? yearsBetween(p.birthDate, opts.asOf) : undefined);
+  return toBasePlayers(pack.players, (id) => clubOf.get(id), pack.manifest.packId, opts.asOf);
+}
+
+/** Converte jogadores JÁ validados do contrato para o formato-base do jogo. Não valida: quem chama garante a validação. */
+export function toBasePlayers(players: readonly PackPlayer[], clubOf: (id: ClubId) => string | undefined, origin: string, asOf: string): BasePlayer[] {
+  return players.map((p): BasePlayer => {
+    const age = p.age ?? (p.birthDate ? yearsBetween(p.birthDate, asOf) : undefined);
     const known = age !== undefined && age >= 14;
     const finalAge = known ? age : 24, rating = p.overall;
     const api = p.externalIds?.["apiFootball"];
     return {
       id: p.id, name: p.name, pos: positionToLegacy(p.position), age: finalAge, rating,
       value: p.value ?? playerValue(rating, finalAge), wage: p.contract?.wage ?? playerWage(rating),
-      clubId: p.clubId ? (clubOf.get(p.clubId) ?? p.clubId) : "livre", origin: pack.manifest.packId,
+      clubId: p.clubId ? (clubOf(p.clubId) ?? p.clubId) : "livre", origin,
       ...(known ? {} : { ageUnknown: true }),
       ...(p.potential !== undefined ? { potential: p.potential } : {}),
       ...(typeof api === "number" ? { apiId: api } : {}),

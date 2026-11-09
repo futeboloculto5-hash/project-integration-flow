@@ -203,7 +203,7 @@ export function importDatapack(files: readonly PackFile[], opts: ImportOptions =
   const gone: Player[] = installedPack ? installedPack.players.filter((p) => !nextIds.has(p.id)) : [];
   if (gone.length > 0) sources.push({ packId: `${m.packId}@${installedPack?.manifest.version ?? "anterior"}`, players: gone });
   const internal = findInternalDuplicates(m.packId, pack.players);
-  const cross = sources.length > 0 ? findDuplicateCandidates(pack.players, buildIdentityIndex(sources), m.packId) : { candidates: [], total: 0, truncated: false };
+  const cross = sources.length > 0 ? findDuplicateCandidates(pack.players, buildIdentityIndex(sources), m.packId) : { candidates: [], total: 0, truncated: false, skippedGroups: 0 };
   const duplicates = [...internal.candidates, ...cross.candidates];
   const duplicatesTotal = internal.total + cross.total;
   const dupItems = (list: DuplicateCandidate[]) => list.map((d) => ({ path: d.a, message: `${d.a} ~ ${d.b} (${d.sourceOfB}): ${d.detail} Não foram unidos; é preciso revisão.` }));
@@ -211,6 +211,7 @@ export function importDatapack(files: readonly PackFile[], opts: ImportOptions =
   const possible = duplicates.filter((d) => d.confidence === "possible");
   if (possible.length > 0) rb.info("policy", "possible_same_name", "", `${possible.length} par(es) com mesmo nome e nacionalidade (apenas informativo; nenhum foi unido).`);
   if (internal.truncated || cross.truncated) rb.markTruncated();
+  if (internal.skippedGroups + cross.skippedGroups > 0) rb.warn("policy", "duplicate_scan_skipped", "", `${internal.skippedGroups + cross.skippedGroups} grupo(s) com mais de 50 jogadores iguais em nome/nascimento/id externo não foram comparados par a par; revise o pacote.`);
 
   // 7. versão e atualização incremental
   let status: ImportStatus = "new";

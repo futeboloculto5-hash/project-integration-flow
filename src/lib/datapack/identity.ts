@@ -64,8 +64,10 @@ function contradicts(a: Player, b: Ref): boolean {
   return false;
 }
 
-export type DuplicateScan = { candidates: DuplicateCandidate[]; total: number; truncated: boolean };
+export type DuplicateScan = { candidates: DuplicateCandidate[]; total: number; truncated: boolean; /** Chaves com grupos grandes demais para comparar (ex.: um mesmo id externo em milhares de jogadores). */ skippedGroups: number };
 export const DUPLICATE_LIMIT = 1000;
+/** Grupos maiores que isto não são comparados par a par (evita custo quadrático em pacotes malformados ou hostis). */
+export const MAX_GROUP = 50;
 
 /**
  * Procura candidatos a duplicata de `players` dentro de `existing`.
@@ -76,6 +78,12 @@ export function findDuplicateCandidates(players: readonly Player[], existing: Id
   const out: DuplicateCandidate[] = [];
   const seen = new Set<string>();
   let total = 0;
+  const skipped = new Set<string>();
+  const group = (m: Map<string, Ref[]>, k: string): Ref[] => {
+    const g = m.get(k) ?? [];
+    if (g.length > MAX_GROUP) { skipped.add(k); return []; }
+    return g;
+  };
   const add = (a: Player, b: Ref, kind: DuplicateKind, confidence: DuplicateConfidence, detail: string) => {
     if (b.id === a.id) return;
     const key = a.id < b.id ? `${a.id}|${b.id}` : `${b.id}|${a.id}`;
@@ -86,12 +94,12 @@ export function findDuplicateCandidates(players: readonly Player[], existing: Id
     if (out.length < limit) out.push({ kind, confidence, a: a.id, b: b.id, sourceOfB: b.packId === ownPackId ? "mesmo-pacote" : b.packId, detail });
   };
   for (const p of players) {
-    for (const k of externalKeys(p)) for (const r of existing.byExternal.get(k) ?? []) add(p, r, "external_id", "probable", `Mesmo id externo (${k}) com ids estáveis diferentes.`);
+    for (const k of externalKeys(p)) for (const r of group(existing.byExternal, k)) add(p, r, "external_id", "probable", `Mesmo id externo (${k}) com ids estáveis diferentes.`);
     const n = normalizeName(p.name);
-    if (p.birthDate) for (const r of existing.byNameBirth.get(`${n}|${p.birthDate.slice(0, 10)}`) ?? []) add(p, r, "name_and_birth", "probable", "Mesmo nome e mesma data de nascimento.");
-    if (p.nationalityId) for (const r of existing.byNameNationality.get(`${n}|${p.nationalityId}`) ?? []) if (!contradicts(p, r)) add(p, r, "name_and_nationality", "possible", "Mesmo nome e nacionalidade (sem dados que os distingam).");
+    if (p.birthDate) for (const r of group(existing.byNameBirth, `${n}|${p.birthDate.slice(0, 10)}`)) add(p, r, "name_and_birth", "probable", "Mesmo nome e mesma data de nascimento.");
+    if (p.nationalityId) for (const r of group(existing.byNameNationality, `${n}|${p.nationalityId}`)) if (!contradicts(p, r)) add(p, r, "name_and_nationality", "possible", "Mesmo nome e nacionalidade (sem dados que os distingam).");
   }
-  return { candidates: out, total, truncated: total > out.length };
+  return { candidates: out, total, truncated: total > out.length, skippedGroups: skipped.size };
 }
 
 /** Duplicatas dentro de um mesmo pacote (ex.: a mesma pessoa listada em dois clubes com ids diferentes). */
