@@ -4,6 +4,7 @@
 //   6. identidade (candidatos a duplicata)  7. versão e comparação com o pacote já instalado.
 // A função NÃO instala nada e NÃO altera o jogo: devolve o relatório e, se aceito, o pacote validado e a diferença.
 import { diffPacks, isEmptyDiff, summarizeDiff, type PackDiff } from "./diff";
+import { scanShared } from "./shared";
 import { defaultRegistry, type AdapterRegistry } from "./adapters";
 import type { PackFile } from "./bundle";
 import { buildIdentityIndex, findDuplicateCandidates, findInternalDuplicates, type DuplicateCandidate, type PlayerSource } from "./identity";
@@ -51,6 +52,8 @@ export type ClubReconciliation = {
   gameClubsNotCovered: number;
 };
 
+export type SharedSummary = { players: number; clubs: number; withPacks: string[]; sportingDifferences: number };
+
 export type ImportResult = {
   status: ImportStatus;
   report: ImportReport;
@@ -60,6 +63,8 @@ export type ImportResult = {
   duplicates: DuplicateCandidate[];
   duplicatesTotal: number;
   reconciliation?: ClubReconciliation;
+  /** Entidades que este pacote tem em comum com pacotes já instalados (mesmo id, mesma entidade). */
+  shared?: SharedSummary;
 };
 
 export const POLICY = { minSquad: 11, maxSquad: 60, listed: 10 } as const;
@@ -179,19 +184,20 @@ export function importDatapack(files: readonly PackFile[], opts: ImportOptions =
     reconciliation = { matched, unknownLegacy: unknown, packOnly, gameClubsNotCovered: opts.gameClubs.filter((c) => !matchedSet.has(c.id)).length };
   }
 
-  // colisões com outros pacotes instalados
+  // ids compartilhados com outros pacotes instalados: o id é global; só é aceito se as descrições forem compatíveis
   const others = ctx.otherPacks;
-  const collisions: { path: string; message: string }[] = [];
+  let shared: SharedSummary | undefined;
   if (others.length > 0) {
-    const clubOwner = new Map<string, string>(), playerOwner = new Map<string, string>(), countryName = new Map<string, string>();
-    for (const o of others) {
-      for (const c of o.clubs) clubOwner.set(c.id, o.manifest.packId);
-      for (const p of o.players) playerOwner.set(p.id, o.manifest.packId);
-      for (const c of o.countries) countryName.set(c.id, c.name);
+    const scan = scanShared(pack, others);
+    listCapped(rb, "error", "policy", "identity_conflict", scan.conflicts, (n) => `${n} ids repetidos em outros pacotes não parecem ser a mesma entidade.`);
+    listCapped(rb, "warning", "policy", "shared_identity_note", scan.notes, (n) => `${n} entidades compartilhadas com observações.`);
+    if (scan.sharedPlayers + scan.sharedClubs > 0) {
+      rb.info("policy", "shared_with_other_pack", "", `${scan.sharedPlayers} jogador(es) e ${scan.sharedClubs} clube(s) já existem em ${scan.withPacks.map((p) => `"${p}"`).join(", ")} e são a mesma entidade (mesmo id); nada é duplicado.`);
+      if (scan.sportingDifferences > 0) rb.info("policy", "shared_sporting_differences", "", `${scan.sportingDifferences} jogador(es) compartilhado(s) têm clube, posição ou força diferentes entre pacotes; vale o pacote de maior precedência.`);
     }
-    for (const c of pack.clubs) { const o = clubOwner.get(c.id); if (o) collisions.push({ path: c.id, message: `Clube ${c.id} também existe no pacote "${o}".` }); }
-    for (const p of pack.players) { const o = playerOwner.get(p.id); if (o) collisions.push({ path: p.id, message: `Jogador ${p.id} também existe no pacote "${o}"; o mesmo id não pode estar em dois pacotes.` }); }
-    listCapped(rb, "error", "policy", "id_collision_other_pack", collisions, (n) => `${n} ids repetidos em outros pacotes instalados.`);
+    shared = { players: scan.sharedPlayers, clubs: scan.sharedClubs, withPacks: scan.withPacks, sportingDifferences: scan.sportingDifferences };
+    const countryName = new Map<string, string>();
+    for (const o of others) for (const c of o.countries) countryName.set(c.id, c.name);
     const conflicts: { path: string; message: string }[] = [];
     for (const c of pack.countries) { const n = countryName.get(c.id); if (n !== undefined && n !== c.name) conflicts.push({ path: c.id, message: `País ${c.id} se chama "${c.name}" aqui e "${n}" em outro pacote.` }); }
     listCapped(rb, "warning", "policy", "country_name_conflict", conflicts, (n) => `${n} países com nome diferente de outro pacote.`);
@@ -234,6 +240,6 @@ export function importDatapack(files: readonly PackFile[], opts: ImportOptions =
     diff = diffPacks(null, pack);
   }
 
-  if (rb.hasErrors) return { ...reject(), duplicates, duplicatesTotal, ...(reconciliation ? { reconciliation } : {}) };
-  return { status, report: rb.build(), pack, ...(diff ? { diff } : {}), duplicates, duplicatesTotal, ...(reconciliation ? { reconciliation } : {}) };
+  if (rb.hasErrors) return { ...reject(), duplicates, duplicatesTotal, ...(reconciliation ? { reconciliation } : {}), ...(shared ? { shared } : {}) };
+  return { status, report: rb.build(), pack, ...(diff ? { diff } : {}), duplicates, duplicatesTotal, ...(reconciliation ? { reconciliation } : {}), ...(shared ? { shared } : {}) };
 }

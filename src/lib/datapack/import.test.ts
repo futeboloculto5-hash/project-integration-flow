@@ -323,17 +323,19 @@ describe('Importação repetida e incremental (loja)', () => {
     expect(r.status).toBe('update');
     expect(codes(r, 'warning')).toContain('previous_version_mismatch');
   });
-  it('pacotes de packIds diferentes convivem; ids repetidos entre eles são recusados', () => {
+  it('pacotes de packIds diferentes convivem; os mesmos ids com as mesmas identidades são compartilhados, não duplicados', () => {
     const store = createPackStore();
     store.importFiles(asFiles(realLike()));
     const other = JSON.parse(JSON.stringify(realLike()).replace(/alfa/g, 'beta').replace(/Alfa/g, 'Beta')) as Datapack;
     expect(store.importFiles(asFiles(other)).status).toBe('new');
     expect(store.list()).toHaveLength(2);
-    const clash = realLike(); clash.manifest.packId = 'pacote-gama';
-    const r = store.importFiles(asFiles(clash));
-    expect(r.status).toBe('rejected');
-    expect(codes(r, 'error')).toContain('id_collision_other_pack');
-    expect(store.list()).toHaveLength(2);
+    const same = realLike(); same.manifest.packId = 'pacote-gama'; // mesmos ids e mesmas pessoas/clubes
+    const r = store.importFiles(asFiles(same));
+    expect(r.status).toBe('new');
+    expect(r.shared).toMatchObject({ players: 30, clubs: 2, withPacks: ['pacote-alfa'] });
+    expect(hasCode(r.report, 'shared_with_other_pack')).toBe(true);
+    expect(store.world().players).toHaveLength(60); // 30 compartilhados contados uma vez + 30 do outro pacote
+    expect(store.list()).toHaveLength(3);
   });
 });
 

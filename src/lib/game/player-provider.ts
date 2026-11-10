@@ -51,7 +51,7 @@ export interface PlayerProvider {
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
 /** Provedor genérico sobre uma lista de jogadores. `hidden` fica fora de listas e buscas, mas continua resolvendo por id (compatibilidade). */
-export function createPlayerProvider(source: string, players: readonly BasePlayer[], hidden: readonly BasePlayer[] = []): PlayerProvider {
+export function createPlayerProvider(source: string, players: readonly BasePlayer[], hidden: readonly BasePlayer[] = [], aliases: ReadonlyMap<string, string> = new Map()): PlayerProvider {
   const byId = new Map<string, BasePlayer>(), clubs = new Map<string, BasePlayer[]>(), positions = new Map<Pos, BasePlayer[]>();
   const list: BasePlayer[] = [], names: string[] = [];
   const index = (p: BasePlayer) => { byId.set(p.id, p); if (p.legacyId && !byId.has(p.legacyId)) byId.set(p.legacyId, p); };
@@ -62,13 +62,14 @@ export function createPlayerProvider(source: string, players: readonly BasePlaye
     (positions.get(p.pos) ?? positions.set(p.pos, []).get(p.pos)!).push(p);
   }
   for (const p of hidden) if (!byId.has(p.id)) index(p);
-  const find = (id: string) => byId.get(id);
+  // `aliases`: id antigo → id canônico (ligações de identidade confirmadas por uma pessoa). Só vale se o id antigo não existir por si.
+  const find = (id: string) => byId.get(id) ?? (aliases.has(id) ? byId.get(aliases.get(id)!) : undefined);
   return {
     source,
     list: () => list,
     find,
     get: (id) => { const p = find(id); if (!p) throw new Error(`Jogador não encontrado: ${id}`); return p; },
-    has: (id) => byId.has(id),
+    has: (id) => find(id) !== undefined,
     resolveId: (id) => find(id)?.id ?? null,
     byClub: (clubId) => clubs.get(clubId) ?? [],
     byPosition: (pos) => positions.get(pos) ?? [],

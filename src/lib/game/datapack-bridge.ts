@@ -2,7 +2,7 @@
 // SOMENTE LEITURA e ainda não usada por nenhuma tela, save ou regra: os jogadores atuais continuam sendo os do jogo até a
 // importação ser validada com um pacote real. Aqui o jogo só empresta seus clubes permanentes para reconciliar e transforma
 // pacotes instalados num PlayerProvider. Nada do que o pacote traz sobre cidade, estádio, cores, caixa ou dívidas chega aos clubes.
-import { createPackStore, gameClubIdOf, type GameClubRef, type ImportResult, type PackFile, type PackStore } from "@/lib/datapack";
+import { createPackStore, type GameClubRef, type ImportResult, type PackFile, type PackStore, type Player } from "@/lib/datapack";
 import { legacyClubs } from "./club-provider";
 import { createPlayerProvider, legacyPlayers, toBasePlayers, type BasePlayer, type PlayerProvider } from "./player-provider";
 
@@ -14,19 +14,25 @@ export function importDatapackForGame(store: PackStore, files: readonly PackFile
   return store.importFiles(files, { gameClubs: gameClubRefs(), ...(opts.allowTestData ? { allowTestData: true } : {}) });
 }
 
-export type WorldPlayers = { active: BasePlayer[]; retired: BasePlayer[] };
+export type WorldPlayers = { active: BasePlayer[]; retired: BasePlayer[]; /** id antigo → id canônico (ligações de identidade confirmadas). */ aliases: Map<string, string> };
 
-/** Jogadores-base dos pacotes instalados. `retired` = os que saíram de versões novas (continuam resolvendo por id). */
+/**
+ * Jogadores-base dos pacotes instalados, já combinados (precedência determinística entre pacotes que compartilham ids).
+ * `retired` = os que saíram de versões novas (continuam resolvendo por id).
+ */
 export function worldPlayersFromStore(store: PackStore, opts: { asOf: string; allowTestData?: boolean }): WorldPlayers {
-  const active: BasePlayer[] = [], retired: BasePlayer[] = [];
-  for (const inst of store.list()) {
-    const m = inst.pack.manifest;
-    if (m.origin === "teste" && !opts.allowTestData) continue; // dado de teste nunca entra no jogo real
-    const clubOf = new Map(inst.pack.clubs.map((c) => [c.id, gameClubIdOf(c)] as const));
-    active.push(...toBasePlayers(inst.pack.players, (id) => clubOf.get(id), m.packId, opts.asOf));
-    for (const r of inst.retired) retired.push(...toBasePlayers([r.player], () => r.lastClubGameId, m.packId, opts.asOf));
+  // dado de teste nunca entra no jogo real
+  const w = store.world((p) => p.pack.manifest.origin !== "teste" || opts.allowTestData === true);
+  const byPack = new Map<string, Player[]>();
+  for (const p of w.players) {
+    const origin = w.playerOrigin.get(p.id)!;
+    const list = byPack.get(origin);
+    if (list) list.push(p); else byPack.set(origin, [p]);
   }
-  return { active, retired };
+  const active: BasePlayer[] = [], retired: BasePlayer[] = [];
+  for (const [packId, list] of byPack) active.push(...toBasePlayers(list, (id) => w.clubGameId.get(id), packId, opts.asOf));
+  for (const r of w.retired) retired.push(...toBasePlayers([r.player], () => r.lastClubGameId, r.packId, opts.asOf));
+  return { active, retired, aliases: w.aliases };
 }
 
 /**
@@ -35,12 +41,12 @@ export function worldPlayersFromStore(store: PackStore, opts: { asOf: string; al
  */
 export function createWorldPlayerProvider(store: PackStore, opts: { asOf: string; allowTestData?: boolean; fallback?: PlayerProvider }): PlayerProvider {
   const fallback = opts.fallback ?? legacyPlayers;
-  const { active, retired } = worldPlayersFromStore(store, opts);
+  const { active, retired, aliases } = worldPlayersFromStore(store, opts);
   const activeIds = new Set(active.map((p) => p.id));
   const covered = new Set(active.map((p) => p.clubId));
   const keep: BasePlayer[] = [], hidden: BasePlayer[] = [...retired];
   for (const p of fallback.list()) (covered.has(p.clubId) || activeIds.has(p.id) ? hidden : keep).push(p);
-  return createPlayerProvider(`mundo+${fallback.source}`, [...active, ...keep], hidden);
+  return createPlayerProvider(`mundo+${fallback.source}`, [...active, ...keep], hidden, aliases);
 }
 
 export { createPackStore };

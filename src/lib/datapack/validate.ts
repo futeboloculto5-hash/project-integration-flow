@@ -65,7 +65,7 @@ const KEYS = {
   competition: ["id", "name", "countryId", "kind", "tier", "legacyDivision", "externalIds", "dataStatus"],
   edition: ["competitionId", "season", "clubIds", "dataStatus"],
   club: ["id", "name", "short", "countryId", "city", "stadium", "colors", "rating", "legacyId", "aliases", "externalIds", "dataStatus"],
-  player: ["id", "name", "birthDate", "age", "nationalityId", "position", "secondaryPositions", "clubId", "overall", "potential", "attributes", "value", "contract", "externalIds", "dataStatus"],
+  player: ["id", "legacyId", "name", "birthDate", "age", "nationalityId", "position", "secondaryPositions", "clubId", "overall", "potential", "attributes", "value", "contract", "externalIds", "dataStatus"],
   root: ["manifest", "countries", "competitions", "editions", "clubs", "players"],
 } as const;
 
@@ -194,12 +194,17 @@ export function validateDatapack(input: unknown): ValidationResult {
     });
 
     // ----- jogadores -----
-    const playerIds = new Set<string>(), sameBody = new Map<string, string>();
+    const playerIds = new Set<string>(), sameBody = new Map<string, string>(), playerLegacy = new Map<string, string>();
     arrays.players.forEach((pl, i) => {
       const p = `players[${i}]`;
       if (!isObj(pl)) { r.error("bad_record", p, "Registro inválido."); return; }
       unknownKeys(r, pl, KEYS.player, p); checkId(r, "plr", pl, p, playerIds); checkName(r, pl, p); checkStatus(r, pl, p); checkExternalIds(r, pl, p);
       const id = typeof pl["id"] === "string" ? pl["id"] : p;
+      if (pl["legacyId"] !== undefined) {
+        if (!isStr(pl["legacyId"], 64)) r.error("bad_name", `${p}.legacyId`, "legacyId inválido.");
+        else if (playerLegacy.has(pl["legacyId"])) r.error("duplicate_legacy_id", `${p}.legacyId`, `legacyId "${pl["legacyId"]}" já usado por ${playerLegacy.get(pl["legacyId"])}.`);
+        else playerLegacy.set(pl["legacyId"], id);
+      }
       const posOk = (POSITIONS as readonly string[]).includes(pl["position"] as string);
       if (!posOk) r.error("bad_position", `${p}.position`, `position deve ser um de: ${POSITIONS.join(", ")}.`);
       if (pl["secondaryPositions"] !== undefined) {

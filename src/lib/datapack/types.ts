@@ -94,6 +94,8 @@ export type Contract = { until: string; wage?: number };
 
 export type Player = {
   id: PlayerId;
+  /** Id que este jogador tem hoje no jogo (ex.: "flamengo-s1-3"), para saves antigos e para pacotes que espelham os dados atuais. Opcional; pacotes reais normalmente não têm. */
+  legacyId?: string;
   name: string;
   /** Data de nascimento (aaaa-mm-dd) quando conhecida; sem ela, `age` pode informar a idade. */
   birthDate?: string;

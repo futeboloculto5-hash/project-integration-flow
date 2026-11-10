@@ -8,6 +8,9 @@ export { readNativeBundle, readFileList, parseJsonFile, BUNDLE_LIMITS, type Pack
 export { nativeAdapter, createAdapterRegistry, defaultAdapters, defaultRegistry, type DatapackAdapter, type AdapterRegistry } from "./adapters";
 export * from "./identity";
 export * from "./diff";
-export { importDatapack, findTestMarkers, POLICY, type ImportOptions, type ImportResult, type ImportStatus, type GameClubRef, type ClubReconciliation } from "./import";
-export { createPackStore, gameClubIdOf, type PackStore, type InstalledPack, type RetiredPlayer } from "./store";
+export { importDatapack, findTestMarkers, POLICY, type ImportOptions, type ImportResult, type ImportStatus, type GameClubRef, type ClubReconciliation, type SharedSummary } from "./import";
+export { createPackStore, gameClubIdOf, type PackStore, type InstalledPack, type RetiredPlayer, type StoreImportOptions } from "./store";
+export * from "./shared";
+export * from "./identity-ledger";
+export { resolveWorld, precedenceOrder, type WorldView, type WorldPack, type Provenance, type Difference } from "./world";
 export { sliceByCountry, sliceByCompetition, catalogByCountry, type SliceSelector, type PackCatalogEntry } from "./slice";

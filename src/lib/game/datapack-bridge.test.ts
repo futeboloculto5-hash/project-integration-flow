@@ -111,6 +111,41 @@ describe('Ponte do datapack · compatibilidade com o PlayerProvider', () => {
   });
 });
 
+describe('Ponte do datapack · identidade entre pacotes', () => {
+  it('pacotes de dois clubes do jogo, com um jogador compartilhado, entram sem duplicar e com a precedência certa', () => {
+    const a = packForGame('1.0.0'); a.manifest.packId = 'pacote-fla';
+    const b = packForGame('1.0.0'); b.manifest.packId = 'pacote-pal';
+    const palId = a.clubs[1]!.id; a.clubs = [a.clubs[0]!]; a.players = a.players.filter((p) => p.clubId !== palId); // a só cobre o Flamengo
+    a.editions[0]!.clubIds = [a.clubs[0]!.id]; a.manifest.counts = { countries: 1, competitions: 1, clubs: 1, players: a.players.length, editions: 1 };
+    // b só cobre o Palmeiras e leva o jogador 1 do Flamengo emprestado, com o mesmo id e a mesma identidade
+    b.clubs = [b.clubs[1]!]; b.players = b.players.filter((p) => p.clubId === b.clubs[0]!.id);
+    const shared = JSON.parse(JSON.stringify(a.players[0]!)); // jogador do Flamengo
+    shared.clubId = b.clubs[0]!.id; b.players.push(shared);
+    b.editions[0]!.clubIds = [b.clubs[0]!.id]; b.manifest.counts = { countries: 1, competitions: 1, clubs: 1, players: b.players.length, editions: 1 };
+    const store = createPackStore();
+    expect(importDatapackForGame(store, files(a), { allowTestData: true }).report.errors).toBe(0);
+    const r = importDatapackForGame(store, files(b), { allowTestData: true });
+    expect(r.report.errors).toBe(0);
+    expect(r.shared?.players).toBe(1);
+    const world = createWorldPlayerProvider(store, { asOf: ASOF, allowTestData: true });
+    expect(world.list().filter((p) => p.id === shared.id)).toHaveLength(1);
+    expect(world.get(shared.id).clubId).toBe('flamengo'); // empate de prioridade e data: vence o packId "pacote-fla"
+    store.setPriority('pacote-pal', 3);
+    expect(createWorldPlayerProvider(store, { asOf: ASOF, allowTestData: true }).get(shared.id).clubId).toBe('palmeiras');
+  });
+  it('ligação confirmada faz o id antigo resolver para o jogador canônico no provedor', () => {
+    const v1 = packForGame('1.0.0'); const v2 = packForGame('1.1.0');
+    const oldId = v1.players[0]!.id; v2.players[0]!.id = 'plr:ponte-renomeado-1';
+    const store = createPackStore();
+    importDatapackForGame(store, files(v1), { allowTestData: true }); importDatapackForGame(store, files(v2), { allowTestData: true });
+    expect(store.link(oldId, 'plr:ponte-renomeado-1', 'o pacote trocou o id').ok).toBe(true);
+    const world = createWorldPlayerProvider(store, { asOf: ASOF, allowTestData: true });
+    expect(world.find(oldId)?.id).toBe('plr:ponte-renomeado-1');
+    expect(world.resolveId(oldId)).toBe('plr:ponte-renomeado-1');
+    expect(world.list().some((p) => p.id === oldId)).toBe(false);
+  });
+});
+
 describe('Ponte do datapack · compatibilidade com o career-codec', () => {
   const rounds = (c: CareerV2, n: number) => { for (let i = 0; i < n; i++) { c = advanceToMatch(c); if (!nextFixture(c)) break; c = completeRound(c, 1, 0, undefined, '2026-11-08'); } return c; };
   it('reabre sem perda um save compactado com o provedor do mundo importado', () => {
