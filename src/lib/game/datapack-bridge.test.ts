@@ -185,7 +185,10 @@ describe('Ponte do datapack · o jogo ainda não usa a importação', () => {
     const walk = (dir: string) => { for (const e of readdirSync(dir, { withFileTypes: true })) { const p = resolve(dir, e.name); if (e.isDirectory()) walk(p); else if (/\.tsx?$/.test(e.name)) files.push(p); } };
     walk(root);
     const uses = /datapack-bridge|datapack\/(import|store|slice|bundle|adapters|diff|identity|report|fixtures)|from ["']@\/lib\/datapack["']/;
-    const offenders = files.filter((f) => !/\.test\.tsx?$/.test(f) && !/lib\/datapack\//.test(f) && !/lib\/game\/datapack-bridge\.ts$/.test(f) && uses.test(readFileSync(f, 'utf8')));
+    const offenders = files.filter((f) => !/\.test\.tsx?$/.test(f) && !/lib\/datapack\//.test(f) && !/lib\/game\/datapack-bridge\.ts$/.test(f) && !/components\/game\/datapack-admin-view\.tsx$/.test(f) && uses.test(readFileSync(f, 'utf8')));
     expect(offenders.map((f) => f.replace(root, 'src'))).toEqual([]);
+    // a tela administrativa isolada também não está ligada a nada
+    const wired = files.filter((f) => !/\.test\.tsx?$/.test(f) && !/datapack-admin-view\.tsx$/.test(f) && /datapack-admin-view/.test(readFileSync(f, 'utf8')));
+    expect(wired.map((f) => f.replace(root, 'src'))).toEqual([]);
   });
 });
