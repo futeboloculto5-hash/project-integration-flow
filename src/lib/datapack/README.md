@@ -64,3 +64,16 @@ Nada do jogo usa isto ainda (há um teste que garante). Os jogadores atuais cont
 **Medição** (51 mil jogadores, 1.500 clubes, 60 países, arquivo de 11 MB): ler+validar+importar ≈ 0,3 s; atualização de 10% dos jogadores ≈ 0,8 s; catálogo por país 6 ms; fatia de um país 3 ms; `PlayerProvider` de 51 mil ≈ 75 ms. Nenhuma otimização complexa foi necessária.
 
 **Como importar um pacote real no futuro:** (1) ter a amostra real e a autorização de uso; (2) escrever um adaptador novo (`DatapackAdapter`) só para esse formato, testado com a amostra, que entrega o contrato interno e registra a fonte e a licença no manifesto; (3) `importDatapackForGame(store, arquivos)` e ler o relatório; (4) só depois decidir ligar o provedor do mundo ao jogo.
+
+## Etapa 7: administração de datapacks (fase 4)
+Componentes isolados, ainda **não ligados a nenhuma tela**:
+- `src/lib/datapack/admin-model.ts` — funções puras que transformam a loja e o relatório de importação em dados de tela: `adminSnapshot(store)`, `summarizePack`, `summarizeImport(result, versãoAnterior)`, `checkForUpdates(store, catálogo)`.
+- `src/components/game/datapack-admin-view.tsx` — `DatapackAdminView` (tela completa), `PackDetailView`, `ImportReportView`, `UpdatesView`. Só recebem dados e chamam callbacks; usam apenas classes `g-*` que o jogo já tem (um teste confere), então seguem a identidade azul atual.
+- Mostram: pacotes instalados, país, temporada, versão, quantidade de clubes e jogadores, competições, origem e licença, erros e avisos, e jogadores adicionados, alterados, transferidos e removidos. Pacote de teste aparece com aviso.
+
+**Como conectar (etapa 8, depois de decidir onde guardar os pacotes):**
+1. Criar um contêiner (ex.: `datapack-admin.tsx`) que guarda um `PackStore` e o último `ImportSummary`.
+2. `onPickFiles`: `readFileList(arquivos)` → `importDatapackForGame(store, arquivos)` → `summarizeImport(resultado, versão anterior)` → atualizar `adminSnapshot(store)`.
+3. `onCheckUpdates`: buscar o catálogo de versões numa fonte definida pelo dono do jogo e chamar `checkForUpdates`. O componente não faz acesso à rede.
+4. Acrescentar uma entrada de navegação (ex.: dentro de "Clube") que renderize o contêiner. Nenhuma tela existente precisa ser reescrita.
+5. Persistir pacotes e livro de identidade (hoje só em memória) antes de liberar para usuários.

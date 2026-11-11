@@ -14,3 +14,4 @@ export * from "./shared";
 export * from "./identity-ledger";
 export { resolveWorld, precedenceOrder, type WorldView, type WorldPack, type Provenance, type Difference } from "./world";
 export { sliceByCountry, sliceByCompetition, catalogByCountry, type SliceSelector, type PackCatalogEntry } from "./slice";
+export { summarizePack, adminSnapshot, checkForUpdates, summarizeImport, ORIGIN_LABEL, STATUS_LABEL, type PackSummary, type AdminSnapshot, type UpdateInfo, type AvailablePack, type ImportSummary, type PlayerChange, type CompetitionInfo } from "./admin-model";

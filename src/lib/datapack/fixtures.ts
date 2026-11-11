@@ -36,7 +36,9 @@ export function syntheticSquadPack(opts: { clubs: string[]; version?: string; sq
   const pad = (n: number) => String(n).padStart(2, "0");
   const clubs: Datapack["clubs"] = opts.clubs.map((legacyId) => ({ id: `club:sint-${legacyId}` as const, name: `Clube Sintético ${legacyId}`, countryId: country, legacyId, dataStatus: "simulado" as const }));
   const players: Datapack["players"] = [];
-  opts.clubs.forEach((legacyId, ci) => {
+  opts.clubs.forEach((legacyId) => {
+    // derivado do nome do clube (não da posição na lista): o mesmo clube tem os mesmos jogadores em pacotes diferentes
+    const ci = [...legacyId].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) % 1000, 7);
     for (let i = 0; i < squadN; i++) {
       players.push({ id: `plr:sint-${legacyId}-${pad(i + 1)}` as const, name: `Atleta Sintético ${legacyId} ${pad(i + 1)}`, position: POS[i % POS.length]!, clubId: `club:sint-${legacyId}`,
         overall: Math.min(95, 58 + ((ci * 3 + i * 7) % 24) + bump), age: 19 + ((i * 5 + ci) % 16), dataStatus: "simulado" });
