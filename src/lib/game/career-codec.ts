@@ -16,7 +16,8 @@
 // LIMITAÇÃO: um save no formato 2 aberto por uma versão do jogo SEM este codec perde as mudanças dos elencos da IA
 // (a versão antiga os regeneraria pela fórmula). Saves clássicos continuam abrindo em qualquer versão.
 import type { CareerV2, Player } from "./career";
-import { legacyPlayers, type PlayerProvider } from "./player-provider";
+import type { PlayerProvider } from "./player-provider";
+import { activePlayers } from "./player-source";
 import { compactVerified, expandPlayer, type PlayerEntry } from "./player-overlay";
 import { toGamePlayer } from "./player-provider";
 
@@ -38,7 +39,7 @@ export const isEncoded = (c: unknown): c is EncodedCareer =>
 // ---------- assinatura da base ----------
 // Se a fórmula ou as listas de nomes mudarem, a assinatura muda e saves compactos deixam de abrir (em vez de trocar jogadores em silêncio).
 const fingerprints = new WeakMap<PlayerProvider, string>();
-export function baseFingerprint(provider: PlayerProvider = legacyPlayers): string {
+export function baseFingerprint(provider: PlayerProvider = activePlayers()): string {
   const cached = fingerprints.get(provider);
   if (cached) return cached;
   let a = 0x811c9dc5, b = 0x01000193 ^ 0x5bd1e995;
@@ -56,7 +57,7 @@ export function baseFingerprint(provider: PlayerProvider = legacyPlayers): strin
  * Compacta os elencos dos outros clubes. Devolve o MESMO objeto se não houver o que compactar.
  * Não altera a carreira recebida. Cada jogador só é compactado se a reconstrução for exata.
  */
-export function encodeCareer(c: StoredCareer, provider: PlayerProvider = legacyPlayers, opts: { baseRef?: BaseRef } = {}): StoredCareer {
+export function encodeCareer(c: StoredCareer, provider: PlayerProvider = activePlayers(), opts: { baseRef?: BaseRef } = {}): StoredCareer {
   if (isEncoded(c)) return c;
   const squads = c.otherSquads;
   if (!squads || Object.keys(squads).length === 0) return c;
@@ -97,7 +98,7 @@ export type RebaseReport = {
 const emptyReport = (): RebaseReport => ({ rebased: false, squads: 0, players: 0, embedded: 0, onRetiredBase: 0, careerOwnedFields: {}, unplacedBasePlayers: 0 });
 
 /** Reconstrói a carreira completa e descreve o que encontrou. Formato clássico passa direto (mesmo objeto). Erros NÃO apagam nada: quem chama mostra a falha. */
-export function decodeCareerWithReport(raw: StoredCareer, provider: PlayerProvider = legacyPlayers, opts: DecodeOptions = {}): { career: CareerV2; report: RebaseReport } {
+export function decodeCareerWithReport(raw: StoredCareer, provider: PlayerProvider = activePlayers(), opts: DecodeOptions = {}): { career: CareerV2; report: RebaseReport } {
   if (!isEncoded(raw)) {
     const f = (raw as unknown as { saveFormat?: unknown }).saveFormat;
     if (f !== undefined) throw new CodecError("unsupported_format", `Formato de save desconhecido: ${String(f)}. Atualize o jogo para abrir esta carreira.`);
@@ -139,7 +140,7 @@ export function decodeCareerWithReport(raw: StoredCareer, provider: PlayerProvid
 }
 
 /** Compatível com o uso antigo: devolve só a carreira. */
-export function decodeCareer(raw: StoredCareer, provider: PlayerProvider = legacyPlayers, opts: DecodeOptions = {}): CareerV2 {
+export function decodeCareer(raw: StoredCareer, provider: PlayerProvider = activePlayers(), opts: DecodeOptions = {}): CareerV2 {
   return decodeCareerWithReport(raw, provider, opts).career;
 }
 

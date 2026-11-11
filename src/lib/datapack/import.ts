@@ -11,6 +11,7 @@ import { buildIdentityIndex, findDuplicateCandidates, findInternalDuplicates, ty
 import { ReportBuilder, type ImportReport } from "./report";
 import { compareSemver } from "./version";
 import type { Club, Datapack, Player } from "./types";
+import { positionToLegacy } from "./positions";
 import { validateDatapack } from "./validate";
 
 /** Clube permanente do jogo (só o necessário para reconciliar; o importador nunca altera estes dados). */
@@ -159,6 +160,23 @@ export function importDatapack(files: readonly PackFile[], opts: ImportOptions =
     else if (n < POLICY.minSquad || n > POLICY.maxSquad) odd.push({ path: c.id, message: `Clube ${c.id} tem ${n} jogadores (esperado entre ${POLICY.minSquad} e ${POLICY.maxSquad}).` });
   }
   listCapped(rb, "warning", "policy", "squad_size_out_of_range", odd, (n) => `${n} clubes com elenco fora de ${POLICY.minSquad}–${POLICY.maxSquad} jogadores.`);
+  // composição para escalar um time (1 goleiro, 4 defensores, 3 meias, 3 atacantes): o motor aceita menos, mas fica fraco
+  const need = { GOL: 1, DEF: 4, MEI: 3, ATA: 3 } as const;
+  const byClubPos = new Map<string, Record<"GOL" | "DEF" | "MEI" | "ATA", number>>();
+  for (const p of pack.players) {
+    if (!p.clubId) continue;
+    const row = byClubPos.get(p.clubId) ?? { GOL: 0, DEF: 0, MEI: 0, ATA: 0 };
+    row[positionToLegacy(p.position)]++;
+    byClubPos.set(p.clubId, row);
+  }
+  const gaps: { path: string; message: string }[] = [];
+  for (const c of pack.clubs) {
+    const row = byClubPos.get(c.id);
+    if (!row || (perClub.get(c.id) ?? 0) < POLICY.minSquad) continue; // elencos pequenos já foram apontados acima
+    const lacking = (Object.keys(need) as (keyof typeof need)[]).filter((k) => row[k] < need[k]).map((k) => `${k} ${row[k]}/${need[k]}`);
+    if (lacking.length > 0) gaps.push({ path: c.id, message: `Clube ${c.id} não tem jogadores para escalar um time completo (${lacking.join(", ")}).` });
+  }
+  listCapped(rb, "warning", "policy", "squad_position_gap", gaps, (n) => `${n} clubes sem jogadores suficientes em alguma posição para escalar um time.`);
   if (empty > 0) rb.info("policy", "club_without_players", "", `${empty} clube(s) sem jogadores no pacote.`);
   if (free > 0) rb.info("policy", "free_agents", "", `${free} jogador(es) sem clube (agentes livres).`);
 

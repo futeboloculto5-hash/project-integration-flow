@@ -1,6 +1,7 @@
 import { KIT_BRANDS } from "./clubs";
 import { legacyClubs } from "./club-provider";
-import { legacyPlayers, toGamePlayer } from "./player-provider";
+import { toGamePlayer } from "./player-provider";
+import { activePlayers } from "./player-source";
 import { brDay, trackMatch } from "./bux";
 import { processMarketDay, transferPlayer, type WorldClub, type Negotiation, type Loan, type TransferRecord } from './transfers';
 import { amortize, book, createFinance, finance, ledgerWeek, processFinanceDay, type FinanceState } from './finance';
@@ -165,7 +166,7 @@ export const teamRating = (squad: Player[], formation?: CareerV2["formation"]) =
 
 /** Elenco-base de um clube: vem do provedor de jogadores (mesmos jogadores que a fórmula gera). Clube sem base cai na fórmula, como antes. */
 function baseSquad(clubId: string): Player[] {
-  const base = legacyPlayers.byClub(clubId);
+  const base = activePlayers().byClub(clubId);
   return base.length ? base.map(toGamePlayer) : generateSquad(clubId, legacyClubs.get(clubId).rating);
 }
 export function aiSquad(career: CareerV2, clubId: string) {
@@ -204,6 +205,12 @@ export function refreshMarket(career: CareerV2, date: string): Player[] {
   for (const club of career.worldClubs ?? []) {
     if (legacyClubs.list().some(x => x.id === club.id)) continue;
     pool.push(...(career.otherSquads?.[club.id] ?? []).filter(p => !career.loans?.some(l => l.playerId === p.id)));
+  }
+  // agentes livres de um mundo importado (o provedor atual do jogo não tem nenhum: nada muda e o sorteio não é tocado)
+  const worldFree = activePlayers().byClub("livre");
+  if (worldFree.length > 0) {
+    const picks = [...worldFree];
+    for (let i = 0; i < Math.min(8, picks.length); i++) pool.push(toGamePlayer(picks.splice(Math.floor(r() * picks.length), 1)[0]!));
   }
   // free agents
   for (let i = 0; i < 6; i++) {

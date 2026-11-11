@@ -23,3 +23,35 @@ export function testPack(opts: { clubs?: number; playersPerClub?: number } = {})
     clubs, players,
   };
 }
+
+/**
+ * Pacote SINTÉTICO que cobre clubes do jogo (por legacyId) com elencos completos inventados — usado para provar que os sistemas do jogo
+ * funcionam com jogadores importados. Declara-se "comunitario" só para passar pela política de pacotes reais; a fonte diz que é gerador de testes.
+ * Nenhum nome, clube ou número aqui representa dado real.
+ */
+export function syntheticSquadPack(opts: { clubs: string[]; version?: string; squad?: number; free?: number; packId?: string; bump?: number } = { clubs: [] }): Datapack {
+  const squadN = opts.squad ?? 26, freeN = opts.free ?? 6, bump = opts.bump ?? 0;
+  const POS = ["GK", "GK", "GK", "CB", "CB", "CB", "CB", "LB", "RB", "LB", "RB", "DM", "CM", "CM", "CM", "AM", "AM", "LM", "RM", "LW", "RW", "ST", "ST", "CF", "ST", "CF", "CB", "CM"] as const;
+  const country = "ctry:sint-brasil" as const;
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const clubs: Datapack["clubs"] = opts.clubs.map((legacyId) => ({ id: `club:sint-${legacyId}` as const, name: `Clube Sintético ${legacyId}`, countryId: country, legacyId, dataStatus: "simulado" as const }));
+  const players: Datapack["players"] = [];
+  opts.clubs.forEach((legacyId, ci) => {
+    for (let i = 0; i < squadN; i++) {
+      players.push({ id: `plr:sint-${legacyId}-${pad(i + 1)}` as const, name: `Atleta Sintético ${legacyId} ${pad(i + 1)}`, position: POS[i % POS.length]!, clubId: `club:sint-${legacyId}`,
+        overall: Math.min(95, 58 + ((ci * 3 + i * 7) % 24) + bump), age: 19 + ((i * 5 + ci) % 16), dataStatus: "simulado" });
+    }
+  });
+  for (let i = 0; i < freeN; i++) players.push({ id: `plr:sint-livre-${pad(i + 1)}` as const, name: `Atleta Sintético Livre ${pad(i + 1)}`, position: POS[(i * 3) % POS.length]!, overall: 55 + i * 2 + bump, age: 24 + i, dataStatus: "simulado" });
+  return {
+    manifest: {
+      schema: "ccw.datapack", schemaVersion: 1, packId: opts.packId ?? "pacote-sintetico", version: opts.version ?? "1.0.0", name: "Pacote sintético de integração",
+      createdAt: "2026-11-10", origin: "comunitario", source: { name: "Gerador sintético dos testes (não são dados reais)", license: "Uso interno de testes" },
+      counts: { countries: 1, competitions: 1, clubs: clubs.length, players: players.length, editions: 1 },
+    },
+    countries: [{ id: country, name: "País Sintético", confederation: "CONMEBOL", dataStatus: "simulado" }],
+    competitions: [{ id: "comp:sint-liga", name: "Liga Sintética", countryId: country, kind: "league", tier: 1, dataStatus: "simulado" }],
+    editions: [{ competitionId: "comp:sint-liga", season: "2026", clubIds: clubs.map((c) => c.id), dataStatus: "simulado" }],
+    clubs, players,
+  };
+}

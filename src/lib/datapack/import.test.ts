@@ -424,3 +424,19 @@ describe('Desempenho defensivo', () => {
     expect(codes(r, 'warning')).toContain('duplicate_scan_skipped');
   });
 });
+
+describe('Importação · composição do elenco (escalação)', () => {
+  it('avisa quando um clube não tem goleiro ou posições para montar um time', () => {
+    const p = realLike({ clubs: 2, playersPerClub: 20 });
+    for (const x of p.players) if (x.clubId === 'club:alfa-001') x.position = 'CM'; // sem goleiro nem defensores
+    const r = importDatapack(asFiles(p));
+    expect(r.report.ok).toBe(true);
+    const gap = r.report.issues.find((i) => i.code === 'squad_position_gap');
+    expect(gap?.path).toBe('club:alfa-001');
+    expect(gap?.message).toContain('GOL 0/1');
+    expect(r.report.issues.filter((i) => i.code === 'squad_position_gap')).toHaveLength(1); // o outro clube está completo
+  });
+  it('elenco completo não gera o aviso', () => {
+    expect(codes(importDatapack(asFiles(realLike({ clubs: 2, playersPerClub: 20 }))), 'warning')).not.toContain('squad_position_gap');
+  });
+});

@@ -145,7 +145,7 @@ export function toBasePlayers(players: readonly PackPlayer[], clubOf: (id: ClubI
     const finalAge = known ? age : 24, rating = p.overall;
     const api = p.externalIds?.["apiFootball"];
     return {
-      id: p.id, name: p.name, pos: positionToLegacy(p.position), age: finalAge, rating,
+      id: p.id, ...(p.legacyId !== undefined ? { legacyId: p.legacyId } : {}), name: p.name, pos: positionToLegacy(p.position), age: finalAge, rating,
       value: p.value ?? playerValue(rating, finalAge), wage: p.contract?.wage ?? playerWage(rating),
       clubId: p.clubId ? (clubOf(p.clubId) ?? p.clubId) : "livre", origin,
       ...(known ? {} : { ageUnknown: true }),
