@@ -77,3 +77,22 @@ Componentes isolados, ainda **não ligados a nenhuma tela**:
 3. `onCheckUpdates`: buscar o catálogo de versões numa fonte definida pelo dono do jogo e chamar `checkForUpdates`. O componente não faz acesso à rede.
 4. Acrescentar uma entrada de navegação (ex.: dentro de "Clube") que renderize o contêiner. Nenhuma tela existente precisa ser reescrita.
 5. Persistir pacotes e livro de identidade (hoje só em memória) antes de liberar para usuários.
+
+## Etapa 7: identidade entre pacotes, versões e saves, integração (fases 1–3 e 5)
+**Identidade global (fase 1).** O id estável (`plr:…`, `club:…`) é GLOBAL: o mesmo id em dois pacotes significa "é o mesmo". Isso só é aceito se os registros forem compatíveis (`shared.ts`): nada se contradiz e o nome é igual (ou há dado que corrobora). Qualquer dúvida é `identity_conflict` e o pacote é rejeitado. Pacotes por país, região ou liga podem repetir um clube ou jogador sem duplicá-lo. A visão efetiva (`world.ts`, `store.world()`) combina os pacotes com precedência determinística, que não depende da ordem de instalação: prioridade, depois data de criação, depois packId. O livro de identidade (`identity-ledger.ts`) guarda o histórico (quem trouxe cada id e quais nomes já teve) e só aceita ligações entre ids confirmadas por uma pessoa (`store.link(from, to, nota)`). **Nada é unido por nome**; nome parecido com id diferente continua sendo só candidato no relatório.
+
+**Versões e saves (fase 2).** O padrão não mudou: um save compactado só abre com a base de jogadores para a qual foi gravado (`base_changed` se mudou; nada é alterado). Com `decodeCareer(raw, provider, { rebase: true })` o save reabre depois de uma atualização de datapack: o que a carreira alterou **fica** (evolução preservada), o que ela nunca tocou adota a base nova, o clube do jogador e o id salvos nunca são trocados, e quem saiu do pacote continua resolvendo (aposentados). `decodeCareerWithReport` descreve o que aconteceria sem gravar nada. O formato do save **não foi alterado** (só um campo opcional `baseRef`); saves antigos e clássicos abrem como antes.
+
+**Integração gradual (fase 3).** `src/lib/game/player-source.ts` define a fonte ativa de jogadores. O padrão é o jogo atual; `usePlayerProvider(createWorldPlayerProvider(...))` ativa um mundo importado, que só manda nos clubes que cobre. Carreira, elencos da IA, mercado (inclui agentes livres do pacote), compra e venda, empréstimos, contratos, temporada, evolução, histórico e salvamento foram exercitados com jogadores importados em `world-integration.test.ts` (dados sintéticos). Nada na interface ativa isso ainda. A importação avisa quando um clube não tem jogadores para escalar um time (`squad_position_gap`).
+
+**Testes de regressão.** Com os mesmos dados, o resultado é idêntico ao anterior: a comparação golden de 146 cenários (carreiras novas, rodadas, temporadas) é idêntica ao original, e há teste de que ativar e desativar um mundo deixa a carreira nova igual.
+
+**Limitações restantes.**
+- Pacotes instalados, livro de identidade e prioridades vivem só em memória: falta persistência (decidir onde guardar).
+- Ativar um mundo importado ainda não está ligado a nenhuma tela, e o save compactado não grava sozinho quais pacotes usou (`baseRef` é opcional).
+- Jogadores novos de uma atualização de datapack não entram sozinhos numa carreira em andamento (nenhum é inserido; o relatório só informa quantos há).
+- O motor de partida ao vivo e a interface não foram exercitados num navegador; só a lógica (`completeRound`, escalação, tabela).
+- Não há adaptador para nenhum formato de terceiros: falta uma amostra real e a autorização de uso.
+- Type-check, lint e build não puderam ser rodados neste ambiente.
+
+**Para importar o datapack real:** receber a amostra e a licença; inspecionar a estrutura e os relacionamentos; escrever o adaptador (ou o site de vocês exportar já em `ccw.datapack` v1); testar a conversão; gerar o relatório; só então persistir e ativar o mundo.
