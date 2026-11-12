@@ -20,6 +20,7 @@ describe('filtro do catálogo (masculino, adulto, estaduais só 1ª divisão)', 
     expect(kept('Brazil', 'Brasileiro U17')).toBe('Brasileirão Sub-17');
     expect(kept('Brazil', 'Copa do Brasil U20')).toBe('Copa do Brasil Sub-20');
     expect(kept('Brazil', 'Brasileiro de Aspirantes')).toBe('Brasileirão de Aspirantes');
+    expect(kept('Brazil', 'São Paulo Youth Cup')).toBe('Copa São Paulo de Futebol Júnior');
     expect(kept('Brazil', 'Paulista - U20')).toMatch(/^X:/);
     expect(kept('Brazil', 'Brasileiro Women')).toMatch(/^X:/);
   });

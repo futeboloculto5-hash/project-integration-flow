@@ -15,6 +15,8 @@ const BR_NATIONAL: Readonly<Record<string, string>> = {
   // categorias de base nacionais do Brasileirão e da Copa do Brasil (pedido do dono do projeto)
   "Brasileiro U20 A": "Brasileirão Sub-20", "Brasileiro U20 B": "Brasileirão Sub-20 Série B", "Brasileiro U17": "Brasileirão Sub-17",
   "Copa do Brasil U20": "Copa do Brasil Sub-20", "Copa do Brasil U17": "Copa do Brasil Sub-17", "Brasileiro de Aspirantes": "Brasileirão de Aspirantes",
+  // a API chama a Copinha de "São Paulo Youth Cup" (id 618; disputada de 2 a 25 de janeiro todo ano)
+  "São Paulo Youth Cup": "Copa São Paulo de Futebol Júnior",
 };
 /** Estaduais: só a 1ª divisão. Aceita "Nome", "Nome - 1" e "Paulista - A1". */
 const BR_STATE_FIRST = /^(Acreano|Alagoano|Amapaense|Amazonense|Baiano|Brasiliense|Capixaba|Carioca|Catarinense|Cearense|Gaúcho|Goiano|Maranhense|Matogrossense|Mineiro|Paraense|Paraibano|Paranaense|Pernambucano|Piauiense|Potiguar|Rondoniense|Roraimense|Sergipano|Sul-Matogrossense|Tocantinense|Paulista)(?: - (?:1|A1))?$/;
