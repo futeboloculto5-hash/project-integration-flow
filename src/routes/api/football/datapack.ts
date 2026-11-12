@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { footballRead, footballFailure } from "@/lib/football-api.server";
 import { importLeague } from "@/lib/datapack/api-football";
+import { fetchCatalog } from "@/lib/datapack/api-football-catalog";
 
 // Rota ADMINISTRATIVA e isolada: gera um datapack de uma liga a partir do API-Football, respeitando um teto de chamadas.
 // Fica desligada (404) enquanto o segredo DATAPACK_ADMIN_TOKEN não existir. Não grava nada no jogo nem em saves:
 // devolve o JSON do pacote para ser revisado e importado depois. Chamadas em cache não gastam orçamento.
+// Catálogo: GET /api/football/datapack?mode=catalog   (países e competições; 2 chamadas)
 // Uso: GET /api/football/datapack?league=71&season=2023&maxCalls=30   com o cabeçalho  x-admin-token: <segredo>
 
 const safeEqual = (a: string, b: string) => {
@@ -24,6 +26,14 @@ async function GET(request: Request) {
   if (!token) return new Response("Not found", { status: 404 });
   if (!safeEqual(request.headers.get("x-admin-token") ?? "", token)) return Response.json({ error: "Não autorizado." }, { status: 401 });
   const q = new URL(request.url).searchParams;
+  if (q.get("mode") === "catalog") {
+    // Catálogo de países e competições: 2 chamadas no total. `countries=Brazil,Colombia` filtra a resposta (opcional).
+    try {
+      const only = (q.get("countries") ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+      const r = await fetchCatalog(async (path, params) => { const x = await footballRead(path, params, 24 * 14); return { payload: x.payload, cached: x.cached }; }, only);
+      return Response.json(r, { headers: { "cache-control": "no-store" } });
+    } catch (error) { return footballFailure(error); }
+  }
   const league = int(q.get("league"), 1, 99999), season = int(q.get("season"), 1990, 2100);
   const maxCalls = int(q.get("maxCalls") ?? "30", 1, 60);
   if (!league || !season || !maxCalls) return Response.json({ error: "Parâmetros: league, season (aaaa) e maxCalls (1 a 60, padrão 30)." }, { status: 400 });
