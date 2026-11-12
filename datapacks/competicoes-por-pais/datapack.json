@@ -3,7 +3,7 @@
   "schema": "ccw.datapack",
   "schemaVersion": 1,
   "packId": "competicoes-por-pais",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "Competições por país (somente nomes)",
   "createdAt": "2026-11-11",
   "origin": "comunitario",
@@ -13,12 +13,13 @@
   },
   "counts": {
    "countries": 28,
-   "competitions": 82,
+   "competitions": 86,
    "clubs": 0,
    "players": 0,
    "editions": 0
   },
-  "notes": "Só entram competições cujo país é inequívoco. 12 nomes ambíguos ficaram de fora até serem confirmados (ver LEIAME.md). Sem clubes, jogadores nem edições: eles virão de outra fonte."
+  "notes": "Só entram competições cujo país é inequívoco ou foi confirmado pelo dono do projeto. Ficaram de fora até confirmação: Premier League (2ª entrada), National League (2ª entrada), Primera A e B (Colômbia), Serie A e B (Equador), Division Profesional e Intermedia (Paraguai) — estes países ainda não estão no pacote. Sem clubes, jogadores nem edições.",
+  "previousVersion": "1.0.0"
  },
  "countries": [
   {
@@ -852,6 +853,38 @@
    "name": "Copa Perú",
    "countryId": "ctry:peru",
    "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:dnk-superliga",
+   "name": "Superliga",
+   "countryId": "ctry:dinamarca",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:chl-campeonato-primera-b",
+   "name": "Campeonato Primera B",
+   "countryId": "ctry:chile",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:per-liga-1",
+   "name": "Liga 1",
+   "countryId": "ctry:peru",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:per-liga-2",
+   "name": "Liga 2",
+   "countryId": "ctry:peru",
+   "kind": "league",
+   "tier": 2,
    "dataStatus": "pesquisa"
   }
  ],

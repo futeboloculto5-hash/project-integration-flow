@@ -13,7 +13,7 @@ describe('Pacote de competições por país', () => {
     expect(r.report.errors).toBe(0);
     expect(r.status).toBe('new');
     expect(r.report.pack).toMatchObject({ packId: 'competicoes-por-pais', origin: 'comunitario', countries: 28 });
-    expect(r.pack!.competitions).toHaveLength(82);
+    expect(r.pack!.competitions).toHaveLength(86);
     expect(findTestMarkers(r.pack!)).toEqual([]);
   });
   it('toda competição pertence a um país e nada traz id, imagem ou dado de terceiros', () => {
@@ -31,8 +31,13 @@ describe('Pacote de competições por país', () => {
     expect(catalogByCountry(p).find((c) => c.countryId === 'ctry:inglaterra')!.competitions).toBe(8);
     expect(importDatapack([{ name: 'datapack.json', text: JSON.stringify(br) }]).report.errors).toBe(0); // a fatia também é um pacote válido
   });
+  it('os nomes confirmados entraram no país certo e os de países ainda fora do pacote não', () => {
+    const p = importDatapack(files).pack!;
+    const of = (n: string) => p.competitions.find((c) => c.name === n)?.countryId;
+    expect(of('Superliga')).toBe('ctry:dinamarca'); expect(of('Campeonato Primera B')).toBe('ctry:chile'); expect(of('Liga 1')).toBe('ctry:peru'); expect(of('Liga 2')).toBe('ctry:peru');
+  });
   it('os nomes ambíguos não foram incluídos', () => {
     const names = importDatapack(files).pack!.competitions.map((c) => c.name);
-    for (const n of ['Primera A', 'Primera B', 'Superliga', 'Liga 1', 'Liga 2', 'Division Profesional', 'Campeonato Primera B']) expect(names).not.toContain(n);
+    for (const n of ['Primera A', 'Primera B', 'Division Profesional', 'Division Intermedia']) expect(names).not.toContain(n);
   });
 });
