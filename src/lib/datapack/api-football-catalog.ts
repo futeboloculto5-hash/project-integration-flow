@@ -1,6 +1,6 @@
 // Catálogo de países e competições do API-Football, em 2 chamadas (`leagues` sem filtro lista tudo).
 // Só reorganiza o que o API informa (nada é inventado) em um formato compacto, agrupado por país, para revisão
-// e para gerar o pacote de competições. Formato lido da documentação v3; ainda não conferido com resposta real.
+// e para gerar o pacote de competições. Conferido com uma resposta real de `leagues` (1251 competições, 171 países); `countries` ainda não.
 import type { ApiRead } from "./api-football";
 
 export type CatalogLeague = { id: number; name: string; type: "league" | "cup" | "other"; firstSeason?: number; lastSeason?: number; current?: boolean };
