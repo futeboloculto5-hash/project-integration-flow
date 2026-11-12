@@ -32,3 +32,20 @@ describe('catálogo de países e competições do API-Football', () => {
     expect(n).toBe(2); expect(r.callsUsed).toBe(1);
   });
 });
+
+import { fetchTeamsByCountry } from './api-football-catalog';
+describe('clubes por país', () => {
+  const resp = (c: string) => ({ response: [{ team: { id: c.length, name: `Clube ${c}`, national: false } }, { team: { id: 900 + c.length, name: c, national: true } }, { team: {} }] });
+  it('gasta 1 chamada por país, respeita o teto e informa o que faltou', async () => {
+    let n = 0; const read = async (_: string, p: Record<string, string>) => { n++; return { cached: p['country'] === 'Peru', payload: resp(p['country']!) }; };
+    const r = await fetchTeamsByCountry(read, ['Peru', 'Brazil', 'Chile', 'Italy'], 2);
+    expect(r.callsUsed).toBe(2); expect(r.cachedCalls).toBe(1); expect(n).toBe(3);
+    expect(r.missing).toEqual(['Italy']);
+    expect(r.teams['Brazil']).toEqual([{ id: 6, name: 'Clube Brazil' }, { id: 906, name: 'Brazil', national: true }]);
+  });
+  it('erro da API para sem perder o que já veio', async () => {
+    const read = async (_: string, p: Record<string, string>) => { if (p['country'] === 'Chile') throw new Error('limite'); return { cached: false, payload: resp(p['country']!) }; };
+    const r = await fetchTeamsByCountry(read, ['Peru', 'Chile', 'Italy'], 10);
+    expect(Object.keys(r.teams)).toEqual(['Peru']); expect(r.missing).toEqual(['Chile', 'Italy']); expect(r.warnings[0]).toContain('Chile');
+  });
+});

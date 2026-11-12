@@ -47,3 +47,24 @@ export async function fetchCatalog(read: ApiRead, only?: readonly string[]): Pro
   const leagues = await read("leagues", {}); if (!leagues.cached) used++;
   return { ...buildCatalog(countries.payload, leagues.payload, only), callsUsed: used };
 }
+
+export type TeamsRun = { teams: Record<string, { id: number; name: string; national?: boolean }[]>; missing: string[]; callsUsed: number; cachedCalls: number; warnings: string[] };
+/** 1 chamada por país (`teams?country=`), parando antes de passar de `maxCalls` chamadas NOVAS. Em cache não conta; rodar de novo continua. */
+export async function fetchTeamsByCountry(read: ApiRead, countries: readonly string[], maxCalls: number): Promise<TeamsRun> {
+  const out: TeamsRun = { teams: {}, missing: [], callsUsed: 0, cachedCalls: 0, warnings: [] };
+  let stop = false;
+  for (const country of countries) {
+    if (stop || out.callsUsed >= maxCalls) { out.missing.push(country); stop = true; continue; }
+    try {
+      const r = await read("teams", { country });
+      if (r.cached) out.cachedCalls++; else out.callsUsed++;
+      const list: { id: number; name: string; national?: boolean }[] = [];
+      for (const item of Array.isArray(r.payload?.response) ? r.payload.response : []) {
+        const id = num(item?.team?.id), name = str(item?.team?.name); if (!id || !name) continue;
+        list.push(item.team.national === true ? { id, name, national: true } : { id, name });
+      }
+      out.teams[country] = list;
+    } catch (e) { out.missing.push(country); out.warnings.push(`Parou em "${country}": ${e instanceof Error ? e.message : "erro"}`); stop = true; }
+  }
+  return out;
+}

@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { footballRead, footballFailure } from "@/lib/football-api.server";
 import { importLeague } from "@/lib/datapack/api-football";
-import { fetchCatalog } from "@/lib/datapack/api-football-catalog";
+import { fetchCatalog, fetchTeamsByCountry } from "@/lib/datapack/api-football-catalog";
 
 // Rota ADMINISTRATIVA e isolada: gera um datapack de uma liga a partir do API-Football, respeitando um teto de chamadas.
 // Fica desligada (404) enquanto o segredo DATAPACK_ADMIN_TOKEN não existir. Não grava nada no jogo nem em saves:
 // devolve o JSON do pacote para ser revisado e importado depois. Chamadas em cache não gastam orçamento.
 // Catálogo: GET /api/football/datapack?mode=catalog   (países e competições; 2 chamadas)
+// Clubes por país: GET /api/football/datapack?mode=teams&countries=Albania,Argentina&maxCalls=40   (1 chamada por país)
 // Uso: GET /api/football/datapack?league=71&season=2023&maxCalls=30   com o cabeçalho  x-admin-token: <segredo>
 
 const safeEqual = (a: string, b: string) => {
@@ -31,6 +32,16 @@ async function GET(request: Request) {
     try {
       const only = (q.get("countries") ?? "").split(",").map((x) => x.trim()).filter(Boolean);
       const r = await fetchCatalog(async (path, params) => { const x = await footballRead(path, params, 24 * 14); return { payload: x.payload, cached: x.cached }; }, only);
+      return Response.json(r, { headers: { "cache-control": "no-store" } });
+    } catch (error) { return footballFailure(error); }
+  }
+  if (q.get("mode") === "teams") {
+    // Clubes por país: 1 chamada por país. `countries=Albania,Argentina` (nomes do API, em inglês). Sem teto estourado: `maxCalls` (padrão 40).
+    const list = (q.get("countries") ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+    const cap = int(q.get("maxCalls") ?? "40", 1, 90);
+    if (list.length === 0 || list.length > 90 || !cap) return Response.json({ error: "Parâmetros: countries (lista separada por vírgula) e maxCalls (1 a 90, padrão 40)." }, { status: 400 });
+    try {
+      const r = await fetchTeamsByCountry(async (path, params) => { const x = await footballRead(path, params, 24 * 14); return { payload: x.payload, cached: x.cached }; }, list, cap);
       return Response.json(r, { headers: { "cache-control": "no-store" } });
     } catch (error) { return footballFailure(error); }
   }
