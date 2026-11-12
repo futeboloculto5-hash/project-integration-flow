@@ -96,3 +96,11 @@ Componentes isolados, ainda **não ligados a nenhuma tela**:
 - Type-check, lint e build não puderam ser rodados neste ambiente.
 
 **Para importar o datapack real:** receber a amostra e a licença; inspecionar a estrutura e os relacionamentos; escrever o adaptador (ou o site de vocês exportar já em `ccw.datapack` v1); testar a conversão; gerar o relatório; só então persistir e ativar o mundo.
+
+## Importador de liga do API-Football (`api-football.ts` + rota `/api/football/datapack`)
+
+Gera um datapack de UMA liga (país, competição, edição, clubes e elencos) respeitando um teto de chamadas. Custo: 1 (`leagues`) + 1 (`teams`) + 1 por clube (`players/squads`) ≈ 22 para 20 clubes. Chamadas em cache não contam; se o orçamento do dia acabar, rodar de novo no dia seguinte continua de onde parou (cache de 14 dias).
+
+- Rota administrativa e isolada: devolve 404 sem o segredo `DATAPACK_ADMIN_TOKEN`; exige o cabeçalho `x-admin-token`. Não grava nada no jogo nem em saves. Parâmetros: `league`, `season`, `maxCalls` (1–60, padrão 30), `competitionId` (opcional).
+- Pacote: `packId = apifootball-<liga>`, versão `1.<aammdd>.0`, origem `licenciado`, ids de jogador `plr:<nome>-<id do API>` (nunca levam o clube).
+- **Limitações**: formato das respostas lido da documentação v3, ainda não conferido com uma resposta real desta conta; `players/squads` não traz força, então `overall` é ESTIMATIVA (jogadores saem com `dataStatus: "estimativa"`); posições em 4 categorias (GK/CB/CM/ST); elenco é o atual mesmo que a temporada seja antiga; fotos não são copiadas; o plano gratuito costuma limitar as temporadas; o orçamento é compartilhado com o jogo (teto de 90/dia).
