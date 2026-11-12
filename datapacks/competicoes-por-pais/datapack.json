@@ -1,0 +1,861 @@
+{
+ "manifest": {
+  "schema": "ccw.datapack",
+  "schemaVersion": 1,
+  "packId": "competicoes-por-pais",
+  "version": "1.0.0",
+  "name": "Competições por país (somente nomes)",
+  "createdAt": "2026-11-11",
+  "origin": "comunitario",
+  "source": {
+   "name": "Compilação própria do projeto a partir dos NOMES de competições do pacote Champholics v86 (somente nomes). País e divisão atribuídos por conhecimento público e sujeitos a conferência.",
+   "license": "Compilação própria; sem ids, imagens ou outros dados do pacote de origem."
+  },
+  "counts": {
+   "countries": 28,
+   "competitions": 82,
+   "clubs": 0,
+   "players": 0,
+   "editions": 0
+  },
+  "notes": "Só entram competições cujo país é inequívoco. 12 nomes ambíguos ficaram de fora até serem confirmados (ver LEIAME.md). Sem clubes, jogadores nem edições: eles virão de outra fonte."
+ },
+ "countries": [
+  {
+   "id": "ctry:argentina",
+   "name": "Argentina",
+   "code": "ARG",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:belgica",
+   "name": "Bélgica",
+   "code": "BEL",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:brasil",
+   "name": "Brasil",
+   "code": "BRA",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:china",
+   "name": "China",
+   "code": "CHN",
+   "confederation": "AFC",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:chile",
+   "name": "Chile",
+   "code": "CHL",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:dinamarca",
+   "name": "Dinamarca",
+   "code": "DNK",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:inglaterra",
+   "name": "Inglaterra",
+   "code": "ENG",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:franca",
+   "name": "França",
+   "code": "FRA",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:alemanha",
+   "name": "Alemanha",
+   "code": "DEU",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:grecia",
+   "name": "Grécia",
+   "code": "GRC",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:italia",
+   "name": "Itália",
+   "code": "ITA",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:coreia-do-sul",
+   "name": "Coreia do Sul",
+   "code": "KOR",
+   "confederation": "AFC",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:marrocos",
+   "name": "Marrocos",
+   "code": "MAR",
+   "confederation": "CAF",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:paises-baixos",
+   "name": "Países Baixos",
+   "code": "NLD",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:portugal",
+   "name": "Portugal",
+   "code": "PRT",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:san-marino",
+   "name": "San Marino",
+   "code": "SMR",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:arabia-saudita",
+   "name": "Arábia Saudita",
+   "code": "SAU",
+   "confederation": "AFC",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:espanha",
+   "name": "Espanha",
+   "code": "ESP",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:suecia",
+   "name": "Suécia",
+   "code": "SWE",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:turquia",
+   "name": "Turquia",
+   "code": "TUR",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:emirados-arabes-unidos",
+   "name": "Emirados Árabes Unidos",
+   "code": "ARE",
+   "confederation": "AFC",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:estados-unidos",
+   "name": "Estados Unidos",
+   "code": "USA",
+   "confederation": "CONCACAF",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:canada",
+   "name": "Canadá",
+   "code": "CAN",
+   "confederation": "CONCACAF",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:ira",
+   "name": "Irã",
+   "code": "IRN",
+   "confederation": "AFC",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:angola",
+   "name": "Angola",
+   "code": "AGO",
+   "confederation": "CAF",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:indonesia",
+   "name": "Indonésia",
+   "code": "IDN",
+   "confederation": "AFC",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:mexico",
+   "name": "México",
+   "code": "MEX",
+   "confederation": "CONCACAF",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:peru",
+   "name": "Peru",
+   "code": "PER",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  }
+ ],
+ "competitions": [
+  {
+   "id": "comp:arg-liga-profesional",
+   "name": "Liga Profesional",
+   "countryId": "ctry:argentina",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:arg-primera-nacional",
+   "name": "Primera Nacional",
+   "countryId": "ctry:argentina",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bel-jupiler-pro-league",
+   "name": "Jupiler Pro League",
+   "countryId": "ctry:belgica",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bel-challenger-pro",
+   "name": "Challenger Pro",
+   "countryId": "ctry:belgica",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-brasileirao-serie-a",
+   "name": "Brasileirão Série A",
+   "countryId": "ctry:brasil",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-brasileirao-serie-b",
+   "name": "Brasileirão Série B",
+   "countryId": "ctry:brasil",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-brasileirao-serie-c",
+   "name": "Brasileirão Série C",
+   "countryId": "ctry:brasil",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-brasileirao-serie-d",
+   "name": "Brasileirão Série D",
+   "countryId": "ctry:brasil",
+   "kind": "league",
+   "tier": 4,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-copa-do-brasil",
+   "name": "Copa do Brasil",
+   "countryId": "ctry:brasil",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-copa-do-nordeste",
+   "name": "Copa do Nordeste",
+   "countryId": "ctry:brasil",
+   "kind": "group_knockout",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-copa-verde",
+   "name": "Copa Verde",
+   "countryId": "ctry:brasil",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-campeonato-paulista",
+   "name": "Campeonato Paulista",
+   "countryId": "ctry:brasil",
+   "kind": "group_knockout",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-campeonato-carioca",
+   "name": "Campeonato Carioca",
+   "countryId": "ctry:brasil",
+   "kind": "group_knockout",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-campeonato-mineiro",
+   "name": "Campeonato Mineiro",
+   "countryId": "ctry:brasil",
+   "kind": "group_knockout",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-campeonato-gaucho",
+   "name": "Campeonato Gaúcho",
+   "countryId": "ctry:brasil",
+   "kind": "group_knockout",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-campeonato-paranaense",
+   "name": "Campeonato Paranaense",
+   "countryId": "ctry:brasil",
+   "kind": "group_knockout",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-campeonato-catarinense",
+   "name": "Campeonato Catarinense",
+   "countryId": "ctry:brasil",
+   "kind": "group_knockout",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:chn-chinese-super-league",
+   "name": "Chinese Super League",
+   "countryId": "ctry:china",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:chn-china-league-one",
+   "name": "China League One",
+   "countryId": "ctry:china",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:chl-chilean-primera-division",
+   "name": "Chilean Primera División",
+   "countryId": "ctry:chile",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:chl-copa-chile",
+   "name": "Copa Chile",
+   "countryId": "ctry:chile",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:dnk-nordicbet-liga",
+   "name": "NordicBet Liga",
+   "countryId": "ctry:dinamarca",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-premier-league",
+   "name": "Premier League",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-efl-championship",
+   "name": "EFL Championship",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-efl-league-one",
+   "name": "EFL League One",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-efl-league-two",
+   "name": "EFL League Two",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "tier": 4,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-national-league",
+   "name": "National League",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "tier": 5,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-fa-cup",
+   "name": "FA Cup",
+   "countryId": "ctry:inglaterra",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-carabao-cup",
+   "name": "Carabao Cup",
+   "countryId": "ctry:inglaterra",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-community-shield",
+   "name": "Community Shield",
+   "countryId": "ctry:inglaterra",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:fra-ligue-1",
+   "name": "Ligue 1",
+   "countryId": "ctry:franca",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:fra-ligue-2",
+   "name": "Ligue 2",
+   "countryId": "ctry:franca",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:fra-ligue-3",
+   "name": "Ligue 3",
+   "countryId": "ctry:franca",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:fra-national-2",
+   "name": "National 2",
+   "countryId": "ctry:franca",
+   "kind": "league",
+   "tier": 4,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:deu-bundesliga",
+   "name": "Bundesliga",
+   "countryId": "ctry:alemanha",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:deu-2-bundesliga",
+   "name": "2. Bundesliga",
+   "countryId": "ctry:alemanha",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:deu-3-liga",
+   "name": "3. Liga",
+   "countryId": "ctry:alemanha",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:grc-super-league-greece",
+   "name": "Super League Greece",
+   "countryId": "ctry:grecia",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:grc-super-league-greece-2",
+   "name": "Super League Greece 2",
+   "countryId": "ctry:grecia",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:grc-gamma-ethniki",
+   "name": "Gamma Ethniki",
+   "countryId": "ctry:grecia",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:ita-serie-a",
+   "name": "Serie A",
+   "countryId": "ctry:italia",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:ita-serie-b",
+   "name": "Serie B",
+   "countryId": "ctry:italia",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:ita-serie-c",
+   "name": "Serie C",
+   "countryId": "ctry:italia",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:ita-serie-d",
+   "name": "Serie D",
+   "countryId": "ctry:italia",
+   "kind": "league",
+   "tier": 4,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:kor-k-league-1",
+   "name": "K League 1",
+   "countryId": "ctry:coreia-do-sul",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:kor-k-league-2",
+   "name": "K League 2",
+   "countryId": "ctry:coreia-do-sul",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:mar-botola-pro",
+   "name": "Botola Pro",
+   "countryId": "ctry:marrocos",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:nld-eredivisie",
+   "name": "Eredivisie",
+   "countryId": "ctry:paises-baixos",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:nld-eerste-divisie",
+   "name": "Eerste Divisie",
+   "countryId": "ctry:paises-baixos",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:nld-knvb-cup",
+   "name": "KNVB Cup",
+   "countryId": "ctry:paises-baixos",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:prt-liga-portugal",
+   "name": "Liga Portugal",
+   "countryId": "ctry:portugal",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:prt-liga-portugal-2",
+   "name": "Liga Portugal 2",
+   "countryId": "ctry:portugal",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:prt-liga-3",
+   "name": "Liga 3",
+   "countryId": "ctry:portugal",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:smr-campionato-sammarinese",
+   "name": "Campionato Sammarinese",
+   "countryId": "ctry:san-marino",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:smr-coppa-titano",
+   "name": "Coppa Titano",
+   "countryId": "ctry:san-marino",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:smr-super-coppa-sammarinese",
+   "name": "Super Coppa Sammarinese",
+   "countryId": "ctry:san-marino",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:sau-saudi-pro-league",
+   "name": "Saudi Pro League",
+   "countryId": "ctry:arabia-saudita",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:esp-laliga",
+   "name": "LaLiga",
+   "countryId": "ctry:espanha",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:esp-laliga-2",
+   "name": "LaLiga 2",
+   "countryId": "ctry:espanha",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:esp-primera-division-rfef",
+   "name": "Primera División RFEF",
+   "countryId": "ctry:espanha",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:esp-segunda-division-rfef",
+   "name": "Segunda División RFEF",
+   "countryId": "ctry:espanha",
+   "kind": "league",
+   "tier": 4,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:swe-allsvenskan",
+   "name": "Allsvenskan",
+   "countryId": "ctry:suecia",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:tur-super-lig",
+   "name": "Süper Lig",
+   "countryId": "ctry:turquia",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:tur-tff-1-lig",
+   "name": "TFF 1. Lig",
+   "countryId": "ctry:turquia",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:tur-tff-2-lig",
+   "name": "TFF 2. Lig",
+   "countryId": "ctry:turquia",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:are-uae-pro-league",
+   "name": "UAE Pro League",
+   "countryId": "ctry:emirados-arabes-unidos",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:usa-major-league-soccer",
+   "name": "Major League Soccer",
+   "countryId": "ctry:estados-unidos",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:usa-usl-championship",
+   "name": "USL Championship",
+   "countryId": "ctry:estados-unidos",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:usa-usl-league-one",
+   "name": "USL League One",
+   "countryId": "ctry:estados-unidos",
+   "kind": "league",
+   "tier": 3,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:can-canadian-championship",
+   "name": "Canadian Championship",
+   "countryId": "ctry:canada",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:irn-persian-gulf-pro-league",
+   "name": "Persian Gulf Pro League",
+   "countryId": "ctry:ira",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:irn-azadegan-league",
+   "name": "Azadegan League",
+   "countryId": "ctry:ira",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:irn-hazfi-cup",
+   "name": "Hazfi Cup",
+   "countryId": "ctry:ira",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:ago-girabola",
+   "name": "Girabola",
+   "countryId": "ctry:angola",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:idn-bri-super-league",
+   "name": "BRI Super League",
+   "countryId": "ctry:indonesia",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:idn-piala-indonesia",
+   "name": "Piala Indonesia",
+   "countryId": "ctry:indonesia",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:mex-liga-mx-apertura",
+   "name": "Liga MX Apertura",
+   "countryId": "ctry:mexico",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:mex-liga-mx-clausura",
+   "name": "Liga MX Clausura",
+   "countryId": "ctry:mexico",
+   "kind": "league",
+   "tier": 1,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:mex-liga-expansion-mx-apertura",
+   "name": "Liga Expansión MX Apertura",
+   "countryId": "ctry:mexico",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:mex-liga-expansion-mx-clausura",
+   "name": "Liga Expansión MX Clausura",
+   "countryId": "ctry:mexico",
+   "kind": "league",
+   "tier": 2,
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:mex-copa-mx",
+   "name": "Copa MX",
+   "countryId": "ctry:mexico",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:per-copa-peru",
+   "name": "Copa Perú",
+   "countryId": "ctry:peru",
+   "kind": "cup",
+   "dataStatus": "pesquisa"
+  }
+ ],
+ "editions": [],
+ "clubs": [],
+ "players": []
+}
