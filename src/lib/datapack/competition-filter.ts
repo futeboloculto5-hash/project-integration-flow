@@ -12,6 +12,9 @@ const OTHER = /(futsal|beach|e-?sports?|virtual|friendl|\bkings? (cup|league)\b|
 const BR_NATIONAL: Readonly<Record<string, string>> = {
   "Serie A": "Brasileirão Série A", "Serie B": "Brasileirão Série B", "Serie C": "Brasileirão Série C", "Serie D": "Brasileirão Série D",
   "Copa Do Brasil": "Copa do Brasil", "Supercopa do Brasil": "Supercopa do Brasil", "Copa do Nordeste": "Copa do Nordeste", "Copa Verde": "Copa Verde",
+  // categorias de base nacionais do Brasileirão e da Copa do Brasil (pedido do dono do projeto)
+  "Brasileiro U20 A": "Brasileirão Sub-20", "Brasileiro U20 B": "Brasileirão Sub-20 Série B", "Brasileiro U17": "Brasileirão Sub-17",
+  "Copa do Brasil U20": "Copa do Brasil Sub-20", "Copa do Brasil U17": "Copa do Brasil Sub-17", "Brasileiro de Aspirantes": "Brasileirão de Aspirantes",
 };
 /** Estaduais: só a 1ª divisão. Aceita "Nome", "Nome - 1" e "Paulista - A1". */
 const BR_STATE_FIRST = /^(Acreano|Alagoano|Amapaense|Amazonense|Baiano|Brasiliense|Capixaba|Carioca|Catarinense|Cearense|Gaúcho|Goiano|Maranhense|Matogrossense|Mineiro|Paraense|Paraibano|Paranaense|Pernambucano|Piauiense|Potiguar|Rondoniense|Roraimense|Sergipano|Sul-Matogrossense|Tocantinense|Paulista)(?: - (?:1|A1))?$/;
@@ -25,6 +28,7 @@ export function fixCase(name: string): string {
 export type Decision = { keep: true; name: string } | { keep: false; reason: string };
 export function decide(country: string, league: CatalogLeague): Decision {
   const n = league.name;
+  if (country === "Brazil" && BR_NATIONAL[n]) return { keep: true, name: BR_NATIONAL[n]! };
   if (FEMALE.test(n)) return { keep: false, reason: "feminino" };
   if (YOUTH.test(n)) return { keep: false, reason: "base/reservas" };
   if (/play-?offs?$/i.test(n)) return { keep: false, reason: "fase (play-offs) da mesma competição" };

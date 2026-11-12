@@ -15,6 +15,14 @@ describe('filtro do catálogo (masculino, adulto, estaduais só 1ª divisão)', 
     expect(kept('Brazil', 'Sul-Matogrossense')).toBe('Campeonato Sul-Matogrossense');
     for (const n of ['Paulista - A2', 'Paulista - A3', 'Carioca - 2', 'Carioca A2', 'Carioca B2', 'Mineiro - 3', 'Paraibano 2', 'Matogrossense 2', 'Paulista Série B', 'Copa Paulista', 'Copa Rio', 'Copa Fares Lopes']) expect(kept('Brazil', n)).toMatch(/^X:/);
   });
+  it('Brasil: categorias de base nacionais continuam, com nome de jogo; as estaduais de base não', () => {
+    expect(kept('Brazil', 'Brasileiro U20 A')).toBe('Brasileirão Sub-20');
+    expect(kept('Brazil', 'Brasileiro U17')).toBe('Brasileirão Sub-17');
+    expect(kept('Brazil', 'Copa do Brasil U20')).toBe('Copa do Brasil Sub-20');
+    expect(kept('Brazil', 'Brasileiro de Aspirantes')).toBe('Brasileirão de Aspirantes');
+    expect(kept('Brazil', 'Paulista - U20')).toMatch(/^X:/);
+    expect(kept('Brazil', 'Brasileiro Women')).toMatch(/^X:/);
+  });
   it('tira feminino e base/reservas em qualquer país, sem tirar nomes comuns', () => {
     for (const n of ['Brasileiro Women', 'FA WSL', 'Liga MX Femenil', 'Frauen-Bundesliga', 'Division 1 Féminine', 'Brasileiro U20 A', 'Copa do Brasil U17', 'Campionato Primavera 1', 'Primera División Femenina', 'Copa America Femenina', 'SheBelieves Cup', 'Premier League 2 Division One']) { expect(kept('X', n)).toMatch(/^X:/); }
     for (const n of ['Premier League', 'Bundesliga', 'Serie A', 'Super Lig', 'Ligue 1', 'Premier League 2025', 'Primera División']) expect(kept('X', n)).toBe(n);
