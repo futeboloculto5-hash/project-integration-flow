@@ -15,9 +15,9 @@
   "counts": {
    "countries": 30,
    "competitions": 454,
-   "clubs": 502,
+   "clubs": 714,
    "players": 0,
-   "editions": 27
+   "editions": 43
   },
   "notes": "Só masculino e adulto; estaduais do Brasil só 1ª divisão. Competições World sem país. Clubes só onde o openfootball tem a liga (27 competições). Sem jogadores."
  },
@@ -37,13 +37,6 @@
    "dataStatus": "pesquisa"
   },
   {
-   "id": "ctry:argentina",
-   "name": "Argentina",
-   "code": "ARG",
-   "confederation": "CONMEBOL",
-   "dataStatus": "pesquisa"
-  },
-  {
    "id": "ctry:arabia-saudita",
    "name": "Arábia Saudita",
    "code": "SAU",
@@ -51,9 +44,9 @@
    "dataStatus": "pesquisa"
   },
   {
-   "id": "ctry:brasil",
-   "name": "Brasil",
-   "code": "BRA",
+   "id": "ctry:argentina",
+   "name": "Argentina",
+   "code": "ARG",
    "confederation": "CONMEBOL",
    "dataStatus": "pesquisa"
   },
@@ -62,6 +55,13 @@
    "name": "Bélgica",
    "code": "BEL",
    "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:brasil",
+   "name": "Brasil",
+   "code": "BRA",
+   "confederation": "CONMEBOL",
    "dataStatus": "pesquisa"
   },
   {
@@ -184,17 +184,17 @@
    "dataStatus": "pesquisa"
   },
   {
-   "id": "ctry:paraguai",
-   "name": "Paraguai",
-   "code": "PRY",
-   "confederation": "CONMEBOL",
-   "dataStatus": "pesquisa"
-  },
-  {
    "id": "ctry:paises-baixos",
    "name": "Países Baixos",
    "code": "NLD",
    "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:paraguai",
+   "name": "Paraguai",
+   "code": "PRY",
+   "confederation": "CONMEBOL",
    "dataStatus": "pesquisa"
   },
   {
@@ -5396,6 +5396,439 @@
     "club:fenerbahce"
    ],
    "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chn-super-league",
+   "season": "2024",
+   "clubIds": [
+    "club:beijing-guoan",
+    "club:shanghai-shenhua",
+    "club:changchun-yatai",
+    "club:shanghai-sipg",
+    "club:tianjin-teda",
+    "club:henan-jianye",
+    "club:shandong-luneng",
+    "club:hangzhou-greentown",
+    "club:shijiazhuang-y-j",
+    "club:qingdao-jonoon",
+    "club:meizhou-kejia",
+    "club:nantong-zhiyun",
+    "club:chengdu-better-city",
+    "club:sichuan-jiuniu",
+    "club:wuhan-three-towns",
+    "club:qingdao-youth-island"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chn-league-one",
+   "season": "2024",
+   "clubIds": [
+    "club:guangzhou-evergrande-fc",
+    "club:heilongjiang-lava-spring",
+    "club:guangxi-baoyun",
+    "club:jiangxi-liansheng",
+    "club:qingdao-red-lions",
+    "club:shanghai-jiading",
+    "club:shenyang-urban",
+    "club:suzhou-dongwu",
+    "club:nanjing-city",
+    "club:dongguan-united",
+    "club:hebei-kungfu",
+    "club:wuxi-wugou",
+    "club:yanbian-longding",
+    "club:chongqing-tongliang-long",
+    "club:dalian-zhixing",
+    "club:yunnan-yukun"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chn-fa-cup",
+   "season": "2024",
+   "clubIds": [
+    "club:beijing-guoan",
+    "club:guangzhou-evergrande-fc",
+    "club:shanghai-shenhua",
+    "club:changchun-yatai",
+    "club:shanghai-sipg",
+    "club:tianjin-teda",
+    "club:henan-jianye",
+    "club:shandong-luneng",
+    "club:hangzhou-greentown",
+    "club:shijiazhuang-y-j",
+    "club:qingdao-jonoon",
+    "club:hunan-billows-fc",
+    "club:meizhou-kejia",
+    "club:heilongjiang-lava-spring",
+    "club:nantong-zhiyun",
+    "club:bit",
+    "club:chengdu-better-city",
+    "club:dalian-huayi",
+    "club:guangxi-baoyun",
+    "club:hangzhou-wuyue-qiantang",
+    "club:hubei-chufeng-heli",
+    "club:inner-mongolia-caoshang",
+    "club:jiangxi-liansheng",
+    "club:qingdao-elite-united",
+    "club:qingdao-kunpeng",
+    "club:qingdao-red-lions",
+    "club:shanghai-jiading",
+    "club:shenyang-urban",
+    "club:sichuan-jiuniu",
+    "club:suzhou-dongwu",
+    "club:wuhan-three-towns",
+    "club:xi-an-hi-tech-zone",
+    "club:nanjing-city",
+    "club:dongguan-united",
+    "club:hebei-kungfu",
+    "club:qingdao-youth-island",
+    "club:quanzhou-yassin",
+    "club:wuxi-wugou",
+    "club:yanbian-longding",
+    "club:yichun-grand-tiger",
+    "club:hainan-star",
+    "club:nantong-haimen-codion",
+    "club:shangyu-pterosaur",
+    "club:tai-an-tiankuang",
+    "club:xi-an-ronghai",
+    "club:chongqing-tongliang-long",
+    "club:dalian-zhixing",
+    "club:guangxi-lanhang",
+    "club:yunnan-yukun",
+    "club:changle-jingangtui",
+    "club:ningxia-renfangzhong",
+    "club:qujing-yibu",
+    "club:rizhao-yuqi",
+    "club:shanghai-shenshui",
+    "club:shanxi-longchengren",
+    "club:wuhan-xiaoma-guohe",
+    "club:changchun-xidu",
+    "club:changning-flying-lions",
+    "club:chunlei",
+    "club:fujian-quanzhou-qinggong",
+    "club:gannan-92-united",
+    "club:guangdong-shudihong",
+    "club:guangxi-bushan",
+    "club:haishan",
+    "club:jiangsu-nan-dongsheng",
+    "club:lanzhou-hailu",
+    "club:lujian-tiancheng",
+    "club:nanning-juding",
+    "club:ningo-shoufa",
+    "club:ningxia-pingluo",
+    "club:qianxinan-xu-fengtang",
+    "club:shanghai-segenda",
+    "club:shanghai-tongji",
+    "club:shanxi-xiangyu",
+    "club:shenzhen-jixiang",
+    "club:shenzhen-juniors",
+    "club:guangxi-hengchen",
+    "club:guangzhou-e-power",
+    "club:langfang-glory-city",
+    "club:shaanxi-union"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:can-canadian-soccer-league",
+   "season": "2024",
+   "clubIds": [
+    "club:serbian-white-eagles",
+    "club:sc-scarborough",
+    "club:hamilton-city",
+    "club:toronto-falcons",
+    "club:future-stars",
+    "club:unity-on"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:can-canadian-championship",
+   "season": "2024",
+   "clubIds": [
+    "club:toronto-fc",
+    "club:vancouver-whitecaps",
+    "club:cf-montreal",
+    "club:cavalry-fc",
+    "club:hfx-wanderers-fc",
+    "club:pacific-fc",
+    "club:york-united",
+    "club:forge",
+    "club:valour",
+    "club:tss-rovers",
+    "club:atletico-ottawa",
+    "club:simcoe-county-rovers",
+    "club:vancouver-fc",
+    "club:saint-laurent"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:can-pacific-coast-soccer-league",
+   "season": "2024",
+   "clubIds": [
+    "club:khalsa",
+    "club:mid-isle-mariners",
+    "club:port-moody",
+    "club:kamloops-rivers-ii",
+    "club:victoria-united",
+    "club:wia",
+    "club:blues",
+    "club:ares-football-association"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chl-primera-division",
+   "season": "2024",
+   "clubIds": [
+    "club:colo-colo",
+    "club:palestino",
+    "club:deportes-iquique",
+    "club:o-higgins",
+    "club:union-espanola",
+    "club:universidad-de-chile",
+    "club:everton-de-vina",
+    "club:union-la-calera",
+    "club:huachipato",
+    "club:a-italiano",
+    "club:coquimbo-unido",
+    "club:cobresal",
+    "club:cobreloa",
+    "club:nublense",
+    "club:deportes-copiapo",
+    "club:u-catolica"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chl-primera-b",
+   "season": "2024",
+   "clubIds": [
+    "club:curico-unido",
+    "club:deportes-temuco",
+    "club:san-luis",
+    "club:universidad-de-concepcion",
+    "club:antofagasta",
+    "club:santiago-wanderers",
+    "club:santiago-morning",
+    "club:magallanes",
+    "club:barnechea",
+    "club:union-san-felipe",
+    "club:d-la-serena",
+    "club:rangers-de-talca",
+    "club:san-marcos-de-arica",
+    "club:deportes-santa-cruz",
+    "club:recoleta",
+    "club:deportes-limache"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chl-copa-chile",
+   "season": "2024",
+   "clubIds": [
+    "club:colo-colo",
+    "club:curico-unido",
+    "club:deportes-temuco",
+    "club:palestino",
+    "club:deportes-iquique",
+    "club:o-higgins",
+    "club:union-espanola",
+    "club:san-luis",
+    "club:universidad-de-chile",
+    "club:universidad-de-concepcion",
+    "club:everton-de-vina",
+    "club:union-la-calera",
+    "club:antofagasta",
+    "club:huachipato",
+    "club:a-italiano",
+    "club:coquimbo-unido",
+    "club:cobresal",
+    "club:cobreloa",
+    "club:santiago-wanderers",
+    "club:deportes-valdivia",
+    "club:santiago-morning",
+    "club:magallanes",
+    "club:nublense",
+    "club:barnechea",
+    "club:d-melipilla",
+    "club:union-san-felipe",
+    "club:d-la-serena",
+    "club:d-puerto-montt",
+    "club:deportes-copiapo",
+    "club:rangers-de-talca",
+    "club:san-marcos-de-arica",
+    "club:deportes-santa-cruz",
+    "club:u-catolica",
+    "club:colchagua",
+    "club:colina",
+    "club:concepcion",
+    "club:deportes-rengo",
+    "club:fernandez-vial",
+    "club:general-velasquez",
+    "club:iberia",
+    "club:lautaro-de-buin",
+    "club:provincial-osorno",
+    "club:recoleta",
+    "club:san-antonio-unido",
+    "club:trasandino",
+    "club:linares-unido",
+    "club:deportes-limache",
+    "club:deportes-quillon",
+    "club:municipal-salamanca",
+    "club:provincial-ovalle",
+    "club:real-san-joaquin",
+    "club:union-companias",
+    "club:chimbarongo",
+    "club:comunal-cabrero",
+    "club:concon-national",
+    "club:municipal-puente-alto",
+    "club:santiago-city",
+    "club:constitucion-unido",
+    "club:imperial-unido",
+    "club:juan-fernandez",
+    "club:municipal-mejillones",
+    "club:el-lucero",
+    "club:juvenil-seminario",
+    "club:union-wanderers",
+    "club:vicente-rosales",
+    "club:11-de-septiembre",
+    "club:barcelona-copiapo",
+    "club:marcos-trincado",
+    "club:norte-unido",
+    "club:presidente-ibanez",
+    "club:ferro-monte-aguila",
+    "club:glorias-navales",
+    "club:alas-portuarias",
+    "club:central-norte",
+    "club:miramar"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:ago-girabola",
+   "season": "2024",
+   "clubIds": [
+    "club:1-de-agosto",
+    "club:academica-do-lobito",
+    "club:desportivo-huila",
+    "club:interclube",
+    "club:bravos-do-maquis-fc",
+    "club:petro-de-luanda",
+    "club:recreativo-do-libolo",
+    "club:sagrada-esperanca",
+    "club:santa-rita",
+    "club:kabuscorp",
+    "club:wiliete",
+    "club:cd-lunda-sul",
+    "club:isaac-de-benguela",
+    "club:sao-salvador",
+    "club:carmona",
+    "club:luanda-city"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:can-canadian-premier-league",
+   "season": "2024",
+   "clubIds": [
+    "club:cavalry-fc",
+    "club:hfx-wanderers-fc",
+    "club:pacific-fc",
+    "club:york-united",
+    "club:forge",
+    "club:valour",
+    "club:atletico-ottawa",
+    "club:vancouver-fc"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chl-super-cup",
+   "season": "2024",
+   "clubIds": [
+    "club:colo-colo",
+    "club:huachipato"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chl-segunda-division",
+   "season": "2024",
+   "clubIds": [
+    "club:d-melipilla",
+    "club:d-puerto-montt",
+    "club:concepcion",
+    "club:deportes-rengo",
+    "club:fernandez-vial",
+    "club:general-velasquez",
+    "club:lautaro-de-buin",
+    "club:provincial-osorno",
+    "club:san-antonio-unido",
+    "club:trasandino",
+    "club:linares-unido",
+    "club:provincial-ovalle",
+    "club:real-san-joaquin",
+    "club:concon-national"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:can-league-1-ontario",
+   "season": "2024",
+   "clubIds": [
+    "club:vaughan-azzurri",
+    "club:guelph-united",
+    "club:alliance-united",
+    "club:blue-devils",
+    "club:burlington",
+    "club:hamilton-united",
+    "club:north-toronto-nitros",
+    "club:prostars",
+    "club:scrosoppi",
+    "club:sigma",
+    "club:simcoe-county-rovers",
+    "club:woodbridge-strikers"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chn-league-two",
+   "season": "2024",
+   "clubIds": [
+    "club:hunan-billows-fc",
+    "club:bit",
+    "club:dalian-huayi",
+    "club:hubei-chufeng-heli",
+    "club:quanzhou-yassin",
+    "club:yichun-grand-tiger",
+    "club:hainan-star",
+    "club:nantong-haimen-codion",
+    "club:shangyu-pterosaur",
+    "club:tai-an-tiankuang",
+    "club:xi-an-ronghai",
+    "club:guangxi-lanhang",
+    "club:rizhao-yuqi",
+    "club:shenzhen-juniors",
+    "club:guangxi-hengchen",
+    "club:guangzhou-e-power",
+    "club:langfang-glory-city",
+    "club:shaanxi-union",
+    "club:shandong-taishan-ii",
+    "club:shanghai-port-ii"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:chn-super-cup",
+   "season": "2024",
+   "clubIds": [
+    "club:shanghai-shenhua",
+    "club:shanghai-sipg"
+   ],
+   "dataStatus": "pesquisa"
   }
  ],
  "clubs": [
@@ -8410,6 +8843,2250 @@
    "name": "Fenerbahçe",
    "countryId": "ctry:turquia",
    "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:beijing-guoan",
+   "name": "Beijing Guoan",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 830
+   },
+   "dataStatus": "pesquisa",
+   "short": "BEI",
+   "city": "Beijing",
+   "stadium": "Workers' Stadium"
+  },
+  {
+   "id": "club:shanghai-shenhua",
+   "name": "Shanghai Shenhua",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 833
+   },
+   "dataStatus": "pesquisa",
+   "short": "SHA",
+   "city": "Shanghai",
+   "stadium": "Shanghai Stadium"
+  },
+  {
+   "id": "club:changchun-yatai",
+   "name": "Changchun Yatai",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 834
+   },
+   "dataStatus": "pesquisa",
+   "short": "CHA",
+   "city": "Changchun",
+   "stadium": "Changchun's People Stadium"
+  },
+  {
+   "id": "club:shanghai-sipg",
+   "name": "SHANGHAI SIPG",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 836
+   },
+   "dataStatus": "pesquisa",
+   "short": "SHA",
+   "city": "Shanghai",
+   "stadium": "Yuanshen Sports Centre Stadium"
+  },
+  {
+   "id": "club:tianjin-teda",
+   "name": "Tianjin Teda",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 837
+   },
+   "dataStatus": "pesquisa",
+   "short": "TIA",
+   "city": "Tianjin",
+   "stadium": "Tianjin Olympic Center Stadium"
+  },
+  {
+   "id": "club:henan-jianye",
+   "name": "Henan Jianye",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 840
+   },
+   "dataStatus": "pesquisa",
+   "short": "HEN",
+   "city": "Zhengzhou",
+   "stadium": "Zhengzhou Hanghai Stadium"
+  },
+  {
+   "id": "club:shandong-luneng",
+   "name": "Shandong Luneng",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 844
+   },
+   "dataStatus": "pesquisa",
+   "short": "SHA",
+   "city": "Ji&apos;nan",
+   "stadium": "Jinan Olympic Sports Center Stadium"
+  },
+  {
+   "id": "club:hangzhou-greentown",
+   "name": "Hangzhou Greentown",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 848
+   },
+   "dataStatus": "pesquisa",
+   "short": "HAN",
+   "city": "Hangzhou",
+   "stadium": "Yellow Dragon Sports Center Stadium"
+  },
+  {
+   "id": "club:shijiazhuang-y-j",
+   "name": "Shijiazhuang Y. J.",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 849
+   },
+   "dataStatus": "pesquisa",
+   "city": "Shijiazhuang",
+   "stadium": "Hebei Olympic Sports Center"
+  },
+  {
+   "id": "club:qingdao-jonoon",
+   "name": "Qingdao Jonoon",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 1431
+   },
+   "dataStatus": "pesquisa",
+   "short": "QIN",
+   "city": "Qingdao",
+   "stadium": "Qingdao Youth Football Stadium"
+  },
+  {
+   "id": "club:meizhou-kejia",
+   "name": "Meizhou Kejia",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 1439
+   },
+   "dataStatus": "pesquisa",
+   "short": "MEI",
+   "city": "Wuhua",
+   "stadium": "Wuhua Olympic Sports Center Huitang Stadium"
+  },
+  {
+   "id": "club:nantong-zhiyun",
+   "name": "Nantong Zhiyun",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 2626
+   },
+   "dataStatus": "pesquisa",
+   "city": "Rugao",
+   "stadium": "Rugao Olympic Sports Center Stadium"
+  },
+  {
+   "id": "club:chengdu-better-city",
+   "name": "Chengdu Better City",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5648
+   },
+   "dataStatus": "pesquisa",
+   "city": "Chengdu",
+   "stadium": "Chengdu Phoenix Mountain Sports Park"
+  },
+  {
+   "id": "club:sichuan-jiuniu",
+   "name": "Sichuan Jiuniu",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5686
+   },
+   "dataStatus": "pesquisa",
+   "city": "Dongguan",
+   "stadium": "Wuhua Hengpi Football Town"
+  },
+  {
+   "id": "club:wuhan-three-towns",
+   "name": "Wuhan Three Towns",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5695
+   },
+   "dataStatus": "pesquisa",
+   "city": "Wuhan",
+   "stadium": "Wuhan Sports Center Stadium"
+  },
+  {
+   "id": "club:qingdao-youth-island",
+   "name": "Qingdao Youth Island",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 17265
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:guangzhou-evergrande-fc",
+   "name": "Guangzhou Evergrande FC",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 832
+   },
+   "dataStatus": "pesquisa",
+   "short": "GUA",
+   "city": "Canton",
+   "stadium": "Tianhe Stadium"
+  },
+  {
+   "id": "club:heilongjiang-lava-spring",
+   "name": "Heilongjiang Lava Spring",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 1445
+   },
+   "dataStatus": "pesquisa",
+   "city": "Harbin",
+   "stadium": "Harbin International Conference Exhibition and Sports Center"
+  },
+  {
+   "id": "club:guangxi-baoyun",
+   "name": "Guangxi Baoyun",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5657
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:jiangxi-liansheng",
+   "name": "Jiangxi Liansheng",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5665
+   },
+   "dataStatus": "pesquisa",
+   "short": "JIA",
+   "city": "Jiujiang",
+   "stadium": "Ruichang Sports Park Stadium"
+  },
+  {
+   "id": "club:qingdao-red-lions",
+   "name": "Qingdao Red Lions",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5679
+   },
+   "dataStatus": "pesquisa",
+   "city": "Qingdao",
+   "stadium": "Qingdao Tiantai Stadium"
+  },
+  {
+   "id": "club:shanghai-jiading",
+   "name": "Shanghai Jiading",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5682
+   },
+   "dataStatus": "pesquisa",
+   "city": "Shanghai",
+   "stadium": "Jiading Stadium"
+  },
+  {
+   "id": "club:shenyang-urban",
+   "name": "Shenyang Urban",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5684
+   },
+   "dataStatus": "pesquisa",
+   "city": "Wuhua",
+   "stadium": "Wuhua Olympic Sports Center Huitang Stadium"
+  },
+  {
+   "id": "club:suzhou-dongwu",
+   "name": "Suzhou Dongwu",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5688
+   },
+   "dataStatus": "pesquisa",
+   "city": "Suzhou",
+   "stadium": "Wujiang Stadium"
+  },
+  {
+   "id": "club:nanjing-city",
+   "name": "Nanjing City",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 16619
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:dongguan-united",
+   "name": "Dongguan United",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 17263
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hebei-kungfu",
+   "name": "Hebei Kungfu",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 17264
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:wuxi-wugou",
+   "name": "Wuxi Wugou",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 17269
+   },
+   "dataStatus": "pesquisa",
+   "city": "Wuxi",
+   "stadium": "Wuxi Sports Center"
+  },
+  {
+   "id": "club:yanbian-longding",
+   "name": "Yanbian Longding",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 17271
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:chongqing-tongliang-long",
+   "name": "Chongqing Tongliang Long",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21262
+   },
+   "dataStatus": "pesquisa",
+   "city": "Chongqing",
+   "stadium": "Tongliang Long Stadium"
+  },
+  {
+   "id": "club:dalian-zhixing",
+   "name": "Dalian Zhixing",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21263
+   },
+   "dataStatus": "pesquisa",
+   "city": "Dalian",
+   "stadium": "Jinzhou Stadium"
+  },
+  {
+   "id": "club:yunnan-yukun",
+   "name": "Yunnan Yukun",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21265
+   },
+   "dataStatus": "pesquisa",
+   "city": "Yuxi",
+   "stadium": "Yuxi plateau Sports Center Stadium"
+  },
+  {
+   "id": "club:hunan-billows-fc",
+   "name": "Hunan Billows FC",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 1438
+   },
+   "dataStatus": "pesquisa",
+   "short": "HUN",
+   "city": "Loudi",
+   "stadium": "Loudi Sports Center"
+  },
+  {
+   "id": "club:bit",
+   "name": "BIT",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5647
+   },
+   "dataStatus": "pesquisa",
+   "short": "BEI",
+   "city": "Beijing",
+   "stadium": "Beijing Institute of Technology Eastern Athletic Field"
+  },
+  {
+   "id": "club:dalian-huayi",
+   "name": "Dalian Huayi",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5652
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hangzhou-wuyue-qiantang",
+   "name": "Hangzhou Wuyue Qiantang",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5658
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hubei-chufeng-heli",
+   "name": "Hubei Chufeng Heli",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5660
+   },
+   "dataStatus": "pesquisa",
+   "city": "Wuhan",
+   "stadium": "Hubei Football Management Center Training Base Central Stadium"
+  },
+  {
+   "id": "club:inner-mongolia-caoshang",
+   "name": "Inner Mongolia Caoshang.",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5662
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:qingdao-elite-united",
+   "name": "Qingdao Elite United",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5677
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:qingdao-kunpeng",
+   "name": "Qingdao Kunpeng",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5678
+   },
+   "dataStatus": "pesquisa",
+   "short": "QIN"
+  },
+  {
+   "id": "club:xi-an-hi-tech-zone",
+   "name": "Xi'an Hi-Tech Zone",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 5697
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:quanzhou-yassin",
+   "name": "Quanzhou Yassin",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 17266
+   },
+   "dataStatus": "pesquisa",
+   "city": "Jinjiang",
+   "stadium": "Jinjiang Football Training Center Stadium"
+  },
+  {
+   "id": "club:yichun-grand-tiger",
+   "name": "Yichun Grand Tiger",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 17272
+   },
+   "dataStatus": "pesquisa",
+   "city": "Wenzhou",
+   "stadium": "Wenzhou Sports Center Stadium"
+  },
+  {
+   "id": "club:hainan-star",
+   "name": "Hainan Star",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 19317
+   },
+   "dataStatus": "pesquisa",
+   "city": "Kunming",
+   "stadium": "Yunnan Coerver Football Training Base Stadium"
+  },
+  {
+   "id": "club:nantong-haimen-codion",
+   "name": "Nantong Haimen Codion",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 19319
+   },
+   "dataStatus": "pesquisa",
+   "city": "Nantong",
+   "stadium": "Haimen Sports Center Stadium"
+  },
+  {
+   "id": "club:shangyu-pterosaur",
+   "name": "Shangyu Pterosaur",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 19320
+   },
+   "dataStatus": "pesquisa",
+   "city": "Ganzhou",
+   "stadium": "Ganzhou Nationwide Fitness Centre Stadium"
+  },
+  {
+   "id": "club:tai-an-tiankuang",
+   "name": "Tai'an Tiankuang",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 19321
+   },
+   "dataStatus": "pesquisa",
+   "city": "Tai&apos;an",
+   "stadium": "Taishan Stadium"
+  },
+  {
+   "id": "club:xi-an-ronghai",
+   "name": "Xi'an Ronghai",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 20674
+   },
+   "dataStatus": "pesquisa",
+   "city": "Taiyuan",
+   "stadium": "Taiyuan University Football Stadium"
+  },
+  {
+   "id": "club:guangxi-lanhang",
+   "name": "Guangxi Lanhang",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21264
+   },
+   "dataStatus": "pesquisa",
+   "city": "Baise",
+   "stadium": "Baise Sports Center Stadium"
+  },
+  {
+   "id": "club:changle-jingangtui",
+   "name": "Changle Jingangtui",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21322
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ningxia-renfangzhong",
+   "name": "Ningxia Renfangzhong",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21325
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:qujing-yibu",
+   "name": "Qujing Yibu",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21327
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rizhao-yuqi",
+   "name": "Rizhao Yuqi",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21328
+   },
+   "dataStatus": "pesquisa",
+   "city": "Lanzhou",
+   "stadium": "Lanzhou Olympic Center Stadium"
+  },
+  {
+   "id": "club:shanghai-shenshui",
+   "name": "Shanghai Shenshui",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21329
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:shanxi-longchengren",
+   "name": "Shanxi Longchengren",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21331
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:wuhan-xiaoma-guohe",
+   "name": "Wuhan Xiaoma Guohe",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 21333
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:changchun-xidu",
+   "name": "Changchun Xidu",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23132
+   },
+   "dataStatus": "pesquisa",
+   "city": "Changchun",
+   "stadium": "Yatai Training Base Stadium"
+  },
+  {
+   "id": "club:changning-flying-lions",
+   "name": "Changning Flying Lions",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23133
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:chunlei",
+   "name": "Chunlei",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23134
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fujian-quanzhou-qinggong",
+   "name": "Fujian Quanzhou Qinggong",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23135
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gannan-92-united",
+   "name": "Gannan 92 United",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23136
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:guangdong-shudihong",
+   "name": "Guangdong Shudihong",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23137
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:guangxi-bushan",
+   "name": "Guangxi Bushan",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23138
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:haishan",
+   "name": "Haishan",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23139
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:jiangsu-nan-dongsheng",
+   "name": "Jiangsu Nan Dongsheng",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23140
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:lanzhou-hailu",
+   "name": "Lanzhou Hailu",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23141
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:lujian-tiancheng",
+   "name": "Lujian Tiancheng",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23142
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:nanning-juding",
+   "name": "Nanning Juding",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23143
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ningo-shoufa",
+   "name": "Ningo Shoufa",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23144
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ningxia-pingluo",
+   "name": "Ningxia Pingluo",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23145
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:qianxinan-xu-fengtang",
+   "name": "Qianxinan Xu Fengtang",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23146
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:shanghai-segenda",
+   "name": "Shanghai Segenda",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23147
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:shanghai-tongji",
+   "name": "Shanghai Tongji",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23148
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:shanxi-xiangyu",
+   "name": "Shanxi Xiangyu",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23149
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:shenzhen-jixiang",
+   "name": "Shenzhen Jixiang",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23150
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:shenzhen-juniors",
+   "name": "Shenzhen Juniors",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23265
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:guangxi-hengchen",
+   "name": "Guangxi Hengchen",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23268
+   },
+   "dataStatus": "pesquisa",
+   "city": "Nanning",
+   "stadium": "Nanning Sports School Wuhe Campus Football Field"
+  },
+  {
+   "id": "club:guangzhou-e-power",
+   "name": "Guangzhou E-Power",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23269
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:langfang-glory-city",
+   "name": "Langfang Glory City",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23270
+   },
+   "dataStatus": "pesquisa",
+   "city": "Hangzhou",
+   "stadium": "Linping Sports Center Stadium"
+  },
+  {
+   "id": "club:shaanxi-union",
+   "name": "Shaanxi Union",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23286
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:serbian-white-eagles",
+   "name": "Serbian White Eagles",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2016
+   },
+   "dataStatus": "pesquisa",
+   "short": "SER",
+   "city": "Etobicoke, Ontario",
+   "stadium": "Centennial Park Stadium"
+  },
+  {
+   "id": "club:sc-scarborough",
+   "name": "SC Scarborough",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2019
+   },
+   "dataStatus": "pesquisa",
+   "city": "Scarborough, Ontario",
+   "stadium": "Birchmount Stadium"
+  },
+  {
+   "id": "club:hamilton-city",
+   "name": "Hamilton City",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2023
+   },
+   "dataStatus": "pesquisa",
+   "short": "LON",
+   "city": "Stoney Creek, Ontario",
+   "stadium": "Heritage Green Field"
+  },
+  {
+   "id": "club:toronto-falcons",
+   "name": "Toronto Falcons",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 18979
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:future-stars",
+   "name": "Future Stars",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 23627
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:unity-on",
+   "name": "Unity ON",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 23628
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:toronto-fc",
+   "name": "Toronto FC",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 1601
+   },
+   "dataStatus": "pesquisa",
+   "short": "TOR",
+   "city": "Toronto, Ontario",
+   "stadium": "BMO Field"
+  },
+  {
+   "id": "club:vancouver-whitecaps",
+   "name": "Vancouver Whitecaps",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 1603
+   },
+   "dataStatus": "pesquisa",
+   "city": "Vancouver, British Columbia",
+   "stadium": "BC Place"
+  },
+  {
+   "id": "club:cf-montreal",
+   "name": "CF Montreal",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 1614
+   },
+   "dataStatus": "pesquisa",
+   "short": "MON",
+   "city": "Montreal, Quebec",
+   "stadium": "Stade Saputo"
+  },
+  {
+   "id": "club:cavalry-fc",
+   "name": "Cavalry FC",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2619
+   },
+   "dataStatus": "pesquisa",
+   "city": "Calgary, Alberta",
+   "stadium": "ATCO Field"
+  },
+  {
+   "id": "club:hfx-wanderers-fc",
+   "name": "HFX Wanderers FC",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2621
+   },
+   "dataStatus": "pesquisa",
+   "city": "Halifax, Nova Scotia",
+   "stadium": "Wanderers Grounds"
+  },
+  {
+   "id": "club:pacific-fc",
+   "name": "Pacific FC",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2622
+   },
+   "dataStatus": "pesquisa",
+   "city": "Victoria, British Columbia",
+   "stadium": "Starlight Stadium"
+  },
+  {
+   "id": "club:york-united",
+   "name": "York United",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2623
+   },
+   "dataStatus": "pesquisa",
+   "city": "Toronto, Ontario",
+   "stadium": "York Lions Stadium"
+  },
+  {
+   "id": "club:forge",
+   "name": "Forge",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 3830
+   },
+   "dataStatus": "pesquisa",
+   "city": "Hamilton",
+   "stadium": "Hamilton Stadium"
+  },
+  {
+   "id": "club:valour",
+   "name": "Valour",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 3831
+   },
+   "dataStatus": "pesquisa",
+   "city": "Winnipeg, Manitoba",
+   "stadium": "Princess Auto Stadium"
+  },
+  {
+   "id": "club:tss-rovers",
+   "name": "TSS Rovers",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 4085
+   },
+   "dataStatus": "pesquisa",
+   "city": "Burnaby, British Columbia",
+   "stadium": "Swangard Stadium"
+  },
+  {
+   "id": "club:atletico-ottawa",
+   "name": "Atlético Ottawa",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 10169
+   },
+   "dataStatus": "pesquisa",
+   "city": "Ottawa, Ontario",
+   "stadium": "TD Place Stadium"
+  },
+  {
+   "id": "club:simcoe-county-rovers",
+   "name": "Simcoe County Rovers",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19110
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vancouver-fc",
+   "name": "Vancouver FC",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 20881
+   },
+   "dataStatus": "pesquisa",
+   "city": "Langley, British Columbia",
+   "stadium": "Willoughby Community Park at the Langley Events Centre"
+  },
+  {
+   "id": "club:saint-laurent",
+   "name": "Saint-Laurent",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 23151
+   },
+   "dataStatus": "pesquisa",
+   "city": "Saint-Laurent, Quebec",
+   "stadium": "Stade Cégep Vanier"
+  },
+  {
+   "id": "club:khalsa",
+   "name": "Khalsa",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 3556
+   },
+   "dataStatus": "pesquisa",
+   "city": "Coquitlam, British Columbia",
+   "stadium": "Queens Park"
+  },
+  {
+   "id": "club:mid-isle-mariners",
+   "name": "Mid Isle Mariners",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 3557
+   },
+   "dataStatus": "pesquisa",
+   "city": "Ladysmith, British Columbia",
+   "stadium": "Ladysmith Turf Field"
+  },
+  {
+   "id": "club:port-moody",
+   "name": "Port Moody",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 16827
+   },
+   "dataStatus": "pesquisa",
+   "city": "Port Moody, British Columbia",
+   "stadium": "Port Moody Trasolini Turf"
+  },
+  {
+   "id": "club:kamloops-rivers-ii",
+   "name": "Kamloops Rivers II",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 18917
+   },
+   "dataStatus": "pesquisa",
+   "city": "Kamloops, British Columbia",
+   "stadium": "Warner Rentals Field at Hillside Stadium"
+  },
+  {
+   "id": "club:victoria-united",
+   "name": "Victoria United",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 18919
+   },
+   "dataStatus": "pesquisa",
+   "city": "Victoria, British Columbia",
+   "stadium": "Braefoot Park"
+  },
+  {
+   "id": "club:wia",
+   "name": "WIA",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 18920
+   },
+   "dataStatus": "pesquisa",
+   "city": "Victoria, British Columbia",
+   "stadium": "University of Victoria - Field 3"
+  },
+  {
+   "id": "club:blues",
+   "name": "Blues",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 23430
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ares-football-association",
+   "name": "Ares Football Association",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 28549
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:colo-colo",
+   "name": "Colo Colo",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2315
+   },
+   "dataStatus": "pesquisa",
+   "short": "COL",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Monumental David Arellano"
+  },
+  {
+   "id": "club:palestino",
+   "name": "Palestino",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2318
+   },
+   "dataStatus": "pesquisa",
+   "short": "PAL",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Municipal de La Cisterna"
+  },
+  {
+   "id": "club:deportes-iquique",
+   "name": "Deportes Iquique",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2319
+   },
+   "dataStatus": "pesquisa",
+   "short": "IQU",
+   "city": "Iquique",
+   "stadium": "Estadio Tierra de Campeones"
+  },
+  {
+   "id": "club:o-higgins",
+   "name": "O'Higgins",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2320
+   },
+   "dataStatus": "pesquisa",
+   "short": "HIG",
+   "city": "Rancagua",
+   "stadium": "Estadio El Teniente"
+  },
+  {
+   "id": "club:union-espanola",
+   "name": "Union Espanola",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2321
+   },
+   "dataStatus": "pesquisa",
+   "short": "ESP",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Santa Laura-Universidad SEK"
+  },
+  {
+   "id": "club:universidad-de-chile",
+   "name": "Universidad de Chile",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2323
+   },
+   "dataStatus": "pesquisa",
+   "short": "CHI",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Santa Laura-Universidad SEK"
+  },
+  {
+   "id": "club:everton-de-vina",
+   "name": "Everton de Vina",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2325
+   },
+   "dataStatus": "pesquisa",
+   "short": "EVE",
+   "city": "Viña del Mar",
+   "stadium": "Estadio Sausalito"
+  },
+  {
+   "id": "club:union-la-calera",
+   "name": "Union La Calera",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2326
+   },
+   "dataStatus": "pesquisa",
+   "short": "UNI",
+   "city": "La Calera",
+   "stadium": "Estadio Municipal Nicolás Chahuán Nazar"
+  },
+  {
+   "id": "club:huachipato",
+   "name": "Huachipato",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2328
+   },
+   "dataStatus": "pesquisa",
+   "short": "HUA",
+   "city": "Talcahuano",
+   "stadium": "Estadio CAP"
+  },
+  {
+   "id": "club:a-italiano",
+   "name": "A. Italiano",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2329
+   },
+   "dataStatus": "pesquisa",
+   "short": "ITA",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Bicentenario Municipal de La Florida"
+  },
+  {
+   "id": "club:coquimbo-unido",
+   "name": "Coquimbo Unido",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2330
+   },
+   "dataStatus": "pesquisa",
+   "short": "COQ",
+   "city": "Coquimbo",
+   "stadium": "Estadio Bicentenario Francisco Sánchez Rumoroso"
+  },
+  {
+   "id": "club:cobresal",
+   "name": "Cobresal",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2331
+   },
+   "dataStatus": "pesquisa",
+   "short": "COB",
+   "city": "El Salvador, Diego de Almagro",
+   "stadium": "Estadio El Cobre"
+  },
+  {
+   "id": "club:cobreloa",
+   "name": "Cobreloa",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2332
+   },
+   "dataStatus": "pesquisa",
+   "short": "COB",
+   "city": "Calama",
+   "stadium": "Estadio Zorros del Desierto"
+  },
+  {
+   "id": "club:nublense",
+   "name": "Nublense",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2337
+   },
+   "dataStatus": "pesquisa",
+   "short": "NUB",
+   "city": "Chillán",
+   "stadium": "Estadio Bicentenario Municipal Nelson Oyarzún"
+  },
+  {
+   "id": "club:deportes-copiapo",
+   "name": "Deportes Copiapo",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2343
+   },
+   "dataStatus": "pesquisa",
+   "short": "COP",
+   "city": "Copiapó",
+   "stadium": "Estadio Luis Valenzuela Hermosilla"
+  },
+  {
+   "id": "club:u-catolica",
+   "name": "U. Catolica",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2994
+   },
+   "dataStatus": "pesquisa",
+   "short": "CAT",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Santa Laura-Universidad SEK"
+  },
+  {
+   "id": "club:curico-unido",
+   "name": "Curico Unido",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2316
+   },
+   "dataStatus": "pesquisa",
+   "short": "CUR",
+   "city": "Curicó",
+   "stadium": "Estadio Bicentenario La Granja"
+  },
+  {
+   "id": "club:deportes-temuco",
+   "name": "Deportes Temuco",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2317
+   },
+   "dataStatus": "pesquisa",
+   "short": "DEP",
+   "city": "Temuco",
+   "stadium": "Estadio Municipal Bicentenario Germán Becker"
+  },
+  {
+   "id": "club:san-luis",
+   "name": "San Luis",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2322
+   },
+   "dataStatus": "pesquisa",
+   "short": "LUI",
+   "city": "Quillota",
+   "stadium": "Estadio Bicentenario Lucio Fariña"
+  },
+  {
+   "id": "club:universidad-de-concepcion",
+   "name": "Universidad de Concepcion",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2324
+   },
+   "dataStatus": "pesquisa",
+   "short": "CON",
+   "city": "Concepción",
+   "stadium": "Estadio Municipal Alcaldesa Ester Roa Rebolledo"
+  },
+  {
+   "id": "club:antofagasta",
+   "name": "Antofagasta",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2327
+   },
+   "dataStatus": "pesquisa",
+   "short": "ANT",
+   "city": "Antofagasta",
+   "stadium": "Estadio Regional Calvo y Bascuñán"
+  },
+  {
+   "id": "club:santiago-wanderers",
+   "name": "Santiago Wanderers",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2333
+   },
+   "dataStatus": "pesquisa",
+   "short": "WAN",
+   "city": "Valparaíso",
+   "stadium": "Estadio Elías Figueroa Brander"
+  },
+  {
+   "id": "club:santiago-morning",
+   "name": "Santiago Morning",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2335
+   },
+   "dataStatus": "pesquisa",
+   "short": "MOR",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Municipal de La Pintana"
+  },
+  {
+   "id": "club:magallanes",
+   "name": "Magallanes",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2336
+   },
+   "dataStatus": "pesquisa",
+   "short": "MAG",
+   "city": "San Bernardo",
+   "stadium": "Estadio Municipal"
+  },
+  {
+   "id": "club:barnechea",
+   "name": "Barnechea",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2338
+   },
+   "dataStatus": "pesquisa",
+   "short": "BAR",
+   "city": "Santiago de Chile",
+   "stadium": "Estadio Municipal de Lo Barnechea"
+  },
+  {
+   "id": "club:union-san-felipe",
+   "name": "Union San Felipe",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2340
+   },
+   "dataStatus": "pesquisa",
+   "short": "FEL",
+   "city": "San Felipe",
+   "stadium": "Estadio Municipal de San Felipe"
+  },
+  {
+   "id": "club:d-la-serena",
+   "name": "D. La Serena",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2341
+   },
+   "dataStatus": "pesquisa",
+   "short": "SER",
+   "city": "La Serena",
+   "stadium": "Estadio La Portada de La Serena"
+  },
+  {
+   "id": "club:rangers-de-talca",
+   "name": "Rangers de Talca",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2344
+   },
+   "dataStatus": "pesquisa",
+   "short": "RAN",
+   "city": "Talca",
+   "stadium": "Estadio Fiscal de Talca"
+  },
+  {
+   "id": "club:san-marcos-de-arica",
+   "name": "San Marcos de Arica",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2345
+   },
+   "dataStatus": "pesquisa",
+   "short": "MAR",
+   "city": "Arica",
+   "stadium": "Estadio Carlos Dittborn"
+  },
+  {
+   "id": "club:deportes-santa-cruz",
+   "name": "Deportes Santa Cruz",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2346
+   },
+   "dataStatus": "pesquisa",
+   "city": "Santa Cruz",
+   "stadium": "Estadio Municipal Joaquín Muñoz García"
+  },
+  {
+   "id": "club:recoleta",
+   "name": "Recoleta",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5644
+   },
+   "dataStatus": "pesquisa",
+   "city": "Recoleta",
+   "stadium": "Estadio Municipal de Recoleta"
+  },
+  {
+   "id": "club:deportes-limache",
+   "name": "Deportes Limache",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 16730
+   },
+   "dataStatus": "pesquisa",
+   "city": "Limache",
+   "stadium": "Estadio Gustavo Ocaranza"
+  },
+  {
+   "id": "club:deportes-valdivia",
+   "name": "Deportes Valdivia",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2334
+   },
+   "dataStatus": "pesquisa",
+   "city": "Valdivia",
+   "stadium": "Estadio El Parque Municipal"
+  },
+  {
+   "id": "club:d-melipilla",
+   "name": "D. Melipilla",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2339
+   },
+   "dataStatus": "pesquisa",
+   "city": "Melipilla",
+   "stadium": "Estadio Soinca Bata"
+  },
+  {
+   "id": "club:d-puerto-montt",
+   "name": "D. Puerto Montt",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 2342
+   },
+   "dataStatus": "pesquisa",
+   "city": "Puerto Montt",
+   "stadium": "Estadio Bicentenario de Chinquihue"
+  },
+  {
+   "id": "club:colchagua",
+   "name": "Colchagua",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5633
+   },
+   "dataStatus": "pesquisa",
+   "city": "San Fernando",
+   "stadium": "Estadio Municipal Jorge Silva Valenzuela"
+  },
+  {
+   "id": "club:colina",
+   "name": "Colina",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5634
+   },
+   "dataStatus": "pesquisa",
+   "city": "Colina",
+   "stadium": "Estadio Municipal de Colina"
+  },
+  {
+   "id": "club:concepcion",
+   "name": "Concepción",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5635
+   },
+   "dataStatus": "pesquisa",
+   "short": "CON",
+   "city": "Concepción",
+   "stadium": "Estadio Municipal Alcaldesa Ester Roa Rebolledo"
+  },
+  {
+   "id": "club:deportes-rengo",
+   "name": "Deportes Rengo",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5636
+   },
+   "dataStatus": "pesquisa",
+   "city": "Rengo",
+   "stadium": "Estadio Municipal Guillermo Guzmán Díaz"
+  },
+  {
+   "id": "club:fernandez-vial",
+   "name": "Fernández Vial",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5638
+   },
+   "dataStatus": "pesquisa",
+   "city": "Concepción",
+   "stadium": "Estadio Municipal Alcaldesa Ester Roa Rebolledo"
+  },
+  {
+   "id": "club:general-velasquez",
+   "name": "General Velásquez",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5639
+   },
+   "dataStatus": "pesquisa",
+   "city": "San Vicente de Tagua Tagua",
+   "stadium": "Estadio Municipal Augusto Rodríguez"
+  },
+  {
+   "id": "club:iberia",
+   "name": "Iberia",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5640
+   },
+   "dataStatus": "pesquisa",
+   "city": "Los Ángeles",
+   "stadium": "Estadio Municipal de Los Ángeles"
+  },
+  {
+   "id": "club:lautaro-de-buin",
+   "name": "Lautaro de Buin",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5641
+   },
+   "dataStatus": "pesquisa",
+   "city": "Buín",
+   "stadium": "Estadio Lautaro"
+  },
+  {
+   "id": "club:provincial-osorno",
+   "name": "Provincial Osorno",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5643
+   },
+   "dataStatus": "pesquisa",
+   "city": "Osorno",
+   "stadium": "Estadio Municipal Rubén Marcos Peralta"
+  },
+  {
+   "id": "club:san-antonio-unido",
+   "name": "San Antonio Unido",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5645
+   },
+   "dataStatus": "pesquisa",
+   "city": "San Antonio",
+   "stadium": "Estadio Municipal Doctor Olegario Henríquez Escalante"
+  },
+  {
+   "id": "club:trasandino",
+   "name": "Trasandino",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 5646
+   },
+   "dataStatus": "pesquisa",
+   "city": "Los Andes",
+   "stadium": "Estadio Regional de Los Andes"
+  },
+  {
+   "id": "club:linares-unido",
+   "name": "Linares Unido",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 15717
+   },
+   "dataStatus": "pesquisa",
+   "city": "Linares",
+   "stadium": "Estadio Tucapel Bustamante"
+  },
+  {
+   "id": "club:deportes-quillon",
+   "name": "Deportes Quillón",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 18772
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:municipal-salamanca",
+   "name": "Municipal Salamanca",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 18775
+   },
+   "dataStatus": "pesquisa",
+   "city": "Salamanca, Región de Coquimbo",
+   "stadium": "Estadio Municipal de Salamanca"
+  },
+  {
+   "id": "club:provincial-ovalle",
+   "name": "Provincial Ovalle",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 18776
+   },
+   "dataStatus": "pesquisa",
+   "city": "Ovalle",
+   "stadium": "Estadio Diaguita"
+  },
+  {
+   "id": "club:real-san-joaquin",
+   "name": "Real San Joaquín",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 18779
+   },
+   "dataStatus": "pesquisa",
+   "city": "San Joaquín",
+   "stadium": "Estadio Municipal de San Joaquín"
+  },
+  {
+   "id": "club:union-companias",
+   "name": "Unión Compañías",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 18783
+   },
+   "dataStatus": "pesquisa",
+   "city": "La Serena",
+   "stadium": "Complejo Juan Soldado"
+  },
+  {
+   "id": "club:chimbarongo",
+   "name": "Chimbarongo",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 21112
+   },
+   "dataStatus": "pesquisa",
+   "city": "Chimbarongo, O&apos;Higgins Region",
+   "stadium": "Municipal de Chimbarongo"
+  },
+  {
+   "id": "club:comunal-cabrero",
+   "name": "Comunal Cabrero",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 21113
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:concon-national",
+   "name": "Concón National",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 21114
+   },
+   "dataStatus": "pesquisa",
+   "city": "Quillota",
+   "stadium": "Estadio Bicentenario Lucio Fariña"
+  },
+  {
+   "id": "club:municipal-puente-alto",
+   "name": "Municipal Puente Alto",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 21115
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:santiago-city",
+   "name": "Santiago City",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 21117
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:constitucion-unido",
+   "name": "Constitución Unido",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23550
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:imperial-unido",
+   "name": "Imperial Unido",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23551
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:juan-fernandez",
+   "name": "Juan Fernández",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23552
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:municipal-mejillones",
+   "name": "Municipal Mejillones",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23553
+   },
+   "dataStatus": "pesquisa",
+   "city": "Mejillones",
+   "stadium": "Estadio Municipal Rolando Cortés Dubo"
+  },
+  {
+   "id": "club:el-lucero",
+   "name": "El Lucero",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23556
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:juvenil-seminario",
+   "name": "Juvenil Seminario",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23557
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:union-wanderers",
+   "name": "Unión Wanderers",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23558
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vicente-rosales",
+   "name": "Vicente Rosales",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23559
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:11-de-septiembre",
+   "name": "11 de Septiembre",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23584
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:barcelona-copiapo",
+   "name": "Barcelona Copiapó",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23585
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:marcos-trincado",
+   "name": "Marcos Trincado",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23586
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:norte-unido",
+   "name": "Norte Unido",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23587
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:presidente-ibanez",
+   "name": "Presidente Ibáñez",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23588
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ferro-monte-aguila",
+   "name": "Ferro Monte Águila",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23589
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:glorias-navales",
+   "name": "Glorias Navales",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23590
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:alas-portuarias",
+   "name": "Alas Portuarias",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 23605
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:central-norte",
+   "name": "Central Norte",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 28550
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:miramar",
+   "name": "Miramar",
+   "countryId": "ctry:chile",
+   "externalIds": {
+    "apiFootball": 28551
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-de-agosto",
+   "name": "1º de Agosto",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4913
+   },
+   "dataStatus": "pesquisa",
+   "short": "PRI",
+   "city": "Luanda",
+   "stadium": "Estádio 11 de Novembro"
+  },
+  {
+   "id": "club:academica-do-lobito",
+   "name": "Académica do Lobito",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4915
+   },
+   "dataStatus": "pesquisa",
+   "short": "LOB",
+   "city": "Lobito",
+   "stadium": "Estádio do Buraco"
+  },
+  {
+   "id": "club:desportivo-huila",
+   "name": "Desportivo Huíla",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4918
+   },
+   "dataStatus": "pesquisa",
+   "short": "HUI",
+   "city": "Lubango",
+   "stadium": "Estádio Provincial da Huíla (Ferroviário)"
+  },
+  {
+   "id": "club:interclube",
+   "name": "Interclube",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4920
+   },
+   "dataStatus": "pesquisa",
+   "short": "INT",
+   "city": "Luanda",
+   "stadium": "Estádio Joaquim Dinis"
+  },
+  {
+   "id": "club:bravos-do-maquis-fc",
+   "name": "Bravos do Maquis FC",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4921
+   },
+   "dataStatus": "pesquisa",
+   "short": "BRA",
+   "city": "Saurimo",
+   "stadium": "Estádio das Mangueiras"
+  },
+  {
+   "id": "club:petro-de-luanda",
+   "name": "Petro de Luanda",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4922
+   },
+   "dataStatus": "pesquisa",
+   "short": "PET",
+   "city": "Luanda",
+   "stadium": "Estádio 11 de Novembro"
+  },
+  {
+   "id": "club:recreativo-do-libolo",
+   "name": "Recreativo do Libolo",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4924
+   },
+   "dataStatus": "pesquisa",
+   "short": "LIB",
+   "city": "Calulo",
+   "stadium": "Estádio Municipal de Calulo"
+  },
+  {
+   "id": "club:sagrada-esperanca",
+   "name": "Sagrada Esperança",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4925
+   },
+   "dataStatus": "pesquisa",
+   "short": "SAG",
+   "city": "Dundo",
+   "stadium": "Estádio Quintalão"
+  },
+  {
+   "id": "club:santa-rita",
+   "name": "Santa Rita",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4928
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kabuscorp",
+   "name": "Kabuscorp",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 4929
+   },
+   "dataStatus": "pesquisa",
+   "short": "KAB",
+   "city": "Luanda",
+   "stadium": "Estádio Municipal dos Coqueiros"
+  },
+  {
+   "id": "club:wiliete",
+   "name": "Wiliete",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 6383
+   },
+   "dataStatus": "pesquisa",
+   "city": "Benguela",
+   "stadium": "Estádio Nacional de OMBAKA"
+  },
+  {
+   "id": "club:cd-lunda-sul",
+   "name": "CD Lunda-Sul",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 17987
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:isaac-de-benguela",
+   "name": "Isaac de Benguela",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 20246
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sao-salvador",
+   "name": "São Salvador",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 22359
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:carmona",
+   "name": "Carmona",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 24908
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:luanda-city",
+   "name": "Luanda City",
+   "countryId": "ctry:angola",
+   "externalIds": {
+    "apiFootball": 24909
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vaughan-azzurri",
+   "name": "Vaughan Azzurri",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 2620
+   },
+   "dataStatus": "pesquisa",
+   "city": "Vaughan, Ontario",
+   "stadium": "North Maple Regional Park Turf 1"
+  },
+  {
+   "id": "club:guelph-united",
+   "name": "Guelph United",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 18766
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:alliance-united",
+   "name": "Alliance United",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19096
+   },
+   "dataStatus": "pesquisa",
+   "city": "Toronto, Ontario",
+   "stadium": "Centennial College Turf"
+  },
+  {
+   "id": "club:blue-devils",
+   "name": "Blue Devils",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19098
+   },
+   "dataStatus": "pesquisa",
+   "city": "Oakville, Ontario",
+   "stadium": "Oakville Sheridan College Stadium"
+  },
+  {
+   "id": "club:burlington",
+   "name": "Burlington",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19099
+   },
+   "dataStatus": "pesquisa",
+   "city": "Burlington, Ontario",
+   "stadium": "Nelson Stadium"
+  },
+  {
+   "id": "club:hamilton-united",
+   "name": "Hamilton United",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19103
+   },
+   "dataStatus": "pesquisa",
+   "city": "Hamilton, Ontario",
+   "stadium": "Ron Joyce Stadium"
+  },
+  {
+   "id": "club:north-toronto-nitros",
+   "name": "North Toronto Nitros",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19105
+   },
+   "dataStatus": "pesquisa",
+   "city": "North York, Ontario",
+   "stadium": "Downsview Turf 1"
+  },
+  {
+   "id": "club:prostars",
+   "name": "ProStars",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19107
+   },
+   "dataStatus": "pesquisa",
+   "city": "Brampton, Ontario",
+   "stadium": "Victoria Park Stadium"
+  },
+  {
+   "id": "club:scrosoppi",
+   "name": "Scrosoppi",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19108
+   },
+   "dataStatus": "pesquisa",
+   "city": "Milton, Ontario",
+   "stadium": "Jean Vanier Field"
+  },
+  {
+   "id": "club:sigma",
+   "name": "Sigma",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19109
+   },
+   "dataStatus": "pesquisa",
+   "city": "Mississauga, ON",
+   "stadium": "Hershey Centre Turf Field 1"
+  },
+  {
+   "id": "club:woodbridge-strikers",
+   "name": "Woodbridge Strikers",
+   "countryId": "ctry:canada",
+   "externalIds": {
+    "apiFootball": 19114
+   },
+   "dataStatus": "pesquisa",
+   "city": "Woodbridge, Ontario",
+   "stadium": "Vaughan Grove 1"
+  },
+  {
+   "id": "club:shandong-taishan-ii",
+   "name": "Shandong Taishan II",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23288
+   },
+   "dataStatus": "pesquisa",
+   "city": "Zoucheng",
+   "stadium": "Zoucheng Sports Center"
+  },
+  {
+   "id": "club:shanghai-port-ii",
+   "name": "Shanghai Port II",
+   "countryId": "ctry:china",
+   "externalIds": {
+    "apiFootball": 23289
+   },
+   "dataStatus": "pesquisa",
+   "city": "Shanghai",
+   "stadium": "Ledongli Lingang Football Sports Center"
   }
  ],
  "players": []

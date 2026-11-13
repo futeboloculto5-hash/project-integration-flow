@@ -7,3 +7,6 @@
 - **Regerar:** `python3 -I montar.py` (usa `competicoes.md` e os pacotes `competicoes-por-pais` e `clubes-por-competicao`).
 - **Licença:** as competições vêm do API-Football da conta do dono do projeto (não redistribuir); os clubes são CC0.
 - Substitui, para uso no jogo, os pacotes `competicoes-por-pais` e `clubes-por-competicao` (que ficam como fonte). Não instale os três ao mesmo tempo.
+
+## Clubes vindos do API-Football (`fonte-api/`)
+Arquivos `<liga>_<temporada>.json` baixados com `baixar_clubes.py` (a temporada é a mais nova que o plano permite; no plano grátis testado foi 2024). `montar.py` os lê e cria clubes e edições só para competições que ainda não têm clubes do openfootball. Clubes são unidos pelo id do API (`externalIds.apiFootball`). Fotos/logos não são copiados. Esses arquivos são dados do API-Football da conta do dono do projeto: não deixe este repositório público.

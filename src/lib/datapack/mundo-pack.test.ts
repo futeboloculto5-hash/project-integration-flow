@@ -40,10 +40,29 @@ describe('Datapack final mundo-competicoes-clubes', () => {
     expect(br.editions).toHaveLength(2);
     expect(br.clubs).toHaveLength(40);
   });
-  it('as 27 edições com clubes apontam para competições existentes', () => {
+  it('as edições com clubes apontam para competições e clubes que existem, sem repetir clube na edição', () => {
     const ids = new Set(p.competitions.map((c) => c.id));
-    expect(p.editions).toHaveLength(27);
-    expect(p.editions.every((e) => ids.has(e.competitionId))).toBe(true);
-    expect(p.clubs).toHaveLength(502);
+    const clubs = new Set(p.clubs.map((c) => c.id));
+    expect(p.editions.length).toBeGreaterThanOrEqual(43);
+    for (const e of p.editions) {
+      expect(ids.has(e.competitionId)).toBe(true);
+      expect(new Set(e.clubIds).size).toBe(e.clubIds.length);
+      expect(e.clubIds.every((c) => clubs.has(c))).toBe(true);
+    }
+    expect(new Set(p.editions.map((e) => e.competitionId)).size).toBe(p.editions.length);
+    const countries = new Set(p.countries.map((c) => c.id));
+    expect(p.clubs.every((c) => countries.has(c.countryId))).toBe(true);
+  });
+  it('clubes vindos do API-Football (2024): ligas da China, Canadá, Chile e Angola, sem seleções e sem duplicar por id do API', () => {
+    const edition = (name: string) => { const c = p.competitions.find((x) => x.name === name && x.countryId !== undefined)!; return p.editions.find((e) => e.competitionId === c.id); };
+    expect(edition('Super League')!.clubIds).toHaveLength(16);
+    expect(edition('Girabola')!.clubIds).toHaveLength(16);
+    expect(edition('Primera División')!.season).toBe('2024');
+    const colo = p.clubs.find((c) => c.name === 'Colo Colo')!;
+    expect(colo).toMatchObject({ countryId: 'ctry:chile', externalIds: { apiFootball: 2315 } });
+    const apiIds = p.clubs.map((c) => (c.externalIds as { apiFootball?: number } | undefined)?.apiFootball).filter((x) => x !== undefined);
+    expect(new Set(apiIds).size).toBe(apiIds.length);
+    expect(p.clubs.length).toBeGreaterThan(502);
+    expect(p.manifest.counts).toMatchObject({ clubs: p.clubs.length, editions: p.editions.length });
   });
 });

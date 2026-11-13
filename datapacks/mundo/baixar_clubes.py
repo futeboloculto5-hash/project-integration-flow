@@ -13,6 +13,8 @@ IDS = "397:2026,1192:2026,258:2025,259:2026,260:2025,479:2026,923:2025,265:2026,
 H = {"x-apisports-key": KEY}
 os.makedirs("clubes", exist_ok=True)
 novos, teto = 0, None
+# Competições que você já baixou antes (de clubes.zip anteriores): são puladas mesmo num notebook novo.
+PULAR = {169,170,171,258,259,260,265,266,267,397,479,527,711,923,929,972,1192,1220}
 
 def chamar(liga, temporada):
     global novos
@@ -22,7 +24,7 @@ def chamar(liga, temporada):
 
 for item in IDS.split(","):
     liga, ano = (int(x) for x in item.split(":"))
-    if any(f.startswith(f"{liga}_") for f in os.listdir("clubes")): continue
+    if liga in PULAR or any(f.startswith(f"{liga}_") for f in os.listdir("clubes")): continue
     if novos >= MAX_NOVOS: print("Chegou em", MAX_NOVOS, "chamadas novas hoje. Rode de novo amanhã."); break
     temporada = min(ano, teto) if teto else ano
     for tentativa in range(3):

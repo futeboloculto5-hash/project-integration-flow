@@ -37,6 +37,7 @@ export const COUNTRY_ALIASES: Readonly<Record<string, CountryInfo>> = Object.fro
   ["Iran", ...C("ira", "Irã", "IRN", "AFC")], ["Angola", ...C("angola", "Angola", "AGO", "CAF")],
   ["Indonesia", ...C("indonesia", "Indonésia", "IDN", "AFC")], ["Mexico", ...C("mexico", "México", "MEX", "CONCACAF")],
   ["Peru", ...C("peru", "Peru", "PER", "CONMEBOL")],
+  ["Colombia", ...C("colombia", "Colômbia", "COL", "CONMEBOL")], ["Paraguay", ...C("paraguai", "Paraguai", "PRY", "CONMEBOL")],
 ].map(([k, , v]) => [k as string, v as CountryInfo]));
 
 const aliasKey = (s: string) => s.trim().replace(/\s+/g, "-").toLowerCase();
