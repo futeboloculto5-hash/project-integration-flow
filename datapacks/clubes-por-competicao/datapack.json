@@ -1,0 +1,4132 @@
+{
+ "manifest": {
+  "schema": "ccw.datapack",
+  "schemaVersion": 1,
+  "packId": "clubes-por-competicao",
+  "version": "1.261112.0",
+  "name": "Clubes por competição (openfootball)",
+  "createdAt": "2026-11-12",
+  "origin": "comunitario",
+  "source": {
+   "name": "openfootball (football.db)",
+   "url": "https://github.com/openfootball",
+   "license": "CC0 1.0 (domínio público)",
+   "retrievedAt": "2026-11-12"
+  },
+  "counts": {
+   "countries": 15,
+   "competitions": 27,
+   "clubs": 502,
+   "players": 0,
+   "editions": 27
+  },
+  "notes": "Clubes lidos dos jogos de cada liga (temporada mais recente disponível por competição). Competições sem arquivo no openfootball ficam sem clubes. Sem jogadores."
+ },
+ "countries": [
+  {
+   "id": "ctry:alemanha",
+   "name": "Alemanha",
+   "code": "DEU",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:argentina",
+   "name": "Argentina",
+   "code": "ARG",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:brasil",
+   "name": "Brasil",
+   "code": "BRA",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:belgica",
+   "name": "Bélgica",
+   "code": "BEL",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:colombia",
+   "name": "Colômbia",
+   "code": "COL",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:espanha",
+   "name": "Espanha",
+   "code": "ESP",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:franca",
+   "name": "França",
+   "code": "FRA",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:grecia",
+   "name": "Grécia",
+   "code": "GRC",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:inglaterra",
+   "name": "Inglaterra",
+   "code": "ENG",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:italia",
+   "name": "Itália",
+   "code": "ITA",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:paraguai",
+   "name": "Paraguai",
+   "code": "PRY",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:paises-baixos",
+   "name": "Países Baixos",
+   "code": "NLD",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:portugal",
+   "name": "Portugal",
+   "code": "PRT",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:suecia",
+   "name": "Suécia",
+   "code": "SWE",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:turquia",
+   "name": "Turquia",
+   "code": "TUR",
+   "confederation": "UEFA",
+   "dataStatus": "pesquisa"
+  }
+ ],
+ "competitions": [
+  {
+   "id": "comp:bra-brasileirao-serie-a",
+   "name": "Brasileirão Série A",
+   "countryId": "ctry:brasil",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 71
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bra-brasileirao-serie-b",
+   "name": "Brasileirão Série B",
+   "countryId": "ctry:brasil",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 72
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:arg-liga-profesional-argentina",
+   "name": "Liga Profesional Argentina",
+   "countryId": "ctry:argentina",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 128
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:col-primera-a",
+   "name": "Primera A",
+   "countryId": "ctry:colombia",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 239
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:pry-division-profesional-apertura",
+   "name": "Division Profesional - Apertura",
+   "countryId": "ctry:paraguai",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 250
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:pry-division-profesional-clausura",
+   "name": "Division Profesional - Clausura",
+   "countryId": "ctry:paraguai",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 252
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-premier-league",
+   "name": "Premier League",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 39
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-championship",
+   "name": "Championship",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 40
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-league-one",
+   "name": "League One",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 41
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-league-two",
+   "name": "League Two",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 42
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:eng-national-league",
+   "name": "National League",
+   "countryId": "ctry:inglaterra",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 43
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:deu-bundesliga",
+   "name": "Bundesliga",
+   "countryId": "ctry:alemanha",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 78
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:deu-2-bundesliga",
+   "name": "2. Bundesliga",
+   "countryId": "ctry:alemanha",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 79
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:deu-3-liga",
+   "name": "3. Liga",
+   "countryId": "ctry:alemanha",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 80
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:esp-la-liga",
+   "name": "La Liga",
+   "countryId": "ctry:espanha",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 140
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:esp-segunda-division",
+   "name": "Segunda División",
+   "countryId": "ctry:espanha",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 141
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:ita-serie-a",
+   "name": "Serie A",
+   "countryId": "ctry:italia",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 135
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:ita-serie-b",
+   "name": "Serie B",
+   "countryId": "ctry:italia",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 136
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:fra-ligue-1",
+   "name": "Ligue 1",
+   "countryId": "ctry:franca",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 61
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:fra-ligue-2",
+   "name": "Ligue 2",
+   "countryId": "ctry:franca",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 62
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:nld-eredivisie",
+   "name": "Eredivisie",
+   "countryId": "ctry:paises-baixos",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 88
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:prt-primeira-liga",
+   "name": "Primeira Liga",
+   "countryId": "ctry:portugal",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 94
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:bel-jupiler-pro-league",
+   "name": "Jupiler Pro League",
+   "countryId": "ctry:belgica",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 144
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:grc-super-league-1",
+   "name": "Super League 1",
+   "countryId": "ctry:grecia",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 197
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:swe-allsvenskan",
+   "name": "Allsvenskan",
+   "countryId": "ctry:suecia",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 113
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:swe-superettan",
+   "name": "Superettan",
+   "countryId": "ctry:suecia",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 114
+   },
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "comp:tur-super-lig",
+   "name": "Süper Lig",
+   "countryId": "ctry:turquia",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 203
+   },
+   "dataStatus": "pesquisa"
+  }
+ ],
+ "editions": [
+  {
+   "competitionId": "comp:bra-brasileirao-serie-a",
+   "season": "2026",
+   "clubIds": [
+    "club:ca-mineiro",
+    "club:se-palmeiras",
+    "club:coritiba-fbc",
+    "club:rb-bragantino",
+    "club:sc-internacional",
+    "club:ca-paranaense",
+    "club:ec-vitoria",
+    "club:clube-do-remo",
+    "club:fluminense-fc",
+    "club:gremio-fbpa",
+    "club:chapecoense-af",
+    "club:santos-fc",
+    "club:sc-corinthians-paulista",
+    "club:ec-bahia",
+    "club:sao-paulo-fc",
+    "club:cr-flamengo",
+    "club:mirassol-fc",
+    "club:cr-vasco-da-gama",
+    "club:botafogo-fr",
+    "club:cruzeiro-ec"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:bra-brasileirao-serie-b",
+   "season": "2025",
+   "clubIds": [
+    "club:goias-go",
+    "club:amazonas-fc-am",
+    "club:paysandu-pa",
+    "club:athletico-paranaense",
+    "club:criciuma-sc",
+    "club:operario-ferroviario-pr",
+    "club:coritiba-pr",
+    "club:vila-nova-go",
+    "club:cr-brasil-al",
+    "club:chapecoense",
+    "club:america-mg",
+    "club:botafogo-sp",
+    "club:ferroviaria-sp",
+    "club:remo-pa",
+    "club:volta-redonda-rj",
+    "club:cuiaba-mt",
+    "club:avai-sc",
+    "club:gremio-novorizontino-sp",
+    "club:atletico-goianiense",
+    "club:athletic-mg"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:arg-liga-profesional-argentina",
+   "season": "2025",
+   "clubIds": [
+    "club:tigre",
+    "club:velez-sarsfield",
+    "club:godoy-cruz",
+    "club:rosario-central",
+    "club:newell-s-old-boys",
+    "club:independiente-rivadavia",
+    "club:defensa-y-justicia",
+    "club:banfield",
+    "club:lanus",
+    "club:deportivo-riestra",
+    "club:barracas-central",
+    "club:racing-club",
+    "club:independiente",
+    "club:sarmiento-de-junin",
+    "club:belgrano-de-cordoba",
+    "club:huracan",
+    "club:san-martin-de-san-juan",
+    "club:atletico-tucuman",
+    "club:san-lorenzo",
+    "club:talleres-de-cordoba",
+    "club:estudiantes",
+    "club:union-de-santa-fe",
+    "club:instituto-de-cordoba",
+    "club:gimnasia-de-la-plata",
+    "club:platense",
+    "club:river-plate",
+    "club:boca-juniors",
+    "club:argentinos-juniors",
+    "club:central-cordoba-sde",
+    "club:aldosivi"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:col-primera-a",
+   "season": "2025",
+   "clubIds": [
+    "club:boyaca-chico",
+    "club:atletico-bucaramanga",
+    "club:america-de-cali",
+    "club:llaneros-fc",
+    "club:atletico-nacional",
+    "club:once-caldas",
+    "club:santa-fe",
+    "club:deportivo-pereira",
+    "club:atletico-junior",
+    "club:deportivo-cali",
+    "club:alianza-fc",
+    "club:independiente-medellin",
+    "club:aguilas-doradas",
+    "club:la-equidad",
+    "club:deportes-tolima",
+    "club:deportivo-pasto",
+    "club:fortaleza-fc",
+    "club:envigado-fc",
+    "club:union-magdalena",
+    "club:millonarios"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:pry-division-profesional-apertura",
+   "season": "2025",
+   "clubIds": [
+    "club:sportivo-trinidense",
+    "club:sportivo-ameliano",
+    "club:sportivo-luqueno",
+    "club:atletico-tembetary",
+    "club:2-de-mayo",
+    "club:club-nacional",
+    "club:general-caballero-djlm",
+    "club:deportivo-recoleta",
+    "club:club-olimpia",
+    "club:guarani",
+    "club:cerro-porteno",
+    "club:libertad"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:pry-division-profesional-clausura",
+   "season": "2025",
+   "clubIds": [
+    "club:sportivo-trinidense",
+    "club:sportivo-ameliano",
+    "club:sportivo-luqueno",
+    "club:atletico-tembetary",
+    "club:2-de-mayo",
+    "club:club-nacional",
+    "club:general-caballero-djlm",
+    "club:deportivo-recoleta",
+    "club:club-olimpia",
+    "club:guarani",
+    "club:cerro-porteno",
+    "club:libertad"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:eng-premier-league",
+   "season": "2026/27",
+   "clubIds": [
+    "club:arsenal-fc",
+    "club:coventry-city-fc",
+    "club:hull-city-afc",
+    "club:manchester-united-fc",
+    "club:ipswich-town-fc",
+    "club:sunderland-afc",
+    "club:nottingham-forest-fc",
+    "club:leeds-united-fc",
+    "club:everton-fc",
+    "club:crystal-palace-fc",
+    "club:brentford-fc",
+    "club:tottenham-hotspur-fc",
+    "club:manchester-city-fc",
+    "club:afc-bournemouth",
+    "club:brighton-hove-albion-fc",
+    "club:aston-villa-fc",
+    "club:newcastle-united-fc",
+    "club:liverpool-fc",
+    "club:fulham-fc",
+    "club:chelsea-fc"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:eng-championship",
+   "season": "2026/27",
+   "clubIds": [
+    "club:wolverhampton-wanderers-fc",
+    "club:blackburn-rovers-fc",
+    "club:bolton-wanderers-fc",
+    "club:preston-north-end-fc",
+    "club:norwich-city-fc",
+    "club:west-bromwich-albion-fc",
+    "club:bristol-city-fc",
+    "club:millwall-fc",
+    "club:middlesbrough-fc",
+    "club:lincoln-city-fc",
+    "club:stoke-city-fc",
+    "club:swansea-city-afc",
+    "club:charlton-athletic-fc",
+    "club:derby-county-fc",
+    "club:portsmouth-fc",
+    "club:queens-park-rangers-fc",
+    "club:sheffield-united-fc",
+    "club:birmingham-city-fc",
+    "club:watford-fc",
+    "club:southampton-fc",
+    "club:burnley-fc",
+    "club:west-ham-united-fc",
+    "club:cardiff-city-fc",
+    "club:wrexham-afc"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:eng-league-one",
+   "season": "2025/26",
+   "clubIds": [
+    "club:luton-town",
+    "club:afc-wimbledon",
+    "club:cardiff-city",
+    "club:peterborough-united",
+    "club:blackpool-fc",
+    "club:stevenage-fc",
+    "club:bradford-city",
+    "club:wycombe-wanderers",
+    "club:burton-albion",
+    "club:mansfield-town",
+    "club:doncaster-rovers",
+    "club:exeter-city",
+    "club:huddersfield-town",
+    "club:leyton-orient",
+    "club:lincoln-city",
+    "club:reading-fc",
+    "club:plymouth-argyle",
+    "club:barnsley-fc",
+    "club:rotherham-united",
+    "club:port-vale-fc",
+    "club:wigan-athletic",
+    "club:northampton-town",
+    "club:stockport-county",
+    "club:bolton-wanderers"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:eng-league-two",
+   "season": "2025/26",
+   "clubIds": [
+    "club:accrington-stanley",
+    "club:gillingham-fc",
+    "club:bristol-rovers",
+    "club:harrogate-town",
+    "club:cambridge-united",
+    "club:cheltenham-town",
+    "club:colchester-united",
+    "club:tranmere-rovers",
+    "club:barnet-fc",
+    "club:fleetwood-town",
+    "club:chesterfield-fc",
+    "club:barrow-afc",
+    "club:grimsby-town",
+    "club:crawley-town",
+    "club:milton-keynes-dons",
+    "club:oldham-athletic",
+    "club:newport-county",
+    "club:notts-county",
+    "club:salford-city",
+    "club:crewe-alexandra",
+    "club:shrewsbury-town",
+    "club:bromley-fc",
+    "club:walsall-fc",
+    "club:swindon-town"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:eng-national-league",
+   "season": "2025/26",
+   "clubIds": [
+    "club:altrincham-fc",
+    "club:aldershot-town",
+    "club:boreham-wood",
+    "club:rochdale-afc",
+    "club:brackley-town",
+    "club:eastleigh-fc",
+    "club:braintree-town",
+    "club:halifax-town",
+    "club:gateshead-fc",
+    "club:southend-united",
+    "club:solihull-moors",
+    "club:forest-green-rovers",
+    "club:tamworth-fc",
+    "club:scunthorpe-united",
+    "club:wealdstone-fc",
+    "club:truro-city",
+    "club:woking-fc",
+    "club:carlisle-united",
+    "club:yeovil-town",
+    "club:hartlepool-united",
+    "club:york-city",
+    "club:sutton-united",
+    "club:boston-united",
+    "club:morecambe-fc"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:deu-bundesliga",
+   "season": "2026/27",
+   "clubIds": [
+    "club:fc-bayern-munchen",
+    "club:vfb-stuttgart",
+    "club:rb-leipzig",
+    "club:borussia-monchengladbach",
+    "club:1-fsv-mainz-05",
+    "club:sc-paderborn-07",
+    "club:1-fc-union-berlin",
+    "club:eintracht-frankfurt",
+    "club:sv-07-elversberg",
+    "club:bayer-04-leverkusen",
+    "club:1-fc-koln",
+    "club:tsg-1899-hoffenheim",
+    "club:borussia-dortmund",
+    "club:hamburger-sv",
+    "club:sc-freiburg",
+    "club:sv-werder-bremen",
+    "club:fc-augsburg",
+    "club:fc-schalke-04"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:deu-2-bundesliga",
+   "season": "2025/26",
+   "clubIds": [
+    "club:fc-schalke-04",
+    "club:hertha-bsc",
+    "club:sv-07-elversberg",
+    "club:1-fc-nurnberg",
+    "club:sc-paderborn-07",
+    "club:holstein-kiel",
+    "club:karlsruher-sc",
+    "club:preu-en-munster",
+    "club:sv-darmstadt-98",
+    "club:vfl-bochum",
+    "club:arminia-bielefeld",
+    "club:fortuna-dusseldorf",
+    "club:1-fc-magdeburg",
+    "club:eintracht-braunschweig",
+    "club:hannover-96",
+    "club:1-fc-kaiserslautern",
+    "club:spvgg-greuther-furth",
+    "club:dynamo-dresden"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:deu-3-liga",
+   "season": "2025/26",
+   "clubIds": [
+    "club:rot-weiss-essen",
+    "club:tsv-1860-munchen",
+    "club:waldhof-mannheim",
+    "club:sc-verl",
+    "club:fc-ingolstadt-04",
+    "club:jahn-regensburg",
+    "club:vfl-osnabruck",
+    "club:alemannia-aachen",
+    "club:energie-cottbus",
+    "club:1-fc-saarbrucken",
+    "club:1899-hoffenheim-ii",
+    "club:tsv-havelse",
+    "club:msv-duisburg",
+    "club:vfb-stuttgart-ii",
+    "club:erzgebirge-aue",
+    "club:hansa-rostock",
+    "club:viktoria-koln",
+    "club:1-fc-schweinfurt-05",
+    "club:sv-wehen-wiesbaden",
+    "club:ssv-ulm-1846"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:esp-la-liga",
+   "season": "2026/27",
+   "clubIds": [
+    "club:deportivo-alaves",
+    "club:getafe-cf",
+    "club:sevilla-fc",
+    "club:rayo-vallecano-de-madrid",
+    "club:real-racing-club-de-santander",
+    "club:villarreal-cf",
+    "club:rcd-espanyol-de-barcelona",
+    "club:levante-ud",
+    "club:rc-deportivo-la-coruna",
+    "club:elche-cf",
+    "club:club-atletico-de-madrid",
+    "club:malaga-cf",
+    "club:real-betis-balompie",
+    "club:real-sociedad-de-futbol",
+    "club:athletic-club",
+    "club:valencia-cf",
+    "club:rc-celta-de-vigo",
+    "club:real-madrid-cf",
+    "club:fc-barcelona",
+    "club:ca-osasuna"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:esp-segunda-division",
+   "season": "2025/26",
+   "clubIds": [
+    "club:burgos-cf",
+    "club:cultural-leonesa",
+    "club:real-valladolid",
+    "club:ad-ceuta-fc",
+    "club:racing-santander",
+    "club:cd-castellon",
+    "club:malaga-cf",
+    "club:sd-eibar",
+    "club:granada-cf",
+    "club:deportivo-la-coruna",
+    "club:real-sociedad-b",
+    "club:real-zaragoza",
+    "club:cadiz-cf",
+    "club:cd-mirandes",
+    "club:sd-huesca",
+    "club:cd-leganes",
+    "club:ud-las-palmas",
+    "club:fc-andorra",
+    "club:sporting-gijon",
+    "club:cordoba-cf",
+    "club:ud-almeria",
+    "club:albacete"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:ita-serie-a",
+   "season": "2026/27",
+   "clubIds": [
+    "club:udinese-calcio",
+    "club:como-1907",
+    "club:fc-internazionale-milano",
+    "club:ac-monza",
+    "club:genoa-cfc",
+    "club:ssc-napoli",
+    "club:parma-calcio-1913",
+    "club:cagliari-calcio",
+    "club:frosinone-calcio",
+    "club:juventus-fc",
+    "club:venezia-fc",
+    "club:us-lecce",
+    "club:atalanta-bc",
+    "club:us-sassuolo-calcio",
+    "club:torino-fc",
+    "club:ac-milan",
+    "club:bologna-fc-1909",
+    "club:ss-lazio",
+    "club:as-roma",
+    "club:acf-fiorentina"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:ita-serie-b",
+   "season": "2025/26",
+   "clubIds": [
+    "club:delfino-pescara",
+    "club:cesena-fc",
+    "club:empoli-fc",
+    "club:calcio-padova",
+    "club:virtus-entella",
+    "club:juve-stabia",
+    "club:ac-monza",
+    "club:mantova-1911-ssd",
+    "club:palermo-fc",
+    "club:ac-reggiana-1919",
+    "club:spezia-calcio",
+    "club:carrarese-calcio",
+    "club:venezia-fc",
+    "club:ssc-bari",
+    "club:us-catanzaro",
+    "club:fc-sudtirol",
+    "club:frosinone-calcio",
+    "club:us-avellino",
+    "club:sampdoria",
+    "club:modena-fc"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:fra-ligue-1",
+   "season": "2026/27",
+   "clubIds": [
+    "club:olympique-de-marseille",
+    "club:rc-strasbourg-alsace",
+    "club:racing-club-de-lens",
+    "club:aj-auxerre",
+    "club:le-mans-fc",
+    "club:stade-brestois-29",
+    "club:es-troyes-ac",
+    "club:paris-fc",
+    "club:ogc-nice",
+    "club:fc-lorient",
+    "club:toulouse-fc",
+    "club:olympique-lyonnais",
+    "club:angers-sco",
+    "club:lille-osc",
+    "club:le-havre-ac",
+    "club:as-monaco-fc",
+    "club:stade-rennais-fc-1901",
+    "club:paris-saint-germain-fc"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:fra-ligue-2",
+   "season": "2025/26",
+   "clubIds": [
+    "club:ea-guingamp",
+    "club:le-mans-fc",
+    "club:estac-troyes",
+    "club:grenoble-foot-38",
+    "club:pau-fc",
+    "club:fc-annecy",
+    "club:montpellier-hsc",
+    "club:red-star-fc",
+    "club:rodez-af",
+    "club:as-nancy-lorraine",
+    "club:stade-lavallois",
+    "club:as-saint-etienne",
+    "club:usl-dunkerque",
+    "club:clermont-foot-63",
+    "club:amiens-sc",
+    "club:stade-de-reims",
+    "club:us-boulogne",
+    "club:sc-bastia"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:nld-eredivisie",
+   "season": "2026/27",
+   "clubIds": [
+    "club:sc-cambuur-leeuwarden",
+    "club:sbv-excelsior",
+    "club:nec",
+    "club:telstar-1963",
+    "club:go-ahead-eagles",
+    "club:willem-ii-tilburg",
+    "club:psv",
+    "club:fortuna-sittard",
+    "club:az",
+    "club:ado-den-haag",
+    "club:sparta-rotterdam",
+    "club:feyenoord-rotterdam",
+    "club:fc-groningen",
+    "club:fc-utrecht",
+    "club:pec-zwolle",
+    "club:afc-ajax",
+    "club:sc-heerenveen",
+    "club:fc-twente-65"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:prt-primeira-liga",
+   "season": "2026/27",
+   "clubIds": [
+    "club:gd-estoril-praia",
+    "club:fc-famalicao",
+    "club:cs-maritimo",
+    "club:casa-pia-ac",
+    "club:vitoria-guimaraes",
+    "club:fc-arouca",
+    "club:cf-estrela-da-amadora",
+    "club:sporting-clube-de-portugal",
+    "club:fc-porto",
+    "club:fc-alverca",
+    "club:moreirense-fc",
+    "club:sporting-clube-de-braga",
+    "club:gil-vicente-fc",
+    "club:rio-ave-fc",
+    "club:sport-lisboa-e-benfica",
+    "club:academico-de-viseu-fc",
+    "club:cd-santa-clara",
+    "club:cd-nacional"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:bel-jupiler-pro-league",
+   "season": "2026/27",
+   "clubIds": [
+    "club:club-brugge",
+    "club:kv-kortrijk",
+    "club:sporting-charleroi",
+    "club:oh-leuven",
+    "club:standard-de-liege",
+    "club:cercle-brugge",
+    "club:kvc-westerlo",
+    "club:royale-union-saint-gilloise",
+    "club:stvv",
+    "club:lommel-sk",
+    "club:kaa-gent",
+    "club:kv-mechelen",
+    "club:sv-zulte-waregem",
+    "club:krc-genk",
+    "club:rsc-anderlecht",
+    "club:raal-la-louviere",
+    "club:royal-antwerp-fc",
+    "club:sk-beveren"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:grc-super-league-1",
+   "season": "2026/27",
+   "clubIds": [
+    "club:asteras-tripolis",
+    "club:atromitos",
+    "club:aek",
+    "club:ofi",
+    "club:iraklis-1908",
+    "club:levadiakos",
+    "club:kifisia",
+    "club:panetolikos",
+    "club:aris-thessaloniki",
+    "club:volos",
+    "club:olympiakos-piraeus",
+    "club:panathinaikos",
+    "club:paok",
+    "club:kalamata"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:swe-allsvenskan",
+   "season": "2025",
+   "clubIds": [
+    "club:djurgardens-if",
+    "club:malmo-ff",
+    "club:bk-hacken",
+    "club:if-brommapojkarna",
+    "club:hammarby-if",
+    "club:ifk-goteborg",
+    "club:if-elfsborg",
+    "club:mjallby-aif",
+    "club:ifk-norrkoping",
+    "club:osters-if",
+    "club:halmstads-bk",
+    "club:degerfors-if",
+    "club:ifk-varnamo",
+    "club:ik-sirius",
+    "club:gais-goteborg",
+    "club:aik-solna"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:swe-superettan",
+   "season": "2025",
+   "clubIds": [
+    "club:gif-sundsvall",
+    "club:helsingborgs-if",
+    "club:sandvikens-if",
+    "club:kalmar-ff",
+    "club:orgryte-is",
+    "club:utsiktens-bk",
+    "club:falkenbergs-ff",
+    "club:varbergs-bois",
+    "club:landskrona-bois",
+    "club:ik-brage",
+    "club:trelleborgs-ff",
+    "club:ostersunds-fk",
+    "club:ik-oddevold",
+    "club:umea-fc",
+    "club:orebro-sk",
+    "club:vasteras-sk"
+   ],
+   "dataStatus": "pesquisa"
+  },
+  {
+   "competitionId": "comp:tur-super-lig",
+   "season": "2026/27",
+   "clubIds": [
+    "club:besiktas",
+    "club:bb-erzurumspor",
+    "club:samsunspor",
+    "club:corum",
+    "club:eyupspor",
+    "club:caykur-rizespor",
+    "club:aytemiz-alanyaspor",
+    "club:goztepe",
+    "club:atiker-konyaspor",
+    "club:trabzonspor",
+    "club:genclerbirligi",
+    "club:kasimpasa",
+    "club:galatasaray",
+    "club:kocaelispor",
+    "club:amed",
+    "club:istanbul-basaksehir",
+    "club:gaziantep-fk",
+    "club:fenerbahce"
+   ],
+   "dataStatus": "pesquisa"
+  }
+ ],
+ "clubs": [
+  {
+   "id": "club:ca-mineiro",
+   "name": "CA Mineiro",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:se-palmeiras",
+   "name": "SE Palmeiras",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:coritiba-fbc",
+   "name": "Coritiba FBC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rb-bragantino",
+   "name": "RB Bragantino",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-internacional",
+   "name": "SC Internacional",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ca-paranaense",
+   "name": "CA Paranaense",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ec-vitoria",
+   "name": "EC Vitória",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:clube-do-remo",
+   "name": "Clube do Remo",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fluminense-fc",
+   "name": "Fluminense FC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gremio-fbpa",
+   "name": "Grêmio FBPA",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:chapecoense-af",
+   "name": "Chapecoense AF",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:santos-fc",
+   "name": "Santos FC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-corinthians-paulista",
+   "name": "SC Corinthians Paulista",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ec-bahia",
+   "name": "EC Bahia",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sao-paulo-fc",
+   "name": "São Paulo FC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cr-flamengo",
+   "name": "CR Flamengo",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:mirassol-fc",
+   "name": "Mirassol FC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cr-vasco-da-gama",
+   "name": "CR Vasco da Gama",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:botafogo-fr",
+   "name": "Botafogo FR",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cruzeiro-ec",
+   "name": "Cruzeiro EC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:goias-go",
+   "name": "Goiás GO",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:amazonas-fc-am",
+   "name": "Amazonas FC AM",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:paysandu-pa",
+   "name": "Paysandu PA",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:athletico-paranaense",
+   "name": "Athletico Paranaense",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:criciuma-sc",
+   "name": "Criciúma SC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:operario-ferroviario-pr",
+   "name": "Operário Ferroviário PR",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:coritiba-pr",
+   "name": "Coritiba PR",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vila-nova-go",
+   "name": "Vila Nova GO",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cr-brasil-al",
+   "name": "CR Brasil AL",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:chapecoense",
+   "name": "Chapecoense",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:america-mg",
+   "name": "América MG",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:botafogo-sp",
+   "name": "Botafogo SP",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ferroviaria-sp",
+   "name": "Ferroviária SP",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:remo-pa",
+   "name": "Remo PA",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:volta-redonda-rj",
+   "name": "Volta Redonda RJ",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cuiaba-mt",
+   "name": "Cuiabá MT",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:avai-sc",
+   "name": "Avaí SC",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gremio-novorizontino-sp",
+   "name": "Grêmio Novorizontino SP",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atletico-goianiense",
+   "name": "Atlético Goianiense",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:athletic-mg",
+   "name": "Athletic MG",
+   "countryId": "ctry:brasil",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:tigre",
+   "name": "Tigre",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:velez-sarsfield",
+   "name": "Vélez Sarsfield",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:godoy-cruz",
+   "name": "Godoy Cruz",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rosario-central",
+   "name": "Rosario Central",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:newell-s-old-boys",
+   "name": "Newell's Old Boys",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:independiente-rivadavia",
+   "name": "Independiente Rivadavia",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:defensa-y-justicia",
+   "name": "Defensa y Justicia",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:banfield",
+   "name": "Banfield",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:lanus",
+   "name": "Lanús",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportivo-riestra",
+   "name": "Deportivo Riestra",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:barracas-central",
+   "name": "Barracas Central",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:racing-club",
+   "name": "Racing Club",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:independiente",
+   "name": "Independiente",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sarmiento-de-junin",
+   "name": "Sarmiento de Junín",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:belgrano-de-cordoba",
+   "name": "Belgrano de Córdoba",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:huracan",
+   "name": "Huracán",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:san-martin-de-san-juan",
+   "name": "San Martín de San Juan",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atletico-tucuman",
+   "name": "Atlético Tucumán",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:san-lorenzo",
+   "name": "San Lorenzo",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:talleres-de-cordoba",
+   "name": "Talleres de Córdoba",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:estudiantes",
+   "name": "Estudiantes",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:union-de-santa-fe",
+   "name": "Unión de Santa Fe",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:instituto-de-cordoba",
+   "name": "Instituto de Córdoba",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gimnasia-de-la-plata",
+   "name": "Gimnasia de La Plata",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:platense",
+   "name": "Platense",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:river-plate",
+   "name": "River Plate",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:boca-juniors",
+   "name": "Boca Juniors",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:argentinos-juniors",
+   "name": "Argentinos Juniors",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:central-cordoba-sde",
+   "name": "Central Córdoba SdE",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aldosivi",
+   "name": "Aldosivi",
+   "countryId": "ctry:argentina",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:boyaca-chico",
+   "name": "Boyacá Chicó",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atletico-bucaramanga",
+   "name": "Atlético Bucaramanga",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:america-de-cali",
+   "name": "América de Cali",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:llaneros-fc",
+   "name": "Llaneros FC",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atletico-nacional",
+   "name": "Atlético Nacional",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:once-caldas",
+   "name": "Once Caldas",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:santa-fe",
+   "name": "Santa Fe",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportivo-pereira",
+   "name": "Deportivo Pereira",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atletico-junior",
+   "name": "Atlético Junior",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportivo-cali",
+   "name": "Deportivo Cali",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:alianza-fc",
+   "name": "Alianza FC",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:independiente-medellin",
+   "name": "Independiente Medellín",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aguilas-doradas",
+   "name": "Águilas Doradas",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:la-equidad",
+   "name": "La Equidad",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportes-tolima",
+   "name": "Deportes Tolima",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportivo-pasto",
+   "name": "Deportivo Pasto",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fortaleza-fc",
+   "name": "Fortaleza FC",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:envigado-fc",
+   "name": "Envigado FC",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:union-magdalena",
+   "name": "Unión Magdalena",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:millonarios",
+   "name": "Millonarios",
+   "countryId": "ctry:colombia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sportivo-trinidense",
+   "name": "Sportivo Trinidense",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sportivo-ameliano",
+   "name": "Sportivo Ameliano",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sportivo-luqueno",
+   "name": "Sportivo Luqueño",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atletico-tembetary",
+   "name": "Atlético Tembetary",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:2-de-mayo",
+   "name": "2 de Mayo",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:club-nacional",
+   "name": "Club Nacional",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:general-caballero-djlm",
+   "name": "General Caballero DJLM",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportivo-recoleta",
+   "name": "Deportivo Recoleta",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:club-olimpia",
+   "name": "Club Olimpia",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:guarani",
+   "name": "Guaraní",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cerro-porteno",
+   "name": "Cerro Porteño",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:libertad",
+   "name": "Libertad",
+   "countryId": "ctry:paraguai",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:arsenal-fc",
+   "name": "Arsenal FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:coventry-city-fc",
+   "name": "Coventry City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hull-city-afc",
+   "name": "Hull City AFC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:manchester-united-fc",
+   "name": "Manchester United FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ipswich-town-fc",
+   "name": "Ipswich Town FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sunderland-afc",
+   "name": "Sunderland AFC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:nottingham-forest-fc",
+   "name": "Nottingham Forest FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:leeds-united-fc",
+   "name": "Leeds United FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:everton-fc",
+   "name": "Everton FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:crystal-palace-fc",
+   "name": "Crystal Palace FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:brentford-fc",
+   "name": "Brentford FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:tottenham-hotspur-fc",
+   "name": "Tottenham Hotspur FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:manchester-city-fc",
+   "name": "Manchester City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:afc-bournemouth",
+   "name": "AFC Bournemouth",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:brighton-hove-albion-fc",
+   "name": "Brighton & Hove Albion FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aston-villa-fc",
+   "name": "Aston Villa FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:newcastle-united-fc",
+   "name": "Newcastle United FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:liverpool-fc",
+   "name": "Liverpool FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fulham-fc",
+   "name": "Fulham FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:chelsea-fc",
+   "name": "Chelsea FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:wolverhampton-wanderers-fc",
+   "name": "Wolverhampton Wanderers FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:blackburn-rovers-fc",
+   "name": "Blackburn Rovers FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bolton-wanderers-fc",
+   "name": "Bolton Wanderers FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:preston-north-end-fc",
+   "name": "Preston North End FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:norwich-city-fc",
+   "name": "Norwich City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:west-bromwich-albion-fc",
+   "name": "West Bromwich Albion FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bristol-city-fc",
+   "name": "Bristol City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:millwall-fc",
+   "name": "Millwall FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:middlesbrough-fc",
+   "name": "Middlesbrough FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:lincoln-city-fc",
+   "name": "Lincoln City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stoke-city-fc",
+   "name": "Stoke City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:swansea-city-afc",
+   "name": "Swansea City AFC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:charlton-athletic-fc",
+   "name": "Charlton Athletic FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:derby-county-fc",
+   "name": "Derby County FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:portsmouth-fc",
+   "name": "Portsmouth FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:queens-park-rangers-fc",
+   "name": "Queens Park Rangers FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sheffield-united-fc",
+   "name": "Sheffield United FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:birmingham-city-fc",
+   "name": "Birmingham City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:watford-fc",
+   "name": "Watford FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:southampton-fc",
+   "name": "Southampton FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:burnley-fc",
+   "name": "Burnley FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:west-ham-united-fc",
+   "name": "West Ham United FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cardiff-city-fc",
+   "name": "Cardiff City FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:wrexham-afc",
+   "name": "Wrexham AFC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:luton-town",
+   "name": "Luton Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:afc-wimbledon",
+   "name": "AFC Wimbledon",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cardiff-city",
+   "name": "Cardiff City",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:peterborough-united",
+   "name": "Peterborough United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:blackpool-fc",
+   "name": "Blackpool FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stevenage-fc",
+   "name": "Stevenage FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bradford-city",
+   "name": "Bradford City",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:wycombe-wanderers",
+   "name": "Wycombe Wanderers",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:burton-albion",
+   "name": "Burton Albion",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:mansfield-town",
+   "name": "Mansfield Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:doncaster-rovers",
+   "name": "Doncaster Rovers",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:exeter-city",
+   "name": "Exeter City",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:huddersfield-town",
+   "name": "Huddersfield Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:leyton-orient",
+   "name": "Leyton Orient",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:lincoln-city",
+   "name": "Lincoln City",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:reading-fc",
+   "name": "Reading FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:plymouth-argyle",
+   "name": "Plymouth Argyle",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:barnsley-fc",
+   "name": "Barnsley FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rotherham-united",
+   "name": "Rotherham United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:port-vale-fc",
+   "name": "Port Vale FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:wigan-athletic",
+   "name": "Wigan Athletic",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:northampton-town",
+   "name": "Northampton Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stockport-county",
+   "name": "Stockport County",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bolton-wanderers",
+   "name": "Bolton Wanderers",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:accrington-stanley",
+   "name": "Accrington Stanley",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gillingham-fc",
+   "name": "Gillingham FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bristol-rovers",
+   "name": "Bristol Rovers",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:harrogate-town",
+   "name": "Harrogate Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cambridge-united",
+   "name": "Cambridge United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cheltenham-town",
+   "name": "Cheltenham Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:colchester-united",
+   "name": "Colchester United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:tranmere-rovers",
+   "name": "Tranmere Rovers",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:barnet-fc",
+   "name": "Barnet FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fleetwood-town",
+   "name": "Fleetwood Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:chesterfield-fc",
+   "name": "Chesterfield FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:barrow-afc",
+   "name": "Barrow AFC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:grimsby-town",
+   "name": "Grimsby Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:crawley-town",
+   "name": "Crawley Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:milton-keynes-dons",
+   "name": "Milton Keynes Dons",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:oldham-athletic",
+   "name": "Oldham Athletic",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:newport-county",
+   "name": "Newport County",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:notts-county",
+   "name": "Notts County",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:salford-city",
+   "name": "Salford City",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:crewe-alexandra",
+   "name": "Crewe Alexandra",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:shrewsbury-town",
+   "name": "Shrewsbury Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bromley-fc",
+   "name": "Bromley FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:walsall-fc",
+   "name": "Walsall FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:swindon-town",
+   "name": "Swindon Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:altrincham-fc",
+   "name": "Altrincham FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aldershot-town",
+   "name": "Aldershot Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:boreham-wood",
+   "name": "Boreham Wood",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rochdale-afc",
+   "name": "Rochdale AFC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:brackley-town",
+   "name": "Brackley Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:eastleigh-fc",
+   "name": "Eastleigh FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:braintree-town",
+   "name": "Braintree Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:halifax-town",
+   "name": "Halifax Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gateshead-fc",
+   "name": "Gateshead FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:southend-united",
+   "name": "Southend United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:solihull-moors",
+   "name": "Solihull Moors",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:forest-green-rovers",
+   "name": "Forest Green Rovers",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:tamworth-fc",
+   "name": "Tamworth FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:scunthorpe-united",
+   "name": "Scunthorpe United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:wealdstone-fc",
+   "name": "Wealdstone FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:truro-city",
+   "name": "Truro City",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:woking-fc",
+   "name": "Woking FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:carlisle-united",
+   "name": "Carlisle United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:yeovil-town",
+   "name": "Yeovil Town",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hartlepool-united",
+   "name": "Hartlepool United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:york-city",
+   "name": "York City",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sutton-united",
+   "name": "Sutton United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:boston-united",
+   "name": "Boston United",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:morecambe-fc",
+   "name": "Morecambe FC",
+   "countryId": "ctry:inglaterra",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-bayern-munchen",
+   "name": "FC Bayern München",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vfb-stuttgart",
+   "name": "VfB Stuttgart",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rb-leipzig",
+   "name": "RB Leipzig",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:borussia-monchengladbach",
+   "name": "Borussia Mönchengladbach",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fsv-mainz-05",
+   "name": "1. FSV Mainz 05",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-paderborn-07",
+   "name": "SC Paderborn 07",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fc-union-berlin",
+   "name": "1. FC Union Berlin",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:eintracht-frankfurt",
+   "name": "Eintracht Frankfurt",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sv-07-elversberg",
+   "name": "SV 07 Elversberg",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bayer-04-leverkusen",
+   "name": "Bayer 04 Leverkusen",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fc-koln",
+   "name": "1. FC Köln",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:tsg-1899-hoffenheim",
+   "name": "TSG 1899 Hoffenheim",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:borussia-dortmund",
+   "name": "Borussia Dortmund",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hamburger-sv",
+   "name": "Hamburger SV",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-freiburg",
+   "name": "SC Freiburg",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sv-werder-bremen",
+   "name": "SV Werder Bremen",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-augsburg",
+   "name": "FC Augsburg",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-schalke-04",
+   "name": "FC Schalke 04",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hertha-bsc",
+   "name": "Hertha BSC",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fc-nurnberg",
+   "name": "1. FC Nürnberg",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:holstein-kiel",
+   "name": "Holstein Kiel",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:karlsruher-sc",
+   "name": "Karlsruher SC",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:preu-en-munster",
+   "name": "Preußen Münster",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sv-darmstadt-98",
+   "name": "SV Darmstadt 98",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vfl-bochum",
+   "name": "VfL Bochum",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:arminia-bielefeld",
+   "name": "Arminia Bielefeld",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fortuna-dusseldorf",
+   "name": "Fortuna Düsseldorf",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fc-magdeburg",
+   "name": "1. FC Magdeburg",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:eintracht-braunschweig",
+   "name": "Eintracht Braunschweig",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hannover-96",
+   "name": "Hannover 96",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fc-kaiserslautern",
+   "name": "1. FC Kaiserslautern",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:spvgg-greuther-furth",
+   "name": "SpVgg Greuther Fürth",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:dynamo-dresden",
+   "name": "Dynamo Dresden",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rot-weiss-essen",
+   "name": "Rot-Weiss Essen",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:tsv-1860-munchen",
+   "name": "TSV 1860 München",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:waldhof-mannheim",
+   "name": "Waldhof Mannheim",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-verl",
+   "name": "SC Verl",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-ingolstadt-04",
+   "name": "FC Ingolstadt 04",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:jahn-regensburg",
+   "name": "Jahn Regensburg",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vfl-osnabruck",
+   "name": "VfL Osnabrück",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:alemannia-aachen",
+   "name": "Alemannia Aachen",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:energie-cottbus",
+   "name": "Energie Cottbus",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fc-saarbrucken",
+   "name": "1. FC Saarbrücken",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1899-hoffenheim-ii",
+   "name": "1899 Hoffenheim II",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:tsv-havelse",
+   "name": "TSV Havelse",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:msv-duisburg",
+   "name": "MSV Duisburg",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vfb-stuttgart-ii",
+   "name": "VfB Stuttgart II",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:erzgebirge-aue",
+   "name": "Erzgebirge Aue",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hansa-rostock",
+   "name": "Hansa Rostock",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:viktoria-koln",
+   "name": "Viktoria Köln",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:1-fc-schweinfurt-05",
+   "name": "1. FC Schweinfurt 05",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sv-wehen-wiesbaden",
+   "name": "SV Wehen Wiesbaden",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ssv-ulm-1846",
+   "name": "SSV Ulm 1846",
+   "countryId": "ctry:alemanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportivo-alaves",
+   "name": "Deportivo Alavés",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:getafe-cf",
+   "name": "Getafe CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sevilla-fc",
+   "name": "Sevilla FC",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rayo-vallecano-de-madrid",
+   "name": "Rayo Vallecano de Madrid",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:real-racing-club-de-santander",
+   "name": "Real Racing Club de Santander",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:villarreal-cf",
+   "name": "Villarreal CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rcd-espanyol-de-barcelona",
+   "name": "RCD Espanyol de Barcelona",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:levante-ud",
+   "name": "Levante UD",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rc-deportivo-la-coruna",
+   "name": "RC Deportivo La Coruña",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:elche-cf",
+   "name": "Elche CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:club-atletico-de-madrid",
+   "name": "Club Atlético de Madrid",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:malaga-cf",
+   "name": "Málaga CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:real-betis-balompie",
+   "name": "Real Betis Balompié",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:real-sociedad-de-futbol",
+   "name": "Real Sociedad de Fútbol",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:athletic-club",
+   "name": "Athletic Club",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:valencia-cf",
+   "name": "Valencia CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rc-celta-de-vigo",
+   "name": "RC Celta de Vigo",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:real-madrid-cf",
+   "name": "Real Madrid CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-barcelona",
+   "name": "FC Barcelona",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ca-osasuna",
+   "name": "CA Osasuna",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:burgos-cf",
+   "name": "Burgos CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cultural-leonesa",
+   "name": "Cultural Leonesa",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:real-valladolid",
+   "name": "Real Valladolid",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ad-ceuta-fc",
+   "name": "AD Ceuta FC",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:racing-santander",
+   "name": "Racing Santander",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cd-castellon",
+   "name": "CD Castellón",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sd-eibar",
+   "name": "SD Eibar",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:granada-cf",
+   "name": "Granada CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:deportivo-la-coruna",
+   "name": "Deportivo La Coruña",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:real-sociedad-b",
+   "name": "Real Sociedad B",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:real-zaragoza",
+   "name": "Real Zaragoza",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cadiz-cf",
+   "name": "Cádiz CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cd-mirandes",
+   "name": "CD Mirandés",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sd-huesca",
+   "name": "SD Huesca",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cd-leganes",
+   "name": "CD Leganés",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ud-las-palmas",
+   "name": "UD Las Palmas",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-andorra",
+   "name": "FC Andorra",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sporting-gijon",
+   "name": "Sporting Gijón",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cordoba-cf",
+   "name": "Córdoba CF",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ud-almeria",
+   "name": "UD Almería",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:albacete",
+   "name": "Albacete",
+   "countryId": "ctry:espanha",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:udinese-calcio",
+   "name": "Udinese Calcio",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:como-1907",
+   "name": "Como 1907",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-internazionale-milano",
+   "name": "FC Internazionale Milano",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ac-monza",
+   "name": "AC Monza",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:genoa-cfc",
+   "name": "Genoa CFC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ssc-napoli",
+   "name": "SSC Napoli",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:parma-calcio-1913",
+   "name": "Parma Calcio 1913",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cagliari-calcio",
+   "name": "Cagliari Calcio",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:frosinone-calcio",
+   "name": "Frosinone Calcio",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:juventus-fc",
+   "name": "Juventus FC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:venezia-fc",
+   "name": "Venezia FC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:us-lecce",
+   "name": "US Lecce",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atalanta-bc",
+   "name": "Atalanta BC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:us-sassuolo-calcio",
+   "name": "US Sassuolo Calcio",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:torino-fc",
+   "name": "Torino FC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ac-milan",
+   "name": "AC Milan",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bologna-fc-1909",
+   "name": "Bologna FC 1909",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ss-lazio",
+   "name": "SS Lazio",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:as-roma",
+   "name": "AS Roma",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:acf-fiorentina",
+   "name": "ACF Fiorentina",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:delfino-pescara",
+   "name": "Delfino Pescara",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cesena-fc",
+   "name": "Cesena FC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:empoli-fc",
+   "name": "Empoli FC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:calcio-padova",
+   "name": "Calcio Padova",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:virtus-entella",
+   "name": "Virtus Entella",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:juve-stabia",
+   "name": "Juve Stabia",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:mantova-1911-ssd",
+   "name": "Mantova 1911 SSD",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:palermo-fc",
+   "name": "Palermo FC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ac-reggiana-1919",
+   "name": "AC Reggiana 1919",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:spezia-calcio",
+   "name": "Spezia Calcio",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:carrarese-calcio",
+   "name": "Carrarese Calcio",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ssc-bari",
+   "name": "SSC Bari",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:us-catanzaro",
+   "name": "US Catanzaro",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-sudtirol",
+   "name": "FC Südtirol",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:us-avellino",
+   "name": "US Avellino",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sampdoria",
+   "name": "Sampdoria",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:modena-fc",
+   "name": "Modena FC",
+   "countryId": "ctry:italia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:olympique-de-marseille",
+   "name": "Olympique de Marseille",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rc-strasbourg-alsace",
+   "name": "RC Strasbourg Alsace",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:racing-club-de-lens",
+   "name": "Racing Club de Lens",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aj-auxerre",
+   "name": "AJ Auxerre",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:le-mans-fc",
+   "name": "Le Mans FC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stade-brestois-29",
+   "name": "Stade Brestois 29",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:es-troyes-ac",
+   "name": "ES Troyes AC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:paris-fc",
+   "name": "Paris FC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ogc-nice",
+   "name": "OGC Nice",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-lorient",
+   "name": "FC Lorient",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:toulouse-fc",
+   "name": "Toulouse FC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:olympique-lyonnais",
+   "name": "Olympique Lyonnais",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:angers-sco",
+   "name": "Angers SCO",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:lille-osc",
+   "name": "Lille OSC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:le-havre-ac",
+   "name": "Le Havre AC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:as-monaco-fc",
+   "name": "AS Monaco FC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stade-rennais-fc-1901",
+   "name": "Stade Rennais FC 1901",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:paris-saint-germain-fc",
+   "name": "Paris Saint-Germain FC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ea-guingamp",
+   "name": "EA Guingamp",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:estac-troyes",
+   "name": "ESTAC Troyes",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:grenoble-foot-38",
+   "name": "Grenoble Foot 38",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:pau-fc",
+   "name": "Pau FC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-annecy",
+   "name": "FC Annecy",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:montpellier-hsc",
+   "name": "Montpellier HSC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:red-star-fc",
+   "name": "Red Star FC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rodez-af",
+   "name": "Rodez AF",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:as-nancy-lorraine",
+   "name": "AS Nancy Lorraine",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stade-lavallois",
+   "name": "Stade Lavallois",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:as-saint-etienne",
+   "name": "AS Saint-Étienne",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:usl-dunkerque",
+   "name": "USL Dunkerque",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:clermont-foot-63",
+   "name": "Clermont Foot 63",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:amiens-sc",
+   "name": "Amiens SC",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stade-de-reims",
+   "name": "Stade de Reims",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:us-boulogne",
+   "name": "US Boulogne",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-bastia",
+   "name": "SC Bastia",
+   "countryId": "ctry:franca",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-cambuur-leeuwarden",
+   "name": "SC Cambuur-Leeuwarden",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sbv-excelsior",
+   "name": "SBV Excelsior",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:nec",
+   "name": "NEC",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:telstar-1963",
+   "name": "Telstar 1963",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:go-ahead-eagles",
+   "name": "Go Ahead Eagles",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:willem-ii-tilburg",
+   "name": "Willem II Tilburg",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:psv",
+   "name": "PSV",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fortuna-sittard",
+   "name": "Fortuna Sittard",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:az",
+   "name": "AZ",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ado-den-haag",
+   "name": "ADO Den Haag",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sparta-rotterdam",
+   "name": "Sparta Rotterdam",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:feyenoord-rotterdam",
+   "name": "Feyenoord Rotterdam",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-groningen",
+   "name": "FC Groningen",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-utrecht",
+   "name": "FC Utrecht",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:pec-zwolle",
+   "name": "PEC Zwolle",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:afc-ajax",
+   "name": "AFC Ajax",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sc-heerenveen",
+   "name": "SC Heerenveen",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-twente-65",
+   "name": "FC Twente '65",
+   "countryId": "ctry:paises-baixos",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gd-estoril-praia",
+   "name": "GD Estoril Praia",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-famalicao",
+   "name": "FC Famalicão",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cs-maritimo",
+   "name": "CS Marítimo",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:casa-pia-ac",
+   "name": "Casa Pia AC",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vitoria-guimaraes",
+   "name": "Vitória Guimarães",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-arouca",
+   "name": "FC Arouca",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cf-estrela-da-amadora",
+   "name": "CF Estrela da Amadora",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sporting-clube-de-portugal",
+   "name": "Sporting Clube de Portugal",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-porto",
+   "name": "FC Porto",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fc-alverca",
+   "name": "FC Alverca",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:moreirense-fc",
+   "name": "Moreirense FC",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sporting-clube-de-braga",
+   "name": "Sporting Clube de Braga",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gil-vicente-fc",
+   "name": "Gil Vicente FC",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rio-ave-fc",
+   "name": "Rio Ave FC",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sport-lisboa-e-benfica",
+   "name": "Sport Lisboa e Benfica",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:academico-de-viseu-fc",
+   "name": "Académico de Viseu FC",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cd-santa-clara",
+   "name": "CD Santa Clara",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cd-nacional",
+   "name": "CD Nacional",
+   "countryId": "ctry:portugal",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:club-brugge",
+   "name": "Club Brugge",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kv-kortrijk",
+   "name": "KV Kortrijk",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sporting-charleroi",
+   "name": "Sporting Charleroi",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:oh-leuven",
+   "name": "OH Leuven",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:standard-de-liege",
+   "name": "Standard de Liège",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:cercle-brugge",
+   "name": "Cercle Brugge",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kvc-westerlo",
+   "name": "KVC Westerlo",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:royale-union-saint-gilloise",
+   "name": "Royale Union Saint-Gilloise",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:stvv",
+   "name": "STVV",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:lommel-sk",
+   "name": "Lommel SK",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kaa-gent",
+   "name": "KAA Gent",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kv-mechelen",
+   "name": "KV Mechelen",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sv-zulte-waregem",
+   "name": "SV Zulte Waregem",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:krc-genk",
+   "name": "KRC Genk",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:rsc-anderlecht",
+   "name": "RSC Anderlecht",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:raal-la-louviere",
+   "name": "RAAL La Louvière",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:royal-antwerp-fc",
+   "name": "Royal Antwerp FC",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sk-beveren",
+   "name": "SK Beveren",
+   "countryId": "ctry:belgica",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:asteras-tripolis",
+   "name": "Asteras Tripolis",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atromitos",
+   "name": "Atromitos",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aek",
+   "name": "AEK",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ofi",
+   "name": "OFI",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:iraklis-1908",
+   "name": "Iraklis 1908",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:levadiakos",
+   "name": "Levadiakos",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kifisia",
+   "name": "Kifisia",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:panetolikos",
+   "name": "Panetolikos",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aris-thessaloniki",
+   "name": "Aris Thessaloniki",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:volos",
+   "name": "Volos",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:olympiakos-piraeus",
+   "name": "Olympiakos Piraeus",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:panathinaikos",
+   "name": "Panathinaikos",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:paok",
+   "name": "PAOK",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kalamata",
+   "name": "Kalamata",
+   "countryId": "ctry:grecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:djurgardens-if",
+   "name": "Djurgårdens IF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:malmo-ff",
+   "name": "Malmö FF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bk-hacken",
+   "name": "BK Häcken",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:if-brommapojkarna",
+   "name": "IF Brommapojkarna",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:hammarby-if",
+   "name": "Hammarby IF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ifk-goteborg",
+   "name": "IFK Göteborg",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:if-elfsborg",
+   "name": "IF Elfsborg",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:mjallby-aif",
+   "name": "Mjällby AIF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ifk-norrkoping",
+   "name": "IFK Norrköping",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:osters-if",
+   "name": "Östers IF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:halmstads-bk",
+   "name": "Halmstads BK",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:degerfors-if",
+   "name": "Degerfors IF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ifk-varnamo",
+   "name": "IFK Värnamo",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ik-sirius",
+   "name": "IK Sirius",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gais-goteborg",
+   "name": "GAIS Göteborg",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aik-solna",
+   "name": "AIK Solna",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gif-sundsvall",
+   "name": "GIF Sundsvall",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:helsingborgs-if",
+   "name": "Helsingborgs IF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:sandvikens-if",
+   "name": "Sandvikens IF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kalmar-ff",
+   "name": "Kalmar FF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:orgryte-is",
+   "name": "Örgryte IS",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:utsiktens-bk",
+   "name": "Utsiktens BK",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:falkenbergs-ff",
+   "name": "Falkenbergs FF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:varbergs-bois",
+   "name": "Varbergs BoIS",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:landskrona-bois",
+   "name": "Landskrona BoIS",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ik-brage",
+   "name": "IK Brage",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:trelleborgs-ff",
+   "name": "Trelleborgs FF",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ostersunds-fk",
+   "name": "Östersunds FK",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:ik-oddevold",
+   "name": "IK Oddevold",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:umea-fc",
+   "name": "Umeå FC",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:orebro-sk",
+   "name": "Örebro SK",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:vasteras-sk",
+   "name": "Västerås SK",
+   "countryId": "ctry:suecia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:besiktas",
+   "name": "Beşiktaş",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:bb-erzurumspor",
+   "name": "BB Erzurumspor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:samsunspor",
+   "name": "Samsunspor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:corum",
+   "name": "Çorum",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:eyupspor",
+   "name": "Eyüpspor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:caykur-rizespor",
+   "name": "Çaykur Rizespor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:aytemiz-alanyaspor",
+   "name": "Aytemiz Alanyaspor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:goztepe",
+   "name": "Göztepe",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:atiker-konyaspor",
+   "name": "Atiker Konyaspor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:trabzonspor",
+   "name": "Trabzonspor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:genclerbirligi",
+   "name": "Gençlerbirligi",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kasimpasa",
+   "name": "Kasimpasa",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:galatasaray",
+   "name": "Galatasaray",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:kocaelispor",
+   "name": "Kocaelispor",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:amed",
+   "name": "Amed",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:istanbul-basaksehir",
+   "name": "İstanbul Başakşehir",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:gaziantep-fk",
+   "name": "Gaziantep FK",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "club:fenerbahce",
+   "name": "Fenerbahçe",
+   "countryId": "ctry:turquia",
+   "dataStatus": "pesquisa"
+  }
+ ],
+ "players": []
+}
