@@ -25,7 +25,7 @@ describe('filtro do catálogo (masculino, adulto, estaduais só 1ª divisão)', 
     expect(kept('Brazil', 'Brasileiro Women')).toMatch(/^X:/);
   });
   it('tira feminino e base/reservas em qualquer país, sem tirar nomes comuns', () => {
-    for (const n of ['Brasileiro Women', 'FA WSL', 'Liga MX Femenil', 'Frauen-Bundesliga', 'Division 1 Féminine', 'Brasileiro U20 A', 'Copa do Brasil U17', 'Campionato Primavera 1', 'Primera División Femenina', 'Copa America Femenina', 'SheBelieves Cup', 'Premier League 2 Division One']) { expect(kept('X', n)).toMatch(/^X:/); }
+    for (const n of ['Brasileiro Women', 'FA WSL', 'Liga MX Femenil', 'Frauen-Bundesliga', 'Division 1 Féminine', 'Brasileiro U20 A', 'Copa do Brasil U17', 'Campionato Primavera 1', 'Primera División Femenina', 'Copa America Femenina', 'SheBelieves Cup', 'Kvindeliga', 'WK-League', 'Copa de la Reina', 'Elitettan', 'WPSL', 'USL W League', 'USL Super League', 'Northern Super League', 'Premier League 2 Division One']) { expect(kept('X', n)).toMatch(/^X:/); }
     for (const n of ['Premier League', 'Bundesliga', 'Serie A', 'Super Lig', 'Ligue 1', 'Premier League 2025', 'Primera División']) expect(kept('X', n)).toBe(n);
   });
   it('tira futsal, amistosos e copas de rei', () => {

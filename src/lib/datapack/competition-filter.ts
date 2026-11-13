@@ -4,7 +4,7 @@
 // para revisão humana. Nada é adivinhado em silêncio.
 import type { ApiCatalog, CatalogLeague } from "./api-football-catalog";
 
-const FEMALE = /\b(women|womens|woman|femin\w*|femen\w*|f[eé]minine|femmes?|frauen|femminile|vrouwen|kobiet\w*|ladies|girls?|nwsl|wsl|damallsvenskan|toppserien|liga f|shebelieves cup|algarve cup)\b/i;
+const FEMALE = /\b(women|womens|woman|femin\w*|femen\w*|f[eé]minine|femmes?|frauen|femminile|vrouwen|kobiet\w*|ladies|girls?|nwsl|wsl|damallsvenskan|toppserien|liga f|shebelieves cup|algarve cup|kvindeliga|wk-league|copa de la reina|elitettan|wpsl|usl w league|usl super league|northern super league|liga bpi)\b/i;
 const YOUTH = /(\bu[- ]?\d{2}\b|\bunder[- ]?\d{2}\b|\bsub[- ]?\d{2}\b|\byouth\b|\bjunior\w*|\bjuvenil\w*|\bjuniores\b|\bprimavera\b|\baspirantes\b|\bacademy\b|\breserves?\b|\bcadete\w*|\bnext gen\b|\bdevelopment\b|\bpremier league 2\b)/i;
 const OTHER = /(futsal|beach|e-?sports?|virtual|friendl|\bkings? (cup|league)\b|\bgames\b)/i;
 

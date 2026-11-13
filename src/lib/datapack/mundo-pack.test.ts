@@ -18,7 +18,7 @@ describe('Datapack final mundo-competicoes-clubes', () => {
   });
   it('tem as competições por país e as World (sem país), cada uma com o id da API', () => {
     expect(p.countries).toHaveLength(30);
-    expect(p.competitions).toHaveLength(462);
+    expect(p.competitions).toHaveLength(454);
     const world = p.competitions.filter((c) => c.countryId === undefined);
     expect(world).toHaveLength(90);
     expect(world.map((c) => c.name)).toEqual(expect.arrayContaining(['UEFA Champions League', 'CONMEBOL Libertadores', 'World Cup']));
@@ -28,6 +28,8 @@ describe('Datapack final mundo-competicoes-clubes', () => {
   it('só masculino e adulto: nada de feminino/base na lista, exceto as bases nacionais do Brasil pedidas', () => {
     const bad = p.competitions.filter((c) => /women|femin|femen|\bU-?\d{2}\b/i.test(c.name)).map((c) => c.name);
     expect(bad).toEqual([]);
+    const femininas = ['Kvindeliga', 'WK-League', 'Copa de la Reina', 'Elitettan', 'WPSL', 'USL W League', 'USL Super League', 'Northern Super League'];
+    expect(p.competitions.filter((c) => femininas.includes(c.name))).toEqual([]);
     expect(p.competitions.find((c) => c.name === 'Brasileirão Sub-20')).toBeTruthy();
     expect(p.competitions.find((c) => c.name === 'Copa São Paulo de Futebol Júnior')).toBeTruthy();
   });

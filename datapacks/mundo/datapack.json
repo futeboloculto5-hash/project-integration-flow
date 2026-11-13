@@ -14,7 +14,7 @@
   },
   "counts": {
    "countries": 30,
-   "competitions": 462,
+   "competitions": 454,
    "clubs": 502,
    "players": 0,
    "editions": 27
@@ -1095,16 +1095,6 @@
    "countryId": "ctry:canada"
   },
   {
-   "id": "comp:can-northern-super-league",
-   "name": "Northern Super League",
-   "kind": "league",
-   "externalIds": {
-    "apiFootball": 1182
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:canada"
-  },
-  {
    "id": "comp:chl-primera-division",
    "name": "Primera División",
    "kind": "league",
@@ -1340,16 +1330,6 @@
    "kind": "league",
    "externalIds": {
     "apiFootball": 127
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:dinamarca"
-  },
-  {
-   "id": "comp:dnk-kvindeliga",
-   "name": "Kvindeliga",
-   "kind": "league",
-   "externalIds": {
-    "apiFootball": 638
    },
    "dataStatus": "pesquisa",
    "countryId": "ctry:dinamarca"
@@ -3185,16 +3165,6 @@
    "countryId": "ctry:coreia-do-sul"
   },
   {
-   "id": "comp:kor-wk-league",
-   "name": "WK-League",
-   "kind": "league",
-   "externalIds": {
-    "apiFootball": 660
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:coreia-do-sul"
-  },
-  {
    "id": "comp:kor-k4-league",
    "name": "K4 League",
    "kind": "league",
@@ -3545,16 +3515,6 @@
    "countryId": "ctry:espanha"
   },
   {
-   "id": "comp:esp-copa-de-la-reina",
-   "name": "Copa de la Reina",
-   "kind": "cup",
-   "externalIds": {
-    "apiFootball": 1248
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:espanha"
-  },
-  {
    "id": "comp:swe-allsvenskan",
    "name": "Allsvenskan",
    "kind": "league",
@@ -3660,16 +3620,6 @@
    "kind": "league",
    "externalIds": {
     "apiFootball": 597
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:suecia"
-  },
-  {
-   "id": "comp:swe-elitettan",
-   "name": "Elitettan",
-   "kind": "league",
-   "externalIds": {
-    "apiFootball": 736
    },
    "dataStatus": "pesquisa",
    "countryId": "ctry:suecia"
@@ -3915,41 +3865,11 @@
    "countryId": "ctry:estados-unidos"
   },
   {
-   "id": "comp:usa-wpsl",
-   "name": "WPSL",
-   "kind": "league",
-   "externalIds": {
-    "apiFootball": 1116
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:estados-unidos"
-  },
-  {
-   "id": "comp:usa-usl-w-league",
-   "name": "USL W League",
-   "kind": "league",
-   "externalIds": {
-    "apiFootball": 1117
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:estados-unidos"
-  },
-  {
    "id": "comp:usa-npsl",
    "name": "NPSL",
    "kind": "league",
    "externalIds": {
     "apiFootball": 1118
-   },
-   "dataStatus": "pesquisa",
-   "countryId": "ctry:estados-unidos"
-  },
-  {
-   "id": "comp:usa-usl-super-league",
-   "name": "USL Super League",
-   "kind": "league",
-   "externalIds": {
-    "apiFootball": 1130
    },
    "dataStatus": "pesquisa",
    "countryId": "ctry:estados-unidos"

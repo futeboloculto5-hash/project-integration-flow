@@ -92,13 +92,12 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Copa do Brasil Sub-17 (API: Copa do Brasil U17) [C] id 1179
 - Brasileirão Sub-20 Série B (API: Brasileiro U20 B) [C] id 1183
 
-## Canada (6)
+## Canada (5)
 - Canadian Soccer League [L] id 258
 - Canadian Championship [C] id 259
 - Pacific Coast Soccer League [L] id 260
 - Canadian Premier League [L] id 479
 - League 1 Ontario [L] id 923
-- Northern Super League [L] id 1182
 
 ## Chile (6)
 - Primera División [L] id 265
@@ -121,7 +120,7 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Copa Colombia [C] id 241
 - Superliga [C] id 713
 
-## Denmark (13)
+## Denmark (12)
 - Superliga [L] id 119
 - 1. Division [L] id 120
 - DBU Pokalen [C] id 121
@@ -131,7 +130,6 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Denmark Series - Group 2 [L] id 125
 - Denmark Series - Group 3 [L] id 126
 - Denmark Series - Group 4 [L] id 127
-- Kvindeliga [L] id 638
 - 3. Division [L] id 862
 - Denmark Series - Promotion Round [L] id 982
 - Denmark Series - Relegation Round [L] id 983
@@ -342,15 +340,14 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Super Cup [C] id 826
 - Crown Prince Cup [C] id 827
 
-## South-Korea (6)
+## South-Korea (5)
 - K League 1 [L] id 292
 - K League 2 [L] id 293
 - FA Cup [C] id 294
 - K3 League [L] id 295
-- WK-League [L] id 660
 - K4 League [L] id 1234
 
-## Spain (35)
+## Spain (34)
 - La Liga [L] id 140
 - Segunda División [L] id 141
 - Copa del Rey [C] id 143
@@ -385,9 +382,8 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Segunda División RFEF - Group 4 [L] id 878
 - Segunda División RFEF - Group 5 [L] id 879
 - Primera División RFEF - Play Offs [L] id 1006
-- Copa de la Reina [C] id 1248
 
-## Sweden (13)
+## Sweden (12)
 - Allsvenskan [L] id 113
 - Superettan [L] id 114
 - Svenska Cupen [C] id 115
@@ -399,7 +395,6 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Division 2 - Södra Svealand [L] id 595
 - Division 2 - Västra Götaland [L] id 596
 - Division 2 - Södra Götaland [L] id 597
-- Elitettan [L] id 736
 - Ettan - Relegation Round [L] id 1055
 
 ## Turkey (9)
@@ -420,7 +415,7 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Presidents Cup [C] id 560
 - Super Cup [C] id 896
 
-## USA (13)
+## USA (10)
 - Major League Soccer [L] id 253
 - USL Championship [L] id 255
 - USL League Two [L] id 256
@@ -430,10 +425,7 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - MLS All-Star [C] id 866
 - MLS Next Pro [L] id 909
 - USL League One Cup [L] id 1095
-- WPSL [L] id 1116
-- USL W League [L] id 1117
 - NPSL [L] id 1118
-- USL Super League [L] id 1130
 
 ## World (90)
 - World Cup [C] id 1
