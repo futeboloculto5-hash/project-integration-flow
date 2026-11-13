@@ -134,6 +134,12 @@ Nome do jogo primeiro; entre parênteses o nome original da API quando mudou.
 - Denmark Series - Promotion Round [L] id 982
 - Denmark Series - Relegation Round [L] id 983
 
+## Ecuador (4)
+- Liga Pro [L] id 242
+- Liga Pro Serie B [L] id 243
+- Supercopa de Ecuador [C] id 853
+- Copa Ecuador [C] id 917
+
 ## England (27)
 - Premier League [L] id 39
 - Championship [L] id 40

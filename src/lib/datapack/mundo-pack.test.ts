@@ -16,9 +16,14 @@ describe('Datapack final mundo-competicoes-clubes', () => {
     expect(findTestMarkers(p)).toEqual([]);
     expect(p.players).toEqual([]);
   });
+  it('só tem países que têm competição (os mesmos do datapack de origem), nenhum a mais por causa de clubes', () => {
+    const comPais = new Set(p.competitions.flatMap((c) => (c.countryId ? [c.countryId] : [])));
+    expect(p.countries.every((c) => comPais.has(c.id))).toBe(true);
+  });
   it('tem as competições por país e as World (sem país), cada uma com o id da API', () => {
-    expect(p.countries).toHaveLength(30);
-    expect(p.competitions).toHaveLength(454);
+    expect(p.countries).toHaveLength(31);
+    expect(p.countries.map((c) => c.name)).toContain('Equador');
+    expect(p.competitions).toHaveLength(458);
     const world = p.competitions.filter((c) => c.countryId === undefined);
     expect(world).toHaveLength(90);
     expect(world.map((c) => c.name)).toEqual(expect.arrayContaining(['UEFA Champions League', 'CONMEBOL Libertadores', 'World Cup']));

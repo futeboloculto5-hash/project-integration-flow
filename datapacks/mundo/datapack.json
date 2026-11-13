@@ -13,8 +13,8 @@
    "retrievedAt": "2026-11-13"
   },
   "counts": {
-   "countries": 30,
-   "competitions": 454,
+   "countries": 31,
+   "competitions": 458,
    "clubs": 714,
    "players": 0,
    "editions": 43
@@ -111,6 +111,13 @@
    "name": "Emirados Árabes Unidos",
    "code": "ARE",
    "confederation": "AFC",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:equador",
+   "name": "Equador",
+   "code": "ECU",
+   "confederation": "CONMEBOL",
    "dataStatus": "pesquisa"
   },
   {
@@ -1363,6 +1370,46 @@
    },
    "dataStatus": "pesquisa",
    "countryId": "ctry:dinamarca"
+  },
+  {
+   "id": "comp:ecu-liga-pro",
+   "name": "Liga Pro",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 242
+   },
+   "dataStatus": "pesquisa",
+   "countryId": "ctry:equador"
+  },
+  {
+   "id": "comp:ecu-liga-pro-serie-b",
+   "name": "Liga Pro Serie B",
+   "kind": "league",
+   "externalIds": {
+    "apiFootball": 243
+   },
+   "dataStatus": "pesquisa",
+   "countryId": "ctry:equador"
+  },
+  {
+   "id": "comp:ecu-supercopa-de-ecuador",
+   "name": "Supercopa de Ecuador",
+   "kind": "cup",
+   "externalIds": {
+    "apiFootball": 853
+   },
+   "dataStatus": "pesquisa",
+   "countryId": "ctry:equador"
+  },
+  {
+   "id": "comp:ecu-copa-ecuador",
+   "name": "Copa Ecuador",
+   "kind": "cup",
+   "externalIds": {
+    "apiFootball": 917
+   },
+   "dataStatus": "pesquisa",
+   "countryId": "ctry:equador"
   },
   {
    "id": "comp:eng-premier-league",

@@ -13,9 +13,10 @@ base = json.load(open(f"{AQUI}/../competicoes-por-pais/datapack.json", encoding=
 cl = json.load(open(f"{AQUI}/../clubes-por-competicao/datapack.json", encoding="utf-8"))
 paises = {c["id"]: c for c in base["countries"] + cl["countries"]}
 paises["ctry:colombia"] = {"id": "ctry:colombia", "name": "Colômbia", "code": "COL", "confederation": "CONMEBOL", "dataStatus": "pesquisa"}
+paises["ctry:equador"] = {"id": "ctry:equador", "name": "Equador", "code": "ECU", "confederation": "CONMEBOL", "dataStatus": "pesquisa"}
 paises["ctry:paraguai"] = {"id": "ctry:paraguai", "name": "Paraguai", "code": "PRY", "confederation": "CONMEBOL", "dataStatus": "pesquisa"}
 EN = {"Angola": "angola", "Argentina": "argentina", "Belgium": "belgica", "Brazil": "brasil", "Canada": "canada", "Chile": "chile", "China": "china",
-      "Colombia": "colombia", "Denmark": "dinamarca", "England": "inglaterra", "France": "franca", "Germany": "alemanha", "Greece": "grecia", "Indonesia": "indonesia",
+      "Colombia": "colombia", "Denmark": "dinamarca", "Ecuador": "equador", "England": "inglaterra", "France": "franca", "Germany": "alemanha", "Greece": "grecia", "Indonesia": "indonesia",
       "Iran": "ira", "Italy": "italia", "Mexico": "mexico", "Morocco": "marrocos", "Netherlands": "paises-baixos", "Paraguay": "paraguai", "Peru": "peru",
       "Portugal": "portugal", "San-Marino": "san-marino", "Saudi-Arabia": "arabia-saudita", "South-Korea": "coreia-do-sul", "Spain": "espanha", "Sweden": "suecia",
       "Turkey": "turquia", "United-Arab-Emirates": "emirados-arabes-unidos", "USA": "estados-unidos"}
@@ -50,10 +51,11 @@ api_para_cid = {c["externalIds"]["apiFootball"]: c["id"] for c in comps}
 tem_clubes = {e["competitionId"] for e in editions}
 api_id_para_clube, ids_clube = {}, {c["id"] for c in clubes}
 avisos_api = []
+PERMITIDOS = set(usados_paises)   # só os países que têm competição no datapack (os mesmos do datapack de origem)
+fora = {}
 def pais_do_time(nome):
     pid = f"ctry:{EN_CLUBE[nome]}" if nome in EN_CLUBE else f"ctry:{slug(nome)}"
-    if pid not in paises: paises[pid] = {"id": pid, "name": nome, "dataStatus": "pesquisa"}
-    usados_paises.add(pid)
+    if pid not in PERMITIDOS: fora[nome] = fora.get(nome, 0) + 1; return None
     return pid
 for f in sorted(glob.glob(f"{AQUI}/fonte-api/*.json"), key=lambda x: int(os.path.basename(x).split("_")[0])):
     liga, ano = os.path.basename(f)[:-5].split("_")
@@ -68,7 +70,7 @@ for f in sorted(glob.glob(f"{AQUI}/fonte-api/*.json"), key=lambda x: int(os.path
         if t.get("national"): continue
         if t["id"] not in api_id_para_clube:
             pid = pais_do_time(t["country"]) if t.get("country") else por_cid[cid].get("countryId")
-            if not pid: avisos_api.append(f"time {t['name']} sem país, ignorado"); continue
+            if not pid: continue   # país fora do datapack (ou sem país): o clube não entra
             base = f"club:{slug(t['name'])}"; novo = base
             if novo in ids_clube: novo = f"{base}-{pid.split(':')[1]}"
             if novo in ids_clube: novo = f"{base}-{t['id']}"
@@ -79,7 +81,7 @@ for f in sorted(glob.glob(f"{AQUI}/fonte-api/*.json"), key=lambda x: int(os.path
             if v.get("city"): c["city"] = v["city"]
             if v.get("name"): c["stadium"] = v["name"]
             clubes.append(c)
-        if api_id_para_clube[t["id"]] not in ids_edicao: ids_edicao.append(api_id_para_clube[t["id"]])
+        if t["id"] in api_id_para_clube and api_id_para_clube[t["id"]] not in ids_edicao: ids_edicao.append(api_id_para_clube[t["id"]])
     if ids_edicao:
         editions.append({"competitionId": cid, "season": temporadas.get(liga, {}).get(ano, ano), "clubIds": ids_edicao, "dataStatus": "pesquisa"}); tem_clubes.add(cid)
 ids = {c["id"] for c in comps}
@@ -94,4 +96,5 @@ pack = {"manifest": {"schema": "ccw.datapack", "schemaVersion": 1, "packId": "mu
         "countries": paises_usados, "competitions": comps, "editions": editions, "clubs": clubes, "players": []}
 json.dump(pack, open(f"{AQUI}/datapack.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 for a in avisos_api: print("AVISO:", a)
+if fora: print("Clubes ignorados por serem de países fora do datapack:", dict(sorted(fora.items(), key=lambda x: -x[1])))
 print(len(paises_usados), "países", len(comps), "competições", len(clubes), "clubes", len(editions), "edições")
