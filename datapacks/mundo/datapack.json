@@ -3,14 +3,14 @@
   "schema": "ccw.datapack",
   "schemaVersion": 1,
   "packId": "mundo-competicoes-clubes",
-  "version": "1.261112.0",
+  "version": "1.261113.0",
   "name": "Competições do mundo por país e clubes",
-  "createdAt": "2026-11-12",
+  "createdAt": "2026-11-13",
   "origin": "comunitario",
   "source": {
-   "name": "API-Football (lista de competições) + openfootball (clubes, CC0)",
-   "license": "Competições: dados do API-Football da conta do dono do projeto, sob os termos dele (não redistribuir). Clubes: openfootball, CC0 1.0.",
-   "retrievedAt": "2026-11-12"
+   "name": "API-Football (competições e parte dos clubes) + openfootball (clubes, CC0)",
+   "license": "Dados do API-Football da conta do dono do projeto, sob os termos dele (não redistribuir). Clubes do openfootball: CC0 1.0.",
+   "retrievedAt": "2026-11-13"
   },
   "counts": {
    "countries": 30,
@@ -19,7 +19,7 @@
    "players": 0,
    "editions": 43
   },
-  "notes": "Só masculino e adulto; estaduais do Brasil só 1ª divisão. Competições World sem país. Clubes só onde o openfootball tem a liga (27 competições). Sem jogadores."
+  "notes": "Só masculino e adulto; estaduais do Brasil só 1ª divisão. Competições World sem país. Clubes: openfootball (temporada atual) onde existe; senão API-Football (temporada mais nova que o plano permite, ver a edição). Sem jogadores."
  },
  "countries": [
   {
@@ -37,6 +37,13 @@
    "dataStatus": "pesquisa"
   },
   {
+   "id": "ctry:argentina",
+   "name": "Argentina",
+   "code": "ARG",
+   "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
    "id": "ctry:arabia-saudita",
    "name": "Arábia Saudita",
    "code": "SAU",
@@ -44,9 +51,9 @@
    "dataStatus": "pesquisa"
   },
   {
-   "id": "ctry:argentina",
-   "name": "Argentina",
-   "code": "ARG",
+   "id": "ctry:brasil",
+   "name": "Brasil",
+   "code": "BRA",
    "confederation": "CONMEBOL",
    "dataStatus": "pesquisa"
   },
@@ -55,13 +62,6 @@
    "name": "Bélgica",
    "code": "BEL",
    "confederation": "UEFA",
-   "dataStatus": "pesquisa"
-  },
-  {
-   "id": "ctry:brasil",
-   "name": "Brasil",
-   "code": "BRA",
-   "confederation": "CONMEBOL",
    "dataStatus": "pesquisa"
   },
   {
@@ -184,17 +184,17 @@
    "dataStatus": "pesquisa"
   },
   {
-   "id": "ctry:paises-baixos",
-   "name": "Países Baixos",
-   "code": "NLD",
-   "confederation": "UEFA",
-   "dataStatus": "pesquisa"
-  },
-  {
    "id": "ctry:paraguai",
    "name": "Paraguai",
    "code": "PRY",
    "confederation": "CONMEBOL",
+   "dataStatus": "pesquisa"
+  },
+  {
+   "id": "ctry:paises-baixos",
+   "name": "Países Baixos",
+   "code": "NLD",
+   "confederation": "UEFA",
    "dataStatus": "pesquisa"
   },
   {
@@ -5709,7 +5709,7 @@
   },
   {
    "competitionId": "comp:ago-girabola",
-   "season": "2024",
+   "season": "2024/25",
    "clubIds": [
     "club:1-de-agosto",
     "club:academica-do-lobito",

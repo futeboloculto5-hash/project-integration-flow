@@ -2,7 +2,7 @@
 """Monta o datapack final `mundo-competicoes-clubes` juntando:
   1. competicoes.md  (lista aprovada pelo dono do projeto: competições por país + World, com ids da API-Football)
   2. ../clubes-por-competicao/datapack.json  (clubes e edições do openfootball, CC0)
-Uso: python3 -I montar.py   (gera base.json; depois rode montar-clubes.ts para gerar datapack.json)"""
+Uso: python3 -I montar.py   (lê competicoes.md, os clubes do openfootball e fonte-api/*.json; gera datapack.json)"""
 import json, re, unicodedata, datetime, os
 AQUI = os.path.dirname(os.path.abspath(__file__))
 def slug(s):
@@ -92,6 +92,6 @@ pack = {"manifest": {"schema": "ccw.datapack", "schemaVersion": 1, "packId": "mu
         "counts": {"countries": len(paises_usados), "competitions": len(comps), "clubs": len(clubes), "players": 0, "editions": len(editions)},
         "notes": "Só masculino e adulto; estaduais do Brasil só 1ª divisão. Competições World sem país. Clubes: openfootball (temporada atual) onde existe; senão API-Football (temporada mais nova que o plano permite, ver a edição). Sem jogadores."},
         "countries": paises_usados, "competitions": comps, "editions": editions, "clubs": clubes, "players": []}
-json.dump(pack, open(f"{AQUI}/base.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+json.dump(pack, open(f"{AQUI}/datapack.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 for a in avisos_api: print("AVISO:", a)
 print(len(paises_usados), "países", len(comps), "competições", len(clubes), "clubes", len(editions), "edições")
